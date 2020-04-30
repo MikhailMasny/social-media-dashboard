@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{A365C7BF-B5C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{87A3AB37-B049-4863-A318-BBFFCF1FD004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.Data", "src\SocialMediaDashboard.Data\SocialMediaDashboard.Data.csproj", "{446CF199-1A11-4D13-9AA3-423FC8E196CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.Data", "src\SocialMediaDashboard.Data\SocialMediaDashboard.Data.csproj", "{446CF199-1A11-4D13-9AA3-423FC8E196CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.Domain", "src\SocialMediaDashboard.Domain\SocialMediaDashboard.Domain.csproj", "{B9911644-6DD6-4881-9441-11897F6CB55A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.Domain", "src\SocialMediaDashboard.Domain\SocialMediaDashboard.Domain.csproj", "{B9911644-6DD6-4881-9441-11897F6CB55A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.Logic", "src\SocialMediaDashboard.Logic\SocialMediaDashboard.Logic.csproj", "{DB6D4AAE-62B3-41B7-88F5-F5BD7454C0E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.Logic", "src\SocialMediaDashboard.Logic\SocialMediaDashboard.Logic.csproj", "{DB6D4AAE-62B3-41B7-88F5-F5BD7454C0E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.Tests", "tests\SocialMediaDashboard.Tests\SocialMediaDashboard.Tests.csproj", "{0E583AF7-0F58-482C-AF29-A50C7B215995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.UnitTests", "tests\SocialMediaDashboard.Tests\SocialMediaDashboard.UnitTests.csproj", "{0E583AF7-0F58-482C-AF29-A50C7B215995}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.WebAPI", "src\SocialMediaDashboard.WebAPI\SocialMediaDashboard.WebAPI.csproj", "{7BBABE70-CF83-45D6-B983-D7F8576CDDBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.WebAPI", "src\SocialMediaDashboard.WebAPI\SocialMediaDashboard.WebAPI.csproj", "{7BBABE70-CF83-45D6-B983-D7F8576CDDBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
