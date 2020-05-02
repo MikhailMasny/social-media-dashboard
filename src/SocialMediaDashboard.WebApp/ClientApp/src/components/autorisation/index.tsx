@@ -29,7 +29,12 @@ export class Autorisation extends Component<AutorisationProps> {
         return (
             <React.Fragment>
                 {isLoggedIn ?
-                    (<div>You are logged in!</div>)
+                    (
+                        <>
+                            <label>You are logged in!</label>
+                            <button onClick={(event) => this.onLogoutSubmit(event)}>Logout</button>
+                        </>
+                    )
                     :
                     (
                         <>
@@ -45,14 +50,19 @@ export class Autorisation extends Component<AutorisationProps> {
             </React.Fragment>
         )
     }
+    //TODO: Replace to event handler
     onLoginSubmit(event: React.MouseEvent) {
         const {
             login,
             password
         } = this.state;
-        console.log('login', login)
         this.props.onLogin(login, password);
     }
+
+    onLogoutSubmit(event: React.MouseEvent) {
+        this.props.onLogOut();
+    }
+
     onInput(type: InputTypes, event: React.FormEvent<HTMLInputElement>) {
         const newValue = (event.target as HTMLTextAreaElement).value;
         switch (type) {

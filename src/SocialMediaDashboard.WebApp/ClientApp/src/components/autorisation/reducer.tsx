@@ -10,7 +10,7 @@ export const reducer: Reducer<AurorisationState> = (state: AurorisationState | u
     if (state === undefined) {
         return { isLoggedIn: false };
     }
-
+    //TODO: Remove redundant cases
     const action = incomingAction as LoginActionInterface;
     switch (action.type) {
         case ActionTypes.ON_LOGIN:
@@ -20,6 +20,14 @@ export const reducer: Reducer<AurorisationState> = (state: AurorisationState | u
             return state;
         case ActionTypes.ON_LOGIN_ERROR:
             state.isLoggedIn = false;
+            return state;
+
+        case ActionTypes.ON_LOGOUT:
+            return state;
+        case ActionTypes.ON_LOGOUT_SUCCESS:
+            state.isLoggedIn = false;
+            return state;
+        case ActionTypes.ON_LOGOUT_ERROR:
             return state;
         default:
             return state;
