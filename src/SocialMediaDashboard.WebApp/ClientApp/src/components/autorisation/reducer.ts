@@ -3,7 +3,7 @@ import { LoginActionInterface } from "./actions";
 import ActionTypes from "./actionTypes";
 
 export interface AurorisationState {
-    isLoggedIn: boolean;
+	isLoggedIn: boolean;
 }
 
 export const reducer: Reducer<AurorisationState> = (state: AurorisationState | undefined, incomingAction: Action): AurorisationState => {

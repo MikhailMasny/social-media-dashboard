@@ -5,9 +5,9 @@ import { ApplicationState } from "../store";
 import * as CounterStore from "../store/Counter";
 
 type CounterProps =
-    CounterStore.CounterState &
-    typeof CounterStore.actionCreators &
-    RouteComponentProps<{}>;
+	CounterStore.CounterState &
+	typeof CounterStore.actionCreators &
+	RouteComponentProps<{}>;
 
 class Counter extends React.PureComponent<CounterProps> {
 	public render() {
@@ -22,7 +22,7 @@ class Counter extends React.PureComponent<CounterProps> {
 				<button type="button"
 					className="btn btn-primary btn-lg"
 					onClick={() => { this.props.increment(); }}>
-                    Increment
+					Increment
 				</button>
 			</React.Fragment>
 		);
