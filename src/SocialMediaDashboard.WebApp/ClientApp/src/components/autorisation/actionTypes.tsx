@@ -1,8 +1,11 @@
+enum ActionTypes {
+    ON_LOGIN = 'ON_LOGIN',
+    ON_LOGIN_SUCCESS = 'ON_LOGIN_SUCCESS',
+    ON_LOGIN_ERROR = 'ON_LOGIN_ERROR',
 
-export const ON_LOGIN: string = 'ON_LOGIN';
-export const ON_LOGIN_SUCCESS: string = 'ON_LOGIN_SUCCESS';
-export const ON_LOGIN_ERROR: string = 'ON_LOGIN_ERROR';
+    ON_LOGOUT = 'ON_LOGOUT',
+    ON_LOGOUT_SUCCESS = 'ON_LOGOUT_SUCCESS',
+    ON_LOGOUT_ERROR = 'ON_LOGOUT_ERROR',
+}
 
-export const ON_LOGOUT: string = 'ON_LOGOUT';
-export const ON_LOGOUT_SUCCESS: string = 'ON_LOGOUT_SUCCESS';
-export const ON_LOGOUT_ERROR: string = 'ON_LOGOUT_ERROR';
+export default ActionTypes;

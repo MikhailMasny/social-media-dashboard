@@ -1,9 +1,10 @@
-import { ON_LOGIN, ON_LOGIN_SUCCESS, ON_LOGIN_ERROR } from "./actionTypes"
+import ActionTypes from "./actionTypes";
 
-export interface LoginActionInterface { type: string, data: object }
+
+export interface LoginActionInterface { type: ActionTypes, data: object | null }
 
 export const actionCreators = {
-    onLogin: (userName: string, password: string) => ({ type: ON_LOGIN, data: { userName, password } } as LoginActionInterface),
-    onLoginSuccess: () => ({ type: ON_LOGIN_SUCCESS } as LoginActionInterface),
-    onLoginError: () => ({ type: ON_LOGIN_ERROR } as LoginActionInterface),
+    onLogin: (userName: string, password: string) => ({ type: ActionTypes.ON_LOGIN, data: { userName, password } } as LoginActionInterface),
+    onLoginSuccess: () => ({ type: ActionTypes.ON_LOGIN_SUCCESS } as LoginActionInterface),
+    onLoginError: () => ({ type: ActionTypes.ON_LOGIN_ERROR } as LoginActionInterface),
 };

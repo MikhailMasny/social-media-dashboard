@@ -25,13 +25,23 @@ export class Autorisation extends Component<AutorisationProps> {
     }
 
     render() {
+        const { isLoggedIn } = this.props;
         return (
             <React.Fragment>
-                <label>Enter login:</label>
-                <input type={InputTypes.Text} onInput={(event) => this.onInput(InputTypes.Text, event)}></input>
-                <label>Enter password:</label>
-                <input type={InputTypes.Password} onInput={(event) => this.onInput(InputTypes.Password, event)}></input>
-                <button onClick={(event) => this.onLoginSubmit(event)}>Submit</button>
+                {isLoggedIn ?
+                    (<div>You are logged in!</div>)
+                    :
+                    (
+                        <>
+                            <label>Enter login:</label>
+                            <input type={InputTypes.Text} onInput={(event) => this.onInput(InputTypes.Text, event)}></input>
+                            <label>Enter password:</label>
+                            <input type={InputTypes.Password} onInput={(event) => this.onInput(InputTypes.Password, event)}></input>
+                            <button onClick={(event) => this.onLoginSubmit(event)}>Submit</button>
+                        </>
+                    )
+                }
+
             </React.Fragment>
         )
     }
