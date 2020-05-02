@@ -1,5 +1,5 @@
-import * as Counter from './Counter';
-import * as Autorisation from '../components/autorisation/reducer';
+import * as Counter from "./Counter";
+import * as Autorisation from "../components/autorisation/reducer";
 
 export interface ApplicationState {
     counter: Counter.CounterState | undefined;
@@ -7,8 +7,8 @@ export interface ApplicationState {
 }
 
 export const reducers = {
-    counter: Counter.reducer,
-    autorisation: Autorisation.reducer,
+	counter: Counter.reducer,
+	autorisation: Autorisation.reducer,
 };
 
 export interface AppThunkAction<TAction> {

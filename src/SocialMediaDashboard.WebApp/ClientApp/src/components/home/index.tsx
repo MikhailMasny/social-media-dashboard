@@ -1,11 +1,19 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import Autorisation from '../autorisation/index'
+import * as React from "react";
+import { connect } from "react-redux";
+import Autorisation from "../autorisation/index";
+import About from "./about";
+
+import "./styles/home.scss";
 
 const Home = () => (
-    <div>
-        <Autorisation ></Autorisation>
-    </div>
+	<div>
+		<div className="aboutContainer">
+			<About />
+		</div>
+		<div className="authContainer">
+			<Autorisation />
+		</div>
+	</div>
 );
 
 export default connect()(Home);
