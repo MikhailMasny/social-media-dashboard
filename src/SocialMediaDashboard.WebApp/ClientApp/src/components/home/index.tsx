@@ -10,7 +10,7 @@ const Home = () => (
 		<div className="aboutContainer">
 			<About />
 		</div>
-		<div className="authContainer">
+		<div className="auth">
 			<Autorisation />
 		</div>
 	</div>

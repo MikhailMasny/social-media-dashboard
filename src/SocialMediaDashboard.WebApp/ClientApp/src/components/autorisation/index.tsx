@@ -4,15 +4,14 @@ import { ApplicationState } from "../../store";
 import { AurorisationState } from "./reducer";
 import { actionCreators } from "./actions";
 
+import BaseInput, { InputTypes } from "../../baseComponents/baseInput";
+
+import "./styles/auth.scss";
+import BaseLabel from "../../baseComponents/baseLabel";
+
 type AutorisationProps =
 	AurorisationState &
 	typeof actionCreators;
-
-enum InputTypes {
-	Text = "Text",
-	Password = "Password"
-}
-
 export class Autorisation extends Component<AutorisationProps> {
 	constructor(props: Readonly<AutorisationProps>) {
 		super(props);
@@ -30,23 +29,24 @@ export class Autorisation extends Component<AutorisationProps> {
 			<React.Fragment>
 				{isLoggedIn ?
 					(
-						<>
-							<label>You are logged in!</label>
-							<button onClick={(event) => this.onLogoutSubmit(event)}>Logout</button>
-						</>
+						<div className="authContainer">
+							<div className="authLabelContainer">
+								<BaseLabel labelText="You are logged in!"></BaseLabel>
+								<button onClick={(event) => this.onLogoutSubmit(event)}>Logout</button>
+							</div>
+						</div>
 					)
 					:
 					(
-						<>
-							<label>Enter login:</label>
-							<input type={InputTypes.Text} onInput={(event) => this.onInput(InputTypes.Text, event)}></input>
-							<label>Enter password:</label>
-							<input type={InputTypes.Password} onInput={(event) => this.onInput(InputTypes.Password, event)}></input>
-							<button onClick={(event) => this.onLoginSubmit(event)}>Submit</button>
-						</>
+						<div className="authContainer">
+							<BaseInput labelText="Login:" onInput={(event) => this.onLoginInput(event)} inputType={InputTypes.text} />
+							<div className="authLabelContainer">
+								<BaseInput labelText="Password:" onInput={(event) => this.onPasswordInput(event)} inputType={InputTypes.password} />
+							</div>
+							<button className="authSumbitButtom" onClick={(event) => this.onLoginSubmit(event)}>Login</button>
+						</div>
 					)
 				}
-
 			</React.Fragment>
 		);
 	}
@@ -63,23 +63,20 @@ export class Autorisation extends Component<AutorisationProps> {
 		this.props.onLogOut();
 	}
 
-	onInput(type: InputTypes, event: React.FormEvent<HTMLInputElement>) {
+	onLoginInput(event: React.FormEvent<HTMLInputElement>) {
 		const newValue = (event.target as HTMLTextAreaElement).value;
-		switch (type) {
-		case InputTypes.Text: {
-			this.setState({
-				login: newValue
-			});
-			break;
-		}
-		case InputTypes.Password: {
-			this.setState({
-				password: newValue
-			});
-			break;
-		}
-		}
+		this.setState({
+			login: newValue
+		});
 	}
+
+	onPasswordInput(event: React.FormEvent<HTMLInputElement>) {
+		const newValue = (event.target as HTMLTextAreaElement).value;
+		this.setState({
+			password: newValue
+		});
+	}
+
 }
 
 export default connect(
