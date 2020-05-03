@@ -49,9 +49,6 @@ class BaseInput extends Component<BaseInputInterface> {
 			</>
 		);
 	}
-	test(): (event: React.FormEvent<HTMLInputElement>) => void {
-		throw new Error("Method not implemented.");
-	}
 }
 
 export default BaseInput;
