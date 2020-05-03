@@ -1,5 +1,6 @@
 import * as React from "react";
 import NavMenu from "../navMenu/";
+import Footer from "../footer/"
 
 export default (props: { children?: React.ReactNode }) => (
 	<React.Fragment>
@@ -7,5 +8,6 @@ export default (props: { children?: React.ReactNode }) => (
 		<div>
 			{props.children}
 		</div>
+		<Footer />
 	</React.Fragment>
 );

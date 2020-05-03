@@ -6,7 +6,7 @@ import { actionCreators } from "./actions";
 
 import BaseInput, { InputTypes } from "../../baseComponents/baseInput";
 
-import "./styles/auth.scss";
+import "./style.scss";
 import BaseLabel from "../../baseComponents/baseLabel";
 
 type AutorisationProps =
