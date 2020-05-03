@@ -6,7 +6,7 @@ export enum InputTypes {
 	password = "password"
 }
 
-interface BaseInputInterface {
+interface BaseInputProps {
 
     /**
      * Text of label near the input.
@@ -21,18 +21,28 @@ interface BaseInputInterface {
     /**
      * Input event.
      */
-	onInput: (event: React.FormEvent<HTMLInputElement>) => void,
+	onInput: (event: React.FormEvent<HTMLInputElement>) => void | undefined,
 
     /**
      * Default input value.
      */
 	defaultInputValue: string | undefined
+
+	/**
+	 * Disable input.
+	 */
+	disabled: boolean,
 }
 
-class BaseInput extends Component<BaseInputInterface> {
+/**
+ * Base application input.
+ */
+class BaseInput extends Component<BaseInputProps> {
 	public static defaultProps = {
 		labelText: undefined,
 		defaultInputValue: undefined,
+		disabled: false,
+		onInput: undefined,
 	}
 
 	render() {
@@ -40,12 +50,13 @@ class BaseInput extends Component<BaseInputInterface> {
 			labelText,
 			inputType,
 			onInput,
-			defaultInputValue
+			defaultInputValue,
+			disabled
 		} = this.props;
 		return (
 			<>
 				{labelText !== undefined ? <BaseLabel labelText={labelText}></BaseLabel> : null}
-				<input defaultValue={defaultInputValue} type={inputType} onInput={onInput} />
+				<input defaultValue={defaultInputValue} type={inputType} onInput={onInput} disabled={disabled} />
 			</>
 		);
 	}
