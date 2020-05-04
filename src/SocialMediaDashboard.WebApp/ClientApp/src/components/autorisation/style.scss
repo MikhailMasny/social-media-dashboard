@@ -1,0 +1,23 @@
+.authContainer {
+    .authLabelContainer {
+        .authInputLabel {
+            width: 80px;
+            text-align: center;
+            display: inline-block;
+        }
+    }
+    .authSumbitButtom {
+        background-color: lightblue;
+        border: 1px solid lightblue;
+        border-radius: 10px;
+        width: 100%;
+        &:focus {
+            border: 1px solid blue;
+        }
+        &:active {
+            color: white;
+            border: 1px solid lightblue;
+            background-color: blue;
+        }
+    }
+}
