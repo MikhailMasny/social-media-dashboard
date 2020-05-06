@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SocialMediaDashboard.Data\SocialMediaDashboard.Data.csproj" />
-    <ProjectReference Include="..\SocialMediaDashboard.Domain\SocialMediaDashboard.Domain.csproj" />
   </ItemGroup>
 
 </Project>

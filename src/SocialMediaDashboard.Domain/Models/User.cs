@@ -19,7 +19,7 @@ namespace SocialMediaDashboard.Domain.Models
         public string Email { get; set; }
 
         /// <summary>
-        /// Password
+        /// Password.
         /// </summary>
         public string Password { get; set; }
 
