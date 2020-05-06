@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using SocialMediaDashboard.Common.Interfaces;
+using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Domain.Models
 {
     /// <summary>
     /// Media model.
     /// </summary>
-    public class Media
+    public class Media : IHasDbIdentity
     {
         /// <summary>
         /// Identifier.

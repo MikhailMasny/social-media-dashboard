@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using SocialMediaDashboard.Common.Interfaces;
+using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Domain.Models
 {
     /// <summary>
     /// User model.
     /// </summary>
-    public class User
+    public class User : IHasDbIdentity
     {
         /// <summary>
         /// Identifier.

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SocialMediaDashboard.Common\SocialMediaDashboard.Common.csproj" />
     <ProjectReference Include="..\SocialMediaDashboard.Data\SocialMediaDashboard.Data.csproj" />
   </ItemGroup>
 

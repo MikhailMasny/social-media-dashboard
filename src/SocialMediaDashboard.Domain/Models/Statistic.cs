@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SocialMediaDashboard.Common.Interfaces;
+using System;
 
 namespace SocialMediaDashboard.Domain.Models
 {
     /// <summary>
     /// Statistic model.
     /// </summary>
-    public class Statistic
+    public class Statistic : IHasDbIdentity
     {
         /// <summary>
         /// Identifier.
