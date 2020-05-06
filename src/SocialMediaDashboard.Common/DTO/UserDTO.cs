@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace SocialMediaDashboard.Common.DTO
 {
+    /// <summary>
+    /// UserDTO model.
+    /// </summary>
     public class UserDTO : IHasDbIdentity
     {
         /// <summary>

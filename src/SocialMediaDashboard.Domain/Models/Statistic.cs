@@ -8,9 +8,7 @@ namespace SocialMediaDashboard.Domain.Models
     /// </summary>
     public class Statistic : IHasDbIdentity
     {
-        /// <summary>
-        /// Identifier.
-        /// </summary>
+        /// <inheritdoc/>
         public int Id { get; set; }
 
         /// <summary>

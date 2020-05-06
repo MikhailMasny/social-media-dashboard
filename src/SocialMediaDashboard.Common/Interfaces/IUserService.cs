@@ -3,9 +3,23 @@ using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Common.Interfaces
 {
+    /// <summary>
+    /// Interface for implement user service.
+    /// </summary>
     public interface IUserService
     {
-        UserDTO Authenticate(string username, string password);
+        /// <summary>
+        /// Authenticate user.
+        /// </summary>
+        /// <param name="email">Email.</param>
+        /// <param name="password">Password</param>
+        /// <returns>User data.</returns>
+        UserDTO Authenticate(string email, string password);
+
+        /// <summary>
+        /// Get all users.
+        /// </summary>
+        /// <returns>Users.</returns>
         IEnumerable<UserDTO> GetAll();
     }
 }

@@ -12,6 +12,7 @@ using System.Text;
 
 namespace SocialMediaDashboard.Logic.Services
 {
+    /// <inheritdoc cref="IUserService"/>
     public class UserService : IUserService
     {
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
@@ -20,13 +21,14 @@ namespace SocialMediaDashboard.Logic.Services
             new UserDTO { Id = 1, Email = "Test@Test", Password = "test", Name = "User", IsAdmin = false }
         };
 
-        private readonly AppSettings _appSettings;
+        private readonly ApplicationSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<ApplicationSettings> appSettings)
         {
             _appSettings = appSettings.Value;
         }
 
+        /// <inheritdoc/>
         public UserDTO Authenticate(string email, string password)
         {
             var user = _users.SingleOrDefault(x => x.Email == email && x.Password == password);
@@ -53,6 +55,7 @@ namespace SocialMediaDashboard.Logic.Services
             return user;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<UserDTO> GetAll()
         {
             return _users;
