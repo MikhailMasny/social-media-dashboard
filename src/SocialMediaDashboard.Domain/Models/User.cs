@@ -22,6 +22,11 @@ namespace SocialMediaDashboard.Domain.Models
         public string Password { get; set; }
 
         /// <summary>
+        /// Avatar.
+        /// </summary>
+        public string Avatar { get; set; }
+
+        /// <summary>
         /// Name.
         /// </summary>
         public string Name { get; set; }
