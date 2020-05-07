@@ -13,8 +13,8 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
-        /// <returns>Operation result, message and user data.</returns>
-        Task<(bool result, string message, UserDTO user)> Authenticate(string email, string password);
+        /// <returns>Operation result, message, user data and token.</returns>
+        Task<(bool result, string message, UserDTO user, string token)> Authenticate(string email, string password);
 
         /// <summary>
         /// Registration user.
@@ -22,8 +22,8 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="email">Email.</param>
         /// <param name="password">Password</param>
         /// <param name="name">Name.</param>
-        /// <returns>Operation result, message and user data.</returns>
-        Task<(bool result, string message, UserDTO user)> Registration(string email, string password, string name);
+        /// <returns>Operation result, message, user data and token.</returns>
+        Task<(bool result, string message, UserDTO user, string token)> Registration(string email, string password, string name);
 
         /// <summary>
         /// Update user profile.

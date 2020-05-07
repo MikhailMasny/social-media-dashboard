@@ -27,14 +27,14 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<(bool result, string message, UserDTO user)> Registration(string email, string password, string name)
+        public async Task<(bool result, string message, UserDTO user, string token)> Registration(string email, string password, string name)
         {
             var existingUser = await _userRepository.GetEntity(x => x.Email == email);
 
             if (existingUser != null)
             {
                 // UNDONE: Response
-                return (false, "The email you specified is already in the system.", null);
+                return (false, "The email you specified is already in the system.", null, null);
             }
 
             var user = new User
@@ -58,13 +58,11 @@ namespace SocialMediaDashboard.Logic.Services
                 IsAdmin = user.IsAdmin
             };
 
-            userDTO.Token = GetToken(user.Id);
-
-            return (true, "User successfully registered.", userDTO);
+            return (true, "User successfully registered.", userDTO, GetToken(user.Id));
         }
 
         /// <inheritdoc/>
-        public async Task<(bool result, string message, UserDTO user)> Authenticate(string email, string password)
+        public async Task<(bool result, string message, UserDTO user, string token)> Authenticate(string email, string password)
         {
             var convertedPassword = ConvertPassword(password);
             var user = await _userRepository.GetEntity(x => x.Email == email && x.Password == convertedPassword);
@@ -72,7 +70,7 @@ namespace SocialMediaDashboard.Logic.Services
             if (user == null)
             {
                 // UNDONE: Response
-                return (false, "Email or password is incorrect.", null);
+                return (false, "Email or password is incorrect.", null, null);
             }
 
             // UNDONE: Automapper
@@ -87,7 +85,7 @@ namespace SocialMediaDashboard.Logic.Services
 
             userDTO.Token = GetToken(user.Id);
 
-            return (true, "User successfully logged in.", userDTO);
+            return (true, "User successfully logged in.", userDTO, GetToken(user.Id));
         }
 
         /// <inheritdoc/>

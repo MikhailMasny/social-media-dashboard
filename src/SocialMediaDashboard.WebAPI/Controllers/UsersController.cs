@@ -30,20 +30,20 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 responseViewModel = new ResponseViewModel
                 {
                     IsSuccessful = false,
-                    Message = "Check the correctness of the entered data.",
-                    User = null
+                    Message = "Check the correctness of the entered data."
                 };
 
                 return BadRequest(responseViewModel);
             }
 
-            var (result, message, user) = await _userService.Registration(model.Email, model.Password, model.Name);
+            var (result, message, user, token) = await _userService.Registration(model.Email, model.Password, model.Name);
 
             responseViewModel = new ResponseViewModel
             {
                 IsSuccessful = result,
                 Message = message,
-                User = user
+                User = user,
+                Token = token
             };
 
             if (!result)
@@ -65,20 +65,20 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 responseViewModel = new ResponseViewModel
                 {
                     IsSuccessful = false,
-                    Message = "Email or password is incorrect.",
-                    User = null
+                    Message = "Email or password is incorrect."
                 };
 
                 return BadRequest(responseViewModel);
             }
 
-            var (result, message, user) = await _userService.Authenticate(model.Email, model.Password);
+            var (result, message, user, token) = await _userService.Authenticate(model.Email, model.Password);
 
             responseViewModel = new ResponseViewModel
             {
                 IsSuccessful = result,
                 Message = message,
-                User = user
+                User = user,
+                Token = token
             };
 
             if (!result)
@@ -100,8 +100,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 responseViewModel = new ResponseViewModel
                 {
                     IsSuccessful = false,
-                    Message = "Check the correctness of the entered data.",
-                    User = null
+                    Message = "Check the correctness of the entered data."
                 };
 
                 return BadRequest(responseViewModel);

@@ -21,5 +21,10 @@ namespace SocialMediaDashboard.WebAPI.ViewModels
         /// User data.
         /// </summary>
         public UserDTO User { get; set; }
+
+        /// <summary>
+        /// JWT Token.
+        /// </summary>
+        public string Token { get; set; }
     }
 }
