@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Data.Context;
+using SocialMediaDashboard.Data.Repository;
+using SocialMediaDashboard.Domain.Models;
 using SocialMediaDashboard.Logic.Services;
 using System.Text;
 
@@ -57,6 +59,7 @@ namespace SocialMediaDashboard.WebAPI
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

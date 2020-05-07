@@ -3,12 +3,13 @@ using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Common.DTO;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Logic.Services
 {
@@ -22,22 +23,36 @@ namespace SocialMediaDashboard.Logic.Services
         };
 
         private readonly ApplicationSettings _appSettings;
+        private readonly IRepository<User> _userRepository;
 
-        public UserService(IOptions<ApplicationSettings> appSettings)
+        public UserService(IOptions<ApplicationSettings> appSettings,
+                           IRepository<User> userRepository)
         {
-            _appSettings = appSettings.Value;
+            _appSettings = appSettings.Value ?? throw new ArgumentNullException(nameof(appSettings));
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         /// <inheritdoc/>
-        public UserDTO Authenticate(string email, string password)
+        public async Task<UserDTO> Authenticate(string email, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Email == email && x.Password == password);
+            var user = await _userRepository.GetEntity(x => x.Email == email && x.Password == password);
 
-            // return null if user not found
             if (user == null)
+            {
+                // UNDONE: Response
                 return null;
+            }
 
-            // authentication successful so generate jwt token
+            // UNDONE: Automapper
+            var userDTO = new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Password = user.Password,
+                Name = user.Name,
+                IsAdmin = user.IsAdmin
+            };
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -50,9 +65,9 @@ namespace SocialMediaDashboard.Logic.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+            userDTO.Token = tokenHandler.WriteToken(token);
 
-            return user;
+            return userDTO;
         }
 
         /// <inheritdoc/>

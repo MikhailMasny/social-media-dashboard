@@ -1,5 +1,6 @@
 ﻿using SocialMediaDashboard.Common.DTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Common.Interfaces
 {
@@ -13,8 +14,8 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password</param>
-        /// <returns>User data.</returns>
-        UserDTO Authenticate(string email, string password);
+        /// <returns>User data (DTO).</returns>
+        Task<UserDTO> Authenticate(string email, string password);
 
         /// <summary>
         /// Get all users.
