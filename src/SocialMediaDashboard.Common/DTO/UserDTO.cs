@@ -19,12 +19,6 @@ namespace SocialMediaDashboard.Common.DTO
         public string Email { get; set; }
 
         /// <summary>
-        /// Password.
-        /// </summary>
-        [JsonIgnore]
-        public string Password { get; set; }
-
-        /// <summary>
         /// Avatar.
         /// </summary>
         public string Avatar { get; set; }

@@ -7,6 +7,7 @@ using SocialMediaDashboard.Domain.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace SocialMediaDashboard.Logic.Services
             var user = new User
             {
                 Email = email,
-                Password = password,
+                Password = ConvertPassword(password),
                 Avatar = "Helloworld",
                 Name = name,
                 IsAdmin = false
@@ -53,7 +54,6 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Id = user.Id,
                 Email = user.Email,
-                Password = user.Password,
                 Avatar = user.Avatar,
                 Name = user.Name,
                 IsAdmin = user.IsAdmin
@@ -67,7 +67,8 @@ namespace SocialMediaDashboard.Logic.Services
         /// <inheritdoc/>
         public async Task<(bool result, string message, UserDTO user)> Authenticate(string email, string password)
         {
-            var user = await _userRepository.GetEntity(x => x.Email == email && x.Password == password);
+            var convertedPassword = ConvertPassword(password);
+            var user = await _userRepository.GetEntity(x => x.Email == email && x.Password == convertedPassword);
 
             if (user == null)
             {
@@ -80,7 +81,6 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Id = user.Id,
                 Email = user.Email,
-                Password = user.Password,
                 Avatar = user.Avatar,
                 Name = user.Name,
                 IsAdmin = user.IsAdmin
@@ -106,6 +106,24 @@ namespace SocialMediaDashboard.Logic.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        private string ConvertPassword(string password)
+        {
+            var sha512 = SHA512.Create();
+            byte[] bytes = Encoding.UTF8.GetBytes(password);
+            byte[] hash = sha512.ComputeHash(bytes);
+            return GetStringFromHash(hash);
+        }
+
+        private string GetStringFromHash(byte[] hash)
+        {
+            var result = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                result.Append(hash[i].ToString("X2"));
+            }
+            return result.ToString();
         }
     }
 }
