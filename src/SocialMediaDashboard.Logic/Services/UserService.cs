@@ -96,6 +96,12 @@ namespace SocialMediaDashboard.Logic.Services
             // UNDONE: to response model
             var user = await _userRepository.GetEntity(x => x.Email == email);
 
+            if (user == null)
+            {
+                // UNDONE: Response
+                return (false, "User with the specified email address was not found.", null);
+            }
+
             user.Name = name;
             user.Avatar = avatar;
 

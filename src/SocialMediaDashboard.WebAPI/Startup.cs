@@ -36,10 +36,10 @@ namespace SocialMediaDashboard.WebAPI
 
             app.UseRouting();
 
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseSwagger();
+            app.UseSwaggerUI(config => config.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Media Dashboard API"));
+
+            app.UseCors(config => config.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
             app.UseAuthorization();
