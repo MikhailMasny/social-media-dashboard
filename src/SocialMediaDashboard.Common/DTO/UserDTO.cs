@@ -3,7 +3,7 @@
 namespace SocialMediaDashboard.Common.DTO
 {
     /// <summary>
-    /// UserDTO model.
+    /// User data transfer object.
     /// </summary>
     public class UserDTO : IHasDbIdentity
     {
@@ -31,10 +31,5 @@ namespace SocialMediaDashboard.Common.DTO
         /// Role.
         /// </summary>
         public bool IsAdmin { get; set; }
-
-        /// <summary>
-        /// JWT Token.
-        /// </summary>
-        public string Token { get; set; }
     }
 }
