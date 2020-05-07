@@ -88,5 +88,40 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(responseViewModel);
         }
+
+        // UNDONE: ApiRoute
+        [HttpPost("profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] ProfileViewModel model)
+        {
+            ResponseViewModel responseViewModel;
+
+            if (!ModelState.IsValid)
+            {
+                responseViewModel = new ResponseViewModel
+                {
+                    IsSuccessful = false,
+                    Message = "Check the correctness of the entered data.",
+                    User = null
+                };
+
+                return BadRequest(responseViewModel);
+            }
+
+            var (result, message, user) = await _userService.UpdateProfile(model.Email, model.Name, model.Avatar);
+
+            responseViewModel = new ResponseViewModel
+            {
+                IsSuccessful = result,
+                Message = message,
+                User = user
+            };
+
+            if (!result)
+            {
+                return BadRequest(responseViewModel);
+            }
+
+            return Ok(responseViewModel);
+        }
     }
 }

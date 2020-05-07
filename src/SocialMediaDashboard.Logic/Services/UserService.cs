@@ -41,7 +41,6 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Email = email,
                 Password = ConvertPassword(password),
-                Avatar = "Helloworld",
                 Name = name,
                 IsAdmin = false
             };
@@ -89,6 +88,31 @@ namespace SocialMediaDashboard.Logic.Services
             userDTO.Token = GetToken(user.Id);
 
             return (true, "User successfully logged in.", userDTO);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(bool result, string message, UserDTO user)> UpdateProfile(string email, string name, string avatar)
+        {
+            // UNDONE: to response model
+            var user = await _userRepository.GetEntity(x => x.Email == email);
+
+            user.Name = name;
+            user.Avatar = avatar;
+
+            _userRepository.Update(user);
+            await _userRepository.SaveChangesAsync();
+
+            // UNDONE: Automapper
+            var userDTO = new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Avatar = user.Avatar,
+                Name = user.Name,
+                IsAdmin = user.IsAdmin
+            };
+
+            return (true, "User data updated successfully.", userDTO);
         }
 
         private string GetToken(int id)

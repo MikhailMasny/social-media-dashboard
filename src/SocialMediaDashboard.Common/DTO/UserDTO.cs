@@ -1,5 +1,4 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
-using System.Text.Json.Serialization;
 
 namespace SocialMediaDashboard.Common.DTO
 {
