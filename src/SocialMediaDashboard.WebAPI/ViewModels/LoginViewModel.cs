@@ -11,6 +11,7 @@ namespace SocialMediaDashboard.WebAPI.ViewModels
         /// Email.
         /// </summary>
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         /// <summary>

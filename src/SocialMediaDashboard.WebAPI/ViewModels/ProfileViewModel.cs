@@ -1,4 +1,6 @@
-﻿namespace SocialMediaDashboard.WebAPI.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SocialMediaDashboard.WebAPI.ViewModels
 {
     /// <summary>
     /// Profile ViewModel.
@@ -8,6 +10,8 @@
         /// <summary>
         /// Email.
         /// </summary>
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         /// <summary>
@@ -18,6 +22,8 @@
         /// <summary>
         /// Name.
         /// </summary>
+        [Required]
+        [StringLength(20, MinimumLength = 5)]
         public string Name { get; set; }
     }
 }
