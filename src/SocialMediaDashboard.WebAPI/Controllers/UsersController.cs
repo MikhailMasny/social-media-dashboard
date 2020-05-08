@@ -30,23 +30,23 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 responseViewModel = new ResponseViewModel
                 {
                     IsSuccessful = false,
-                    Message = "Check the correctness of the entered data.",
-                    User = null
+                    Message = "Check the correctness of the entered data."
                 };
 
                 return BadRequest(responseViewModel);
             }
 
-            var (result, message, user) = await _userService.Registration(model.Email, model.Password, model.Name);
+            var result = await _userService.Registration(model.Email, model.Password, model.Name);
 
             responseViewModel = new ResponseViewModel
             {
-                IsSuccessful = result,
-                Message = message,
-                User = user
+                IsSuccessful = result.Result,
+                Message = result.Message,
+                User = result.User,
+                Token = result.Token
             };
 
-            if (!result)
+            if (!result.Result)
             {
                 return BadRequest(responseViewModel);
             }
@@ -65,23 +65,58 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 responseViewModel = new ResponseViewModel
                 {
                     IsSuccessful = false,
-                    Message = "Email or password is incorrect.",
-                    User = null
+                    Message = "Email or password is incorrect."
                 };
 
                 return BadRequest(responseViewModel);
             }
 
-            var (result, message, user) = await _userService.Authenticate(model.Email, model.Password);
+            var result = await _userService.Authenticate(model.Email, model.Password);
 
             responseViewModel = new ResponseViewModel
             {
-                IsSuccessful = result,
-                Message = message,
-                User = user
+                IsSuccessful = result.Result,
+                Message = result.Message,
+                User = result.User,
+                Token = result.Token
             };
 
-            if (!result)
+            if (!result.Result)
+            {
+                return BadRequest(responseViewModel);
+            }
+
+            return Ok(responseViewModel);
+        }
+
+        // UNDONE: ApiRoute
+        [HttpPost("profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] ProfileViewModel model)
+        {
+            ResponseViewModel responseViewModel;
+
+            if (!ModelState.IsValid)
+            {
+                responseViewModel = new ResponseViewModel
+                {
+                    IsSuccessful = false,
+                    Message = "Check the correctness of the entered data."
+                };
+
+                return BadRequest(responseViewModel);
+            }
+
+            var result = await _userService.UpdateProfile(model.Email, model.Name, model.Avatar);
+
+            responseViewModel = new ResponseViewModel
+            {
+                IsSuccessful = result.Result,
+                Message = result.Message,
+                User = result.User,
+                Token = result.Token
+            };
+
+            if (!result.Result)
             {
                 return BadRequest(responseViewModel);
             }

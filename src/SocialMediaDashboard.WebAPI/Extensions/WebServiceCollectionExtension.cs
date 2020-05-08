@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SocialMediaDashboard.Common.Helpers;
+using System;
 using System.Text;
 
 namespace SocialMediaDashboard.WebAPI.Extensions
@@ -42,6 +44,46 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                     ValidateAudience = false
                 };
             });
+
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API",
+                    Description = "Social Media Dashboard API",
+                    Contact = new OpenApiContact()
+                    {
+                        Name = "Mikhail M. & Alexandr G.",
+                        //Url = new Uri("localhost") // UNDONE: add it after deploy
+                    }
+                });
+
+                var securitySchema = new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+                config.AddSecurityDefinition("Bearer", securitySchema);
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { 
+                        securitySchema, new[] { "Bearer" } 
+                    }
+                };
+                config.AddSecurityRequirement(securityRequirement);
+            });
+
+            services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddCors();
             services.AddControllers();

@@ -1,16 +1,14 @@
-﻿using SocialMediaDashboard.Common.DTO;
-
-namespace SocialMediaDashboard.WebAPI.ViewModels
+﻿namespace SocialMediaDashboard.Common.DTO
 {
     /// <summary>
-    /// Authentication response ViewModel.
+    /// Auth data transfer object.
     /// </summary>
-    public class ResponseViewModel
+    public class AuthDTO
     {
         /// <summary>
-        /// Result of response.
+        /// Operation result.
         /// </summary>
-        public bool IsSuccessful { get; set; }
+        public bool Result { get; set; }
 
         /// <summary>
         /// Message.

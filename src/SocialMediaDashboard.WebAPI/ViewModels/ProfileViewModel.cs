@@ -3,9 +3,9 @@
 namespace SocialMediaDashboard.WebAPI.ViewModels
 {
     /// <summary>
-    /// Authenticate ViewModel.
+    /// Profile ViewModel.
     /// </summary>
-    public class LoginViewModel
+    public class ProfileViewModel
     {
         /// <summary>
         /// Email.
@@ -15,9 +15,15 @@ namespace SocialMediaDashboard.WebAPI.ViewModels
         public string Email { get; set; }
 
         /// <summary>
-        /// Password.
+        /// Avatar.
+        /// </summary>
+        public string Avatar { get; set; }
+
+        /// <summary>
+        /// Name.
         /// </summary>
         [Required]
-        public string Password { get; set; }
+        [StringLength(20, MinimumLength = 5)]
+        public string Name { get; set; }
     }
 }
