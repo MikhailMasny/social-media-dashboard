@@ -29,13 +29,13 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AuthDTO> Registration(string email, string password, string name)
+        public async Task<ResponseDTO> Registration(string email, string password, string name)
         {
             var existingUser = await _userRepository.GetEntity(x => x.Email == email);
 
             if (existingUser != null)
             {
-                return new AuthDTO
+                return new ResponseDTO
                 {
                     Result = false,
                     Message = "The email you specified is already in the system."
@@ -63,7 +63,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Role = user.Role
             };
 
-            return new AuthDTO
+            return new ResponseDTO
             {
                 Result = true,
                 Message = "User successfully registered.",
@@ -73,14 +73,14 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AuthDTO> Authenticate(string email, string password)
+        public async Task<ResponseDTO> Authenticate(string email, string password)
         {
             var convertedPassword = ConvertPassword(password);
             var user = await _userRepository.GetEntity(x => x.Email == email && x.Password == convertedPassword);
 
             if (user == null)
             {
-                return new AuthDTO
+                return new ResponseDTO
                 {
                     Result = false,
                     Message = "Email or password is incorrect."
@@ -97,7 +97,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Role = user.Role
             };
 
-            return new AuthDTO
+            return new ResponseDTO
             {
                 Result = true,
                 Message = "User successfully logged in.",
@@ -105,15 +105,47 @@ namespace SocialMediaDashboard.Logic.Services
                 Token = GetToken(user.Id, user.Email, user.Role)
             };
         }
+
         /// <inheritdoc/>
-        public async Task<AuthDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar)
+        public async Task<ResponseDTO> GetProfile(int userId)
+        {
+            var user = await _userRepository.GetEntity(x => x.Id == userId);
+
+            if (user == null)
+            {
+                return new ResponseDTO
+                {
+                    Result = false,
+                    Message = "User with the specified email address was not found."
+                };
+            }
+
+            var userDTO = new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Avatar = user.Avatar,
+                Name = user.Name,
+                Role = user.Role
+            };
+
+            return new ResponseDTO
+            {
+                Result = true,
+                Message = "User data updated successfully.",
+                User = userDTO
+            };
+        }
+
+        /// <inheritdoc/>
+        public async Task<ResponseDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar)
         {
             // UNDONE: to response model
             var user = await _userRepository.GetEntity(x => x.Id == tokenData.Id);
 
             if (user == null)
             {
-                return new AuthDTO
+                return new ResponseDTO
                 {
                     Result = false,
                     Message = "User with the specified email address was not found."
@@ -136,7 +168,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Role = user.Role
             };
 
-            return new AuthDTO
+            return new ResponseDTO
             {
                 Result = true,
                 Message = "User data updated successfully.",

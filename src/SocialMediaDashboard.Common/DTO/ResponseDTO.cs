@@ -3,7 +3,7 @@
     /// <summary>
     /// Auth data transfer object.
     /// </summary>
-    public class AuthDTO
+    public class ResponseDTO
     {
         /// <summary>
         /// Operation result.

@@ -124,5 +124,27 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(responseViewModel);
         }
+
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var tokenData = _userService.GetUserData(User);
+            var result = await _userService.GetProfile(tokenData.Id);
+
+            var responseViewModel = new ResponseViewModel
+            {
+                IsSuccessful = result.Result,
+                Message = result.Message,
+                User = result.User,
+                Token = result.Token
+            };
+
+            if (!result.Result)
+            {
+                return BadRequest(responseViewModel);
+            }
+
+            return Ok(responseViewModel);
+        }
     }
 }

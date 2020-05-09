@@ -14,8 +14,8 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
-        /// <returns>Auth data transfer object.</returns>
-        Task<AuthDTO> Authenticate(string email, string password);
+        /// <returns>Response data transfer object.</returns>
+        Task<ResponseDTO> Authenticate(string email, string password);
 
         /// <summary>
         /// Registration user.
@@ -23,8 +23,8 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="email">Email.</param>
         /// <param name="password">Password</param>
         /// <param name="name">Name.</param>
-        /// <returns>Auth data transfer object.</returns>
-        Task<AuthDTO> Registration(string email, string password, string name);
+        /// <returns>Response data transfer object.</returns>
+        Task<ResponseDTO> Registration(string email, string password, string name);
 
         /// <summary>
         /// Update user profile.
@@ -32,8 +32,15 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="tokenData">Token data transfer object.</param>
         /// <param name="name">Name.</param>
         /// <param name="avatar">Avatar.</param>
-        /// <returns>Auth data transfer object.</returns>
-        Task<AuthDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar);
+        /// <returns>Response data transfer object.</returns>
+        Task<ResponseDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar);
+
+        /// <summary>
+        /// Get user profile.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>Response data transfer object.</returns>
+        Task<ResponseDTO> GetProfile(int userId);
 
         /// <summary>
         /// Get user data from Token.
