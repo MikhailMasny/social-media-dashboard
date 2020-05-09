@@ -49,6 +49,7 @@ namespace SocialMediaDashboard.WebAPI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
         }
