@@ -1,4 +1,5 @@
 ﻿using SocialMediaDashboard.Common.DTO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Common.Interfaces
@@ -28,10 +29,17 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <summary>
         /// Update user profile.
         /// </summary>
-        /// <param name="email">Email.</param>
+        /// <param name="tokenData">Token data transfer object.</param>
         /// <param name="name">Name.</param>
         /// <param name="avatar">Avatar.</param>
         /// <returns>Auth data transfer object.</returns>
-        Task<AuthDTO> UpdateProfile(string email, string name, string avatar);
+        Task<AuthDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar);
+
+        /// <summary>
+        /// Get user data from Token.
+        /// </summary>
+        /// <param name="claimsPrincipal">User claims.</param>
+        /// <returns>Token data transfer object.</returns>
+        TokenDTO GetUserData(ClaimsPrincipal claimsPrincipal);
     }
 }

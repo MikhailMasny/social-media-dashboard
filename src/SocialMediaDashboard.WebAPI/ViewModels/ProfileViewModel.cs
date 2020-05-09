@@ -8,13 +8,6 @@ namespace SocialMediaDashboard.WebAPI.ViewModels
     public class ProfileViewModel
     {
         /// <summary>
-        /// Email.
-        /// </summary>
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        /// <summary>
         /// Avatar.
         /// </summary>
         public string Avatar { get; set; }

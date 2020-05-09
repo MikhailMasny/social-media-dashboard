@@ -6,6 +6,7 @@ using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -66,7 +67,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Result = true,
                 Message = "User successfully registered.",
                 User = userDTO,
-                Token = GetToken(user.Id)
+                Token = GetToken(user.Id, user.Email, user.IsAdmin)
             };
         }
 
@@ -100,15 +101,14 @@ namespace SocialMediaDashboard.Logic.Services
                 Result = true,
                 Message = "User successfully logged in.",
                 User = userDTO,
-                Token = GetToken(user.Id)
+                Token = GetToken(user.Id, user.Email, user.IsAdmin)
             };
         }
-
         /// <inheritdoc/>
-        public async Task<AuthDTO> UpdateProfile(string email, string name, string avatar)
+        public async Task<AuthDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar)
         {
             // UNDONE: to response model
-            var user = await _userRepository.GetEntity(x => x.Email == email);
+            var user = await _userRepository.GetEntity(x => x.Id == tokenData.Id);
 
             if (user == null)
             {
@@ -143,7 +143,18 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        private string GetToken(int id)
+        /// <inheritdoc/>
+        public TokenDTO GetUserData(ClaimsPrincipal claimsPrincipal)
+        {
+            return new TokenDTO
+            {
+                Id = int.Parse(claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value),
+                Email = claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Email).FirstOrDefault().Value,
+                IsAdmin = bool.Parse(claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Role).FirstOrDefault().Value)
+            };
+        }
+
+        private string GetToken(int id, string email, bool isAdmin)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -151,7 +162,9 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Role, isAdmin.ToString()) // TODO: fix to Role
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
