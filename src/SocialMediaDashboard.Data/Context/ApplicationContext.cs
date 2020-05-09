@@ -14,10 +14,7 @@ namespace SocialMediaDashboard.Data.Context
         /// </summary>
         /// <param name="options">DbContextOptions.</param>
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
-            : base(options)
-        {
-            Database.Migrate();
-        }
+            : base(options) { }
 
         /// <summary>
         /// User entities.

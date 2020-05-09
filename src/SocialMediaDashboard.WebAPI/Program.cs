@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using SocialMediaDashboard.WebAPI.Extensions;
 using System;
 
 namespace SocialMediaDashboard.WebAPI
@@ -22,7 +23,11 @@ namespace SocialMediaDashboard.WebAPI
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
+
+                IHost host = CreateHostBuilder(args).Build();
+                InitialServicesScopeFactory.Build(host);
+                host.Run();
+
                 return 0;
             }
             catch (Exception ex)
