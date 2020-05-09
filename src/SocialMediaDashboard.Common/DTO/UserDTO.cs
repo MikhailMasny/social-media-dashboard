@@ -30,6 +30,6 @@ namespace SocialMediaDashboard.Common.DTO
         /// <summary>
         /// Role.
         /// </summary>
-        public bool IsAdmin { get; set; }
+        public string Role { get; set; }
     }
 }

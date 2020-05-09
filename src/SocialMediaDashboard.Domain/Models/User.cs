@@ -36,7 +36,7 @@ namespace SocialMediaDashboard.Domain.Models
         /// <summary>
         /// Role.
         /// </summary>
-        public bool IsAdmin { get; set; }
+        public string Role { get; set; }
 
         /// <summary>
         /// Navigation to Media.

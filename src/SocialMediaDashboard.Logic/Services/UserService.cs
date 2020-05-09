@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Common.DTO;
+using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Models;
@@ -46,7 +47,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = email,
                 Password = ConvertPassword(password),
                 Name = name,
-                IsAdmin = false
+                Role = Roles.User.ToString()
             };
 
             await _userRepository.AddAsync(user);
@@ -59,7 +60,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = user.Email,
                 Avatar = user.Avatar,
                 Name = user.Name,
-                IsAdmin = user.IsAdmin
+                Role = user.Role
             };
 
             return new AuthDTO
@@ -67,7 +68,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Result = true,
                 Message = "User successfully registered.",
                 User = userDTO,
-                Token = GetToken(user.Id, user.Email, user.IsAdmin)
+                Token = GetToken(user.Id, user.Email, user.Role)
             };
         }
 
@@ -93,7 +94,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = user.Email,
                 Avatar = user.Avatar,
                 Name = user.Name,
-                IsAdmin = user.IsAdmin
+                Role = user.Role
             };
 
             return new AuthDTO
@@ -101,7 +102,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Result = true,
                 Message = "User successfully logged in.",
                 User = userDTO,
-                Token = GetToken(user.Id, user.Email, user.IsAdmin)
+                Token = GetToken(user.Id, user.Email, user.Role)
             };
         }
         /// <inheritdoc/>
@@ -132,7 +133,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = user.Email,
                 Avatar = user.Avatar,
                 Name = user.Name,
-                IsAdmin = user.IsAdmin
+                Role = user.Role
             };
 
             return new AuthDTO
@@ -150,11 +151,11 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Id = int.Parse(claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value),
                 Email = claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Email).FirstOrDefault().Value,
-                IsAdmin = bool.Parse(claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Role).FirstOrDefault().Value)
+                Role = claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Role).FirstOrDefault().Value
             };
         }
 
-        private string GetToken(int id, string email, bool isAdmin)
+        private string GetToken(int id, string email, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -164,7 +165,7 @@ namespace SocialMediaDashboard.Logic.Services
                 {
                     new Claim(ClaimTypes.NameIdentifier, id.ToString()),
                     new Claim(ClaimTypes.Email, email),
-                    new Claim(ClaimTypes.Role, isAdmin.ToString()) // TODO: fix to Role
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
