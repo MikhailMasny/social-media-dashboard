@@ -87,6 +87,7 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
             services.AddCors();
             services.AddControllers();
+            services.AddHealthChecks();
 
             return services;
         }
