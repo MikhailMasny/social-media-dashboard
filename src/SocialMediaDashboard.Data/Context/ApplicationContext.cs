@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMediaDashboard.Data.Configurations;
 using SocialMediaDashboard.Domain.Models;
 
 namespace SocialMediaDashboard.Data.Context
@@ -15,8 +16,7 @@ namespace SocialMediaDashboard.Data.Context
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
-            // UNDONE: fix it to Migrate
-            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         /// <summary>
@@ -33,5 +33,12 @@ namespace SocialMediaDashboard.Data.Context
         /// Statistic entities.
         /// </summary>
         public DbSet<Statistic> Statistics { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new MediaConfiguration());
+            modelBuilder.ApplyConfiguration(new StatisticConfiguration());
+        }
     }
 }
