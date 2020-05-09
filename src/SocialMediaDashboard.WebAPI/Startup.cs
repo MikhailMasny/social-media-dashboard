@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using SocialMediaDashboard.Data.Extensions;
 using SocialMediaDashboard.Logic.Extensions;
 using SocialMediaDashboard.WebAPI.Extensions;
@@ -31,6 +32,8 @@ namespace SocialMediaDashboard.WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
