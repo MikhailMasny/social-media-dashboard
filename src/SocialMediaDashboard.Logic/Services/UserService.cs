@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Common.DTO;
+using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -27,13 +29,13 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AuthDTO> Registration(string email, string password, string name)
+        public async Task<ResponseDTO> Registration(string email, string password, string name)
         {
             var existingUser = await _userRepository.GetEntity(x => x.Email == email);
 
             if (existingUser != null)
             {
-                return new AuthDTO
+                return new ResponseDTO
                 {
                     Result = false,
                     Message = "The email you specified is already in the system."
@@ -45,7 +47,7 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = email,
                 Password = ConvertPassword(password),
                 Name = name,
-                IsAdmin = false
+                Role = Roles.User.ToString()
             };
 
             await _userRepository.AddAsync(user);
@@ -58,27 +60,27 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = user.Email,
                 Avatar = user.Avatar,
                 Name = user.Name,
-                IsAdmin = user.IsAdmin
+                Role = user.Role
             };
 
-            return new AuthDTO
+            return new ResponseDTO
             {
                 Result = true,
                 Message = "User successfully registered.",
                 User = userDTO,
-                Token = GetToken(user.Id)
+                Token = GetToken(user.Id, user.Email, user.Role)
             };
         }
 
         /// <inheritdoc/>
-        public async Task<AuthDTO> Authenticate(string email, string password)
+        public async Task<ResponseDTO> Authenticate(string email, string password)
         {
             var convertedPassword = ConvertPassword(password);
             var user = await _userRepository.GetEntity(x => x.Email == email && x.Password == convertedPassword);
 
             if (user == null)
             {
-                return new AuthDTO
+                return new ResponseDTO
                 {
                     Result = false,
                     Message = "Email or password is incorrect."
@@ -92,27 +94,58 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = user.Email,
                 Avatar = user.Avatar,
                 Name = user.Name,
-                IsAdmin = user.IsAdmin
+                Role = user.Role
             };
 
-            return new AuthDTO
+            return new ResponseDTO
             {
                 Result = true,
                 Message = "User successfully logged in.",
                 User = userDTO,
-                Token = GetToken(user.Id)
+                Token = GetToken(user.Id, user.Email, user.Role)
             };
         }
 
         /// <inheritdoc/>
-        public async Task<AuthDTO> UpdateProfile(string email, string name, string avatar)
+        public async Task<ResponseDTO> GetProfile(int userId)
         {
-            // UNDONE: to response model
-            var user = await _userRepository.GetEntity(x => x.Email == email);
+            var user = await _userRepository.GetEntity(x => x.Id == userId);
 
             if (user == null)
             {
-                return new AuthDTO
+                return new ResponseDTO
+                {
+                    Result = false,
+                    Message = "User with the specified email address was not found."
+                };
+            }
+
+            var userDTO = new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Avatar = user.Avatar,
+                Name = user.Name,
+                Role = user.Role
+            };
+
+            return new ResponseDTO
+            {
+                Result = true,
+                Message = "User data updated successfully.",
+                User = userDTO
+            };
+        }
+
+        /// <inheritdoc/>
+        public async Task<ResponseDTO> UpdateProfile(TokenDTO tokenData, string name, string avatar)
+        {
+            // UNDONE: to response model
+            var user = await _userRepository.GetEntity(x => x.Id == tokenData.Id);
+
+            if (user == null)
+            {
+                return new ResponseDTO
                 {
                     Result = false,
                     Message = "User with the specified email address was not found."
@@ -132,10 +165,10 @@ namespace SocialMediaDashboard.Logic.Services
                 Email = user.Email,
                 Avatar = user.Avatar,
                 Name = user.Name,
-                IsAdmin = user.IsAdmin
+                Role = user.Role
             };
 
-            return new AuthDTO
+            return new ResponseDTO
             {
                 Result = true,
                 Message = "User data updated successfully.",
@@ -143,7 +176,18 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        private string GetToken(int id)
+        /// <inheritdoc/>
+        public TokenDTO GetUserData(ClaimsPrincipal claimsPrincipal)
+        {
+            return new TokenDTO
+            {
+                Id = int.Parse(claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value),
+                Email = claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Email).FirstOrDefault().Value,
+                Role = claimsPrincipal.Claims.Where(a => a.Type == ClaimTypes.Role).FirstOrDefault().Value
+            };
+        }
+
+        private string GetToken(int id, string email, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -151,7 +195,9 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

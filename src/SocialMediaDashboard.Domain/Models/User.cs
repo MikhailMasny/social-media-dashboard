@@ -8,6 +8,8 @@ namespace SocialMediaDashboard.Domain.Models
     /// </summary>
     public class User : IHasDbIdentity
     {
+        public static IEnumerable<object> Claims { get; set; }
+
         /// <inheritdoc/>
         public int Id { get; set; }
 
@@ -34,7 +36,7 @@ namespace SocialMediaDashboard.Domain.Models
         /// <summary>
         /// Role.
         /// </summary>
-        public bool IsAdmin { get; set; }
+        public string Role { get; set; }
 
         /// <summary>
         /// Navigation to Media.

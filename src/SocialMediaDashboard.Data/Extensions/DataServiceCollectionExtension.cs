@@ -20,7 +20,7 @@ namespace SocialMediaDashboard.Data.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlite(configuration.GetConnectionString("SQLiteConnection")));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             return services;

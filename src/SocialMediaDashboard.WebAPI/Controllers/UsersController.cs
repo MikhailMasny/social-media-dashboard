@@ -90,7 +90,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         // UNDONE: ApiRoute
-        [HttpPost("profile")]
+        [HttpPost("profile/update")]
         public async Task<IActionResult> UpdateProfile([FromBody] ProfileViewModel model)
         {
             ResponseViewModel responseViewModel;
@@ -106,9 +106,32 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 return BadRequest(responseViewModel);
             }
 
-            var result = await _userService.UpdateProfile(model.Email, model.Name, model.Avatar);
+            var tokenData = _userService.GetUserData(User);
+            var result = await _userService.UpdateProfile(tokenData, model.Name, model.Avatar);
 
             responseViewModel = new ResponseViewModel
+            {
+                IsSuccessful = result.Result,
+                Message = result.Message,
+                User = result.User,
+                Token = result.Token
+            };
+
+            if (!result.Result)
+            {
+                return BadRequest(responseViewModel);
+            }
+
+            return Ok(responseViewModel);
+        }
+
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var tokenData = _userService.GetUserData(User);
+            var result = await _userService.GetProfile(tokenData.Id);
+
+            var responseViewModel = new ResponseViewModel
             {
                 IsSuccessful = result.Result,
                 Message = result.Message,

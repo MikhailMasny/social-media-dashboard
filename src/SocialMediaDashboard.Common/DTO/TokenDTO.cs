@@ -3,9 +3,9 @@
 namespace SocialMediaDashboard.Common.DTO
 {
     /// <summary>
-    /// User data transfer object.
+    /// Token data transfer object.
     /// </summary>
-    public class UserDTO : IHasDbIdentity
+    public class TokenDTO : IHasDbIdentity
     {
         /// <summary>
         /// Identifier.
@@ -16,16 +16,6 @@ namespace SocialMediaDashboard.Common.DTO
         /// Email.
         /// </summary>
         public string Email { get; set; }
-
-        /// <summary>
-        /// Avatar.
-        /// </summary>
-        public string Avatar { get; set; }
-
-        /// <summary>
-        /// Name.
-        /// </summary>
-        public string Name { get; set; }
 
         /// <summary>
         /// Role.
