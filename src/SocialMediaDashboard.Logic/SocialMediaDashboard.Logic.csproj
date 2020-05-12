@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SocialMediaDashboard.Data\SocialMediaDashboard.Data.csproj" />
-    <ProjectReference Include="..\SocialMediaDashboard.Domain\SocialMediaDashboard.Domain.csproj" />
   </ItemGroup>
 
 </Project>

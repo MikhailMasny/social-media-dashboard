@@ -19,9 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.UnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.WebAPI", "src\SocialMediaDashboard.WebAPI\SocialMediaDashboard.WebAPI.csproj", "{7BBABE70-CF83-45D6-B983-D7F8576CDDBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.IntegrationTests", "tests\SocialMediaDashboard.IntegrationTests\SocialMediaDashboard.IntegrationTests.csproj", "{72E5805D-D20B-4AC0-A971-597A89DB749C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.IntegrationTests", "tests\SocialMediaDashboard.IntegrationTests\SocialMediaDashboard.IntegrationTests.csproj", "{72E5805D-D20B-4AC0-A971-597A89DB749C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaDashboard.Common", "src\SocialMediaDashboard.Common\SocialMediaDashboard.Common.csproj", "{E4EB9A44-A437-4302-AE49-F64EB809D111}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialMediaDashboard.Common", "src\SocialMediaDashboard.Common\SocialMediaDashboard.Common.csproj", "{E4EB9A44-A437-4302-AE49-F64EB809D111}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{67A61AB0-CC13-4459-A953-D86E134DBD3B}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
