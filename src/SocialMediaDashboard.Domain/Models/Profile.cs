@@ -1,11 +1,15 @@
-﻿namespace SocialMediaDashboard.Domain.Models
+﻿using SocialMediaDashboard.Common.Interfaces;
+using System;
+
+namespace SocialMediaDashboard.Domain.Models
 {
     /// <summary>
     /// User profile.
     /// </summary>
-    public class Profile
+    public class Profile : IHasDbIdentity
     {
-        // UNDONE: release it
+        /// <inheritdoc/>
+        public int Id { get; set; }
 
         /// <summary>
         /// Avatar.
@@ -16,5 +20,10 @@
         /// Name.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// User identifier.
+        /// </summary>
+        public Guid UserId { get; set; }
     }
 }

@@ -27,9 +27,14 @@ namespace SocialMediaDashboard.Data.Context
         /// </summary>
         public DbSet<Statistic> Statistics { get; set; }
 
+        /// <summary>
+        /// Profile entities.
+        /// </summary>
+        public DbSet<Statistic> Profiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ProfileConfiguration());
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
             modelBuilder.ApplyConfiguration(new StatisticConfiguration());
             base.OnModelCreating(modelBuilder);

@@ -1,4 +1,5 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Domain.Models
@@ -19,12 +20,7 @@ namespace SocialMediaDashboard.Domain.Models
         /// <summary>
         /// User identifier.
         /// </summary>
-        public int UserId { get; set; }
-
-        /// <summary>
-        /// Navigation property for User.
-        /// </summary>
-        public User User { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// Navigation to Statistic.

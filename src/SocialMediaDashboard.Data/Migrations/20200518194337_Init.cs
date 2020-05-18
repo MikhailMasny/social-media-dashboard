@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SocialMediaDashboard.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,20 +47,32 @@ namespace SocialMediaDashboard.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Medias",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Avatar = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true)
+                    AccountName = table.Column<string>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Medias", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Profiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Avatar = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 20, nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Profiles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,26 +182,6 @@ namespace SocialMediaDashboard.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Medias",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountName = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Medias", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Medias_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Statistics",
                 columns: table => new
                 {
@@ -251,11 +243,6 @@ namespace SocialMediaDashboard.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Medias_UserId",
-                table: "Medias",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Statistics_MediaId",
                 table: "Statistics",
                 column: "MediaId");
@@ -279,6 +266,9 @@ namespace SocialMediaDashboard.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Profiles");
+
+            migrationBuilder.DropTable(
                 name: "Statistics");
 
             migrationBuilder.DropTable(
@@ -289,9 +279,6 @@ namespace SocialMediaDashboard.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Medias");
-
-            migrationBuilder.DropTable(
-                name: "User");
         }
     }
 }
