@@ -18,6 +18,7 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Requests
         /// Password.
         /// </summary>
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

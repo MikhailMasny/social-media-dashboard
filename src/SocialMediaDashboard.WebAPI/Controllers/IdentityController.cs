@@ -33,7 +33,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Token = authResult.Token
+                Message = "For successful login confirm your email"
             });
         }
 
@@ -52,7 +52,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Token = authResult.Token
+                Token = authResult.Token,
+                Message = "Email and password successfully accepted."
             });
         }
 
@@ -79,7 +80,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Token = authResult.Token
+                Token = authResult.Token,
+                Message = "Your mail has been successfully confirmed."
             });
         }
     }

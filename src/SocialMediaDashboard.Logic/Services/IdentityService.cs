@@ -48,6 +48,9 @@ namespace SocialMediaDashboard.Logic.Services
 
             var createdUser = await _userManager.CreateAsync(newUser, password);
 
+            // UNDONE: release it
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+
             if (!createdUser.Succeeded)
             {
                 return new AuthenticationResult
