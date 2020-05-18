@@ -9,6 +9,21 @@ namespace SocialMediaDashboard.Common.Interfaces
     public interface IIdentityService
     {
         /// <summary>
+        /// Confirm email.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="code">Verify code.</param>
+        /// <returns>Authentication result data transfer object.</returns>
+        Task<AuthenticationResult> ConfirmEmailAsync(string userId, string code);
+
+        /// <summary>
+        /// Get user Id.
+        /// </summary>
+        /// <param name="userName">Username.</param>
+        /// <returns>Id.</returns>
+        Task<string> GetUserIdByNameAsync(string userName);
+
+        /// <summary>
         /// Sign in.
         /// </summary>
         /// <param name="email">Email.</param>

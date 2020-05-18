@@ -21,9 +21,14 @@
             public const string Login = Root + "/identity/login";
 
             /// <summary>
-            /// Registration path
+            /// Registration path.
             /// </summary>
             public const string Registration = Root + "/identity/registration";
+
+            /// <summary>
+            /// Confirm path.
+            /// </summary>
+            public const string Confirm = Root + "/identity/confirm";
         }
     }
 }

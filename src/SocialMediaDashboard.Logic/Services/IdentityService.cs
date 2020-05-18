@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Common.DTO;
@@ -71,6 +72,16 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
+
+            if (!emailConfirmationResult.IsSuccessful)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = emailConfirmationResult.Errors
+                };
+            }
+
             var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
             if (!userHasValidPassword)
@@ -82,6 +93,59 @@ namespace SocialMediaDashboard.Logic.Services
             }
 
             return GenerateAuthenticationResult(user);
+        }
+
+        /// <inheritdoc/>
+        public async Task<string> GetUserIdByNameAsync(string userName)
+        {
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == userName);
+
+            return user.Id;
+        }
+
+        /// <inheritdoc />
+        public async Task<AuthenticationResult> ConfirmEmailAsync(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User does not exist." }
+                };
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (!result.Succeeded)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Unexpected token issues.." }
+                };
+            }
+
+            return GenerateAuthenticationResult(user);
+        }
+
+        /// <inheritdoc/>
+        private async Task<EmailConfirmationResult> EmailConfirmHandlerAsync(IdentityUser identityUser)
+        {
+            var isConfirmed = await _userManager.IsEmailConfirmedAsync(identityUser);
+
+            if (!isConfirmed)
+            {
+                return new EmailConfirmationResult
+                {
+                    Errors = new[] { "You have not verified your email." }
+                };
+            }
+
+            return new EmailConfirmationResult
+            {
+                IsSuccessful = true
+            };
         }
 
         private AuthenticationResult GenerateAuthenticationResult(IdentityUser identityUser)
