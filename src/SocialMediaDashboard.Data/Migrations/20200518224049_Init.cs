@@ -53,7 +53,7 @@ namespace SocialMediaDashboard.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccountName = table.Column<string>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,7 +68,7 @@ namespace SocialMediaDashboard.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Avatar = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 20, nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

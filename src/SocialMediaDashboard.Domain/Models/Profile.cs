@@ -1,12 +1,11 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
-using System;
 
 namespace SocialMediaDashboard.Domain.Models
 {
     /// <summary>
     /// User profile.
     /// </summary>
-    public class Profile : IHasDbIdentity
+    public class Profile : IHasDbIdentity, IHasUserIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
@@ -21,9 +20,7 @@ namespace SocialMediaDashboard.Domain.Models
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// User identifier.
-        /// </summary>
-        public Guid UserId { get; set; }
+        /// <inheritdoc/>
+        public string UserId { get; set; }
     }
 }

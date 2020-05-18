@@ -10,7 +10,7 @@ using SocialMediaDashboard.Data.Context;
 namespace SocialMediaDashboard.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200518194337_Init")]
+    [Migration("20200518224049_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -232,8 +232,8 @@ namespace SocialMediaDashboard.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -255,8 +255,8 @@ namespace SocialMediaDashboard.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

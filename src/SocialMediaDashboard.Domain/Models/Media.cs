@@ -1,5 +1,4 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
-using System;
 using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Domain.Models
@@ -7,7 +6,7 @@ namespace SocialMediaDashboard.Domain.Models
     /// <summary>
     /// Media model.
     /// </summary>
-    public class Media : IHasDbIdentity
+    public class Media : IHasDbIdentity, IHasUserIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
@@ -17,10 +16,8 @@ namespace SocialMediaDashboard.Domain.Models
         /// </summary>
         public string AccountName { get; set; }
 
-        /// <summary>
-        /// User identifier.
-        /// </summary>
-        public Guid UserId { get; set; }
+        /// <inheritdoc/>
+        public string UserId { get; set; }
 
         /// <summary>
         /// Navigation to Statistic.
