@@ -3,7 +3,7 @@
 namespace SocialMediaDashboard.Common.DTO
 {
     /// <summary>
-    /// Result.
+    /// Result (base object).
     /// </summary>
     public abstract class ResultBase
     {

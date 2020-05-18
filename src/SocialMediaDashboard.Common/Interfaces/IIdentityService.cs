@@ -11,20 +11,34 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <summary>
         /// Confirm email.
         /// </summary>
-        /// <param name="userId">User identifier.</param>
+        /// <param name="id">User identifier.</param>
         /// <param name="code">Verify code.</param>
         /// <returns>Authentication result data transfer object.</returns>
-        Task<AuthenticationResult> ConfirmEmailAsync(string userId, string code);
+        Task<AuthenticationResult> ConfirmEmailAsync(string id, string code);
 
         /// <summary>
-        /// Get user Id.
+        /// Get user by Email.
         /// </summary>
-        /// <param name="userName">Username.</param>
-        /// <returns>Id.</returns>
-        Task<string> GetUserIdByNameAsync(string userName);
+        /// <param name="email">Email.</param>
+        /// <returns>User data transfet object.</returns>
+        Task<UserResult> GetUserByEmailAsync(string email);
 
         /// <summary>
-        /// Sign in.
+        /// Get user by Id.
+        /// </summary>
+        /// <param name="id">User identifier.</param>
+        /// <returns>User data transfet object.</returns>
+        Task<UserResult> GetUserByIdAsync(string id);
+
+        /// <summary>
+        /// Get user by username.
+        /// </summary>
+        /// <param name="username">Username.</param>
+        /// <returns>User data transfet object.</returns>
+        Task<UserResult> GetUserByNameAsync(string username);
+
+        /// <summary>
+        /// Sign in.s
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>

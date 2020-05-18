@@ -1,7 +1,7 @@
 ﻿namespace SocialMediaDashboard.Common.DTO
 {
     /// <summary>
-    /// Authentication result.
+    /// Authentication data transfet object.
     /// </summary>
     public class AuthenticationResult : ResultBase
     {

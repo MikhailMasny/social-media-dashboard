@@ -40,13 +40,13 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var newUser = new IdentityUser
+            var identityUser = new IdentityUser
             {
                 Email = email,
                 UserName = email // UNDONE: username
             };
 
-            var createdUser = await _userManager.CreateAsync(newUser, password);
+            var createdUser = await _userManager.CreateAsync(identityUser, password);
 
             if (!createdUser.Succeeded)
             {
@@ -59,8 +59,8 @@ namespace SocialMediaDashboard.Logic.Services
             return new RegistrationResult
             {
                 IsSuccessful = true,
-                UserId = newUser.Id,
-                Code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser)
+                UserId = identityUser.Id,
+                Code = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser)
             };
         }
 
@@ -101,9 +101,9 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc />
-        public async Task<AuthenticationResult> ConfirmEmailAsync(string userId, string code)
+        public async Task<AuthenticationResult> ConfirmEmailAsync(string id, string code)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -113,9 +113,9 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
 
-            if (!result.Succeeded)
+            if (!identityResult.Succeeded)
             {
                 return new AuthenticationResult
                 {
@@ -127,11 +127,60 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<string> GetUserIdByNameAsync(string userName)
+        public async Task<UserResult> GetUserByEmailAsync(string email)
         {
-            var user = await _userManager.Users.FirstAsync(u => u.UserName == userName);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            return user.Id;
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserResult> GetUserByIdAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserResult> GetUserByNameAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber
+            };
         }
 
         private async Task<RegistrationResult> EmailConfirmHandlerAsync(IdentityUser identityUser)
