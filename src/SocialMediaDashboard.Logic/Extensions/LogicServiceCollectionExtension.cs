@@ -16,6 +16,7 @@ namespace SocialMediaDashboard.Logic.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddLogic(this IServiceCollection services)
         {
+            services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserService, UserService>();
 
             return services;

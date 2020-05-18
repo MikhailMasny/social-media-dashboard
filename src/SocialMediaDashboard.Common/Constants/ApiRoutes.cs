@@ -10,6 +10,20 @@
         /// </summary>
         public const string Root = "api";
 
-        // UNDONE: TBC
+        /// <summary>
+        /// Identity path.
+        /// </summary>
+        public static class Identity
+        {
+            /// <summary>
+            /// Login path.
+            /// </summary>
+            public const string Login = Root + "/identity/login";
+
+            /// <summary>
+            /// Registration path
+            /// </summary>
+            public const string Registration = Root + "/identity/registration";
+        }
     }
 }

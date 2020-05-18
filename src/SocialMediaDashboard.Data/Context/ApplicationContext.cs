@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Data.Configurations;
 using SocialMediaDashboard.Domain.Models;
 
@@ -7,7 +8,7 @@ namespace SocialMediaDashboard.Data.Context
     /// <summary>
     /// Database context.
     /// </summary>
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext
     {
         /// <summary>
         /// Constructor.
@@ -15,11 +16,6 @@ namespace SocialMediaDashboard.Data.Context
         /// <param name="options">DbContextOptions.</param>
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) { }
-
-        /// <summary>
-        /// User entities.
-        /// </summary>
-        public DbSet<User> Users { get; set; }
 
         /// <summary>
         /// Media entities.
@@ -33,9 +29,10 @@ namespace SocialMediaDashboard.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            //modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
             modelBuilder.ApplyConfiguration(new StatisticConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
