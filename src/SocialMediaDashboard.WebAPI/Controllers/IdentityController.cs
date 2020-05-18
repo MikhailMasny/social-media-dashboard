@@ -18,9 +18,28 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [HttpPost(ApiRoutes.Identity.Registration)]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
+        public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
-            var authResult = await _identityService.CreateUserAsync(request.Email, request.Password);
+            var authResult = await _identityService.RegistrationAsync(request.Email, request.Password);
+
+            if (!authResult.IsSuccessful)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResult.Errors
+                });
+            }
+
+            return Ok(new AuthSuccessfulResponse
+            {
+                Token = authResult.Token
+            });
+        }
+
+        [HttpPost(ApiRoutes.Identity.Login)]
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
+        {
+            var authResult = await _identityService.LoginAsync(request.Email, request.Password);
 
             if (!authResult.IsSuccessful)
             {

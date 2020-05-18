@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Logic.Services
 {
+    /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
     {
         private readonly ApplicationSettings _appSettings;
@@ -25,7 +26,8 @@ namespace SocialMediaDashboard.Logic.Services
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<AuthenticationResult> CreateUserAsync(string email, string password)
+        /// <inheritdoc/>
+        public async Task<AuthenticationResult> RegistrationAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -33,7 +35,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User exists" }
+                    Errors = new[] { "The email you specified is already in the system." }
                 };
             }
 
@@ -53,16 +55,36 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var token = GetToken(newUser.Id, newUser.Email);
-
-            return new AuthenticationResult
-            {
-                IsSuccessful = true,
-                Token = token
-            };
+            return GenerateAuthenticationResult(newUser);
         }
 
-        private string GetToken(string id, string email)
+        /// <inheritdoc/>
+        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User does not exist." }
+                };
+            }
+
+            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
+
+            if (!userHasValidPassword)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Email or password is incorrect." }
+                };
+            }
+
+            return GenerateAuthenticationResult(user);
+        }
+
+        private AuthenticationResult GenerateAuthenticationResult(IdentityUser identityUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -70,16 +92,21 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, email),
+                    new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, email),
-                    new Claim(ClaimTypes.NameIdentifier, id)
+                    new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
+                    new Claim(ClaimTypes.NameIdentifier, identityUser.Id)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+
+            return new AuthenticationResult
+            {
+                IsSuccessful = true,
+                Token = tokenHandler.WriteToken(token)
+            };
         }
     }
 }
