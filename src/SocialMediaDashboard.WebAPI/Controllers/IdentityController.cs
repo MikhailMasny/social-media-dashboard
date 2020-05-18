@@ -21,17 +21,19 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Registration)]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
-            var authResult = await _identityService.RegistrationAsync(request.Email, request.Password);
+            var registrationResult = await _identityService.RegistrationAsync(request.Email, request.Password);
 
-            if (!authResult.IsSuccessful)
+            if (!registrationResult.IsSuccessful)
             {
-                return BadRequest(new AuthFailedResponse
+                return BadRequest(new FailedResponse
                 {
-                    Errors = authResult.Errors
+                    Errors = registrationResult.Errors
                 });
             }
 
-            return Ok(new AuthSuccessfulResponse
+            // UNDONE: send mail with token here
+
+            return Ok(new SuccessfulResponse
             {
                 Message = "For successful login confirm your email"
             });
@@ -44,13 +46,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authResult.IsSuccessful)
             {
-                return BadRequest(new AuthFailedResponse
+                return BadRequest(new FailedResponse
                 {
                     Errors = authResult.Errors
                 });
             }
 
-            return Ok(new AuthSuccessfulResponse
+            return Ok(new SuccessfulResponse
             {
                 Token = authResult.Token,
                 Message = "Email and password successfully accepted."
@@ -62,7 +64,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             if (emailQuery.UserId == null || emailQuery.Code == null)
             {
-                return BadRequest(new AuthFailedResponse
+                return BadRequest(new FailedResponse
                 {
                     Errors = new[] { "Data is incorrect." }
                 });
@@ -72,13 +74,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authResult.IsSuccessful)
             {
-                return BadRequest(new AuthFailedResponse
+                return BadRequest(new FailedResponse
                 {
                     Errors = authResult.Errors
                 });
             }
 
-            return Ok(new AuthSuccessfulResponse
+            return Ok(new SuccessfulResponse
             {
                 Token = authResult.Token,
                 Message = "Your mail has been successfully confirmed."

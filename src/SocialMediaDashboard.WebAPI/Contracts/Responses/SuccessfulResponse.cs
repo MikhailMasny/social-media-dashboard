@@ -3,7 +3,7 @@
     /// <summary>
     /// Authentication successful response.
     /// </summary>
-    public class AuthSuccessfulResponse
+    public class SuccessfulResponse
     {
         /// <summary>
         /// JWT Token.

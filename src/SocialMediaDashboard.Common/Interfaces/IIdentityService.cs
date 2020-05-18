@@ -36,7 +36,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
-        /// <returns>Authentication result data transfer object.</returns>
-        Task<AuthenticationResult> RegistrationAsync(string email, string password);
+        /// <returns>Email confirmation result data transfer object.</returns>
+        Task<RegistrationResult> RegistrationAsync(string email, string password);
     }
 }
