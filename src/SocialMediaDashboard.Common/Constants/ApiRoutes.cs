@@ -39,6 +39,11 @@
             /// Restore endpoint.
             /// </summary>
             public const string Restore = Root + "/" + Path + "/restore";
+
+            /// <summary>
+            /// Reset endpoint.
+            /// </summary>
+            public const string Reset = Root + "/" + Path + "/reset";
         }
     }
 }

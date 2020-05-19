@@ -35,7 +35,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new SuccessfulResponse
             {
-                Message = $"For successful login confirm your email"
+                Message = $"For successful login confirm your email {confirmationResult.Code}"
             });
         }
 
@@ -104,7 +104,29 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             
             return Ok(new SuccessfulResponse
             {
-                Message = $"For successful login confirm your email" // UNDONE: RazorViewEngine + SendGrid
+                Message = $"For successful login confirm your email {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+            });
+        }
+
+        [HttpPost(ApiRoutes.Identity.Reset)]
+        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
+        {
+            var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, request.NewPassword, request.Code);
+
+            if (!authenticationResult.IsSuccessful)
+            {
+                return BadRequest(new FailedResponse
+                {
+                    Errors = authenticationResult.Errors
+                });
+            }
+
+            // UNDONE: send mail with token here
+
+            return Ok(new SuccessfulResponse
+            {
+                Token = authenticationResult.Token,
+                Message = "New password successfully accepted." // UNDONE: RazorViewEngine + SendGrid
             });
         }
     }

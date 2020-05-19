@@ -53,6 +53,15 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<ConfirmationResult> RestorePasswordAsync(string email);
 
         /// <summary>
+        /// Reset password.
+        /// </summary>
+        /// <param name="email">Email.</param>
+        /// <param name="newPassword">New password.</param>
+        /// <param name="code">Verify code.</param>
+        /// <returns>Authentication result data transfer object.</returns>
+        Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code);
+
+        /// <summary>
         /// Sign up (create new user).
         /// </summary>
         /// <param name="email">Email.</param>
