@@ -35,7 +35,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new SuccessfulResponse
             {
-                Message = "For successful login confirm your email"
+                Message = $"For successful login confirm your email"
             });
         }
 
@@ -84,6 +84,27 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authResult.Token,
                 Message = "Your mail has been successfully confirmed."
+            });
+        }
+
+        [HttpPost(ApiRoutes.Identity.Restore)]
+        public async Task<IActionResult> RestorePassword([FromBody] UserLoginRequest request)
+        {
+            var registrationResult = await _identityService.RestorePasswordAsync(request.Email);
+
+            if (!registrationResult.IsSuccessful)
+            {
+                return BadRequest(new FailedResponse
+                {
+                    Errors = registrationResult.Errors
+                });
+            }
+
+            // UNDONE: send mail with token here
+            
+            return Ok(new SuccessfulResponse
+            {
+                Message = $"For successful login confirm your email" // UNDONE: RazorViewEngine + SendGrid
             });
         }
     }

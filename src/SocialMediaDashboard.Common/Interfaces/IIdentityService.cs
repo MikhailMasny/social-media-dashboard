@@ -38,7 +38,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<UserResult> GetUserByNameAsync(string username);
 
         /// <summary>
-        /// Sign in.s
+        /// Sign in.
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
@@ -46,11 +46,18 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<AuthenticationResult> LoginAsync(string email, string password);
 
         /// <summary>
+        /// Restore password.
+        /// </summary>
+        /// <param name="email">Email.</param>
+        /// <returns>Registration result data transfer object.</returns>
+        Task<RegistrationResult> RestorePasswordAsync(string email);
+
+        /// <summary>
         /// Sign up (create new user).
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
-        /// <returns>Email confirmation result data transfer object.</returns>
+        /// <returns>Registration result data transfer object.</returns>
         Task<RegistrationResult> RegistrationAsync(string email, string password);
     }
 }

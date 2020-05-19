@@ -5,6 +5,8 @@
     /// </summary>
     public class RegistrationResult : ResultBase
     {
+        // ConfirmationResult
+
         /// <summary>
         /// User identifier.
         /// </summary>

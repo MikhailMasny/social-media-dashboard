@@ -126,6 +126,37 @@ namespace SocialMediaDashboard.Logic.Services
             return GenerateAuthenticationResult(user);
         }
 
+        /// <inheritdoc />
+        public async Task<RegistrationResult> RestorePasswordAsync(string email)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
+
+            if (identityUser == null)
+            {
+                return new RegistrationResult
+                {
+                    Errors = new[] { "User does not exist." }
+                };
+            }
+
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
+
+            if (!emailConfirmationResult.IsSuccessful)
+            {
+                return new RegistrationResult
+                {
+                    Errors = emailConfirmationResult.Errors
+                };
+            }
+
+            return new RegistrationResult
+            {
+                IsSuccessful = true,
+                UserId = identityUser.Id,
+                Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser)
+            };
+        }
+
         /// <inheritdoc/>
         public async Task<UserResult> GetUserByEmailAsync(string email)
         {

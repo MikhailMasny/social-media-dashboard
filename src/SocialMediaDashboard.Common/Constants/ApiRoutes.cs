@@ -16,19 +16,29 @@
         public static class Identity
         {
             /// <summary>
-            /// Login path.
+            /// Identity path.
             /// </summary>
-            public const string Login = Root + "/identity/login";
+            public const string Path = "identity";
 
             /// <summary>
-            /// Registration path.
+            /// Login endpoint.
             /// </summary>
-            public const string Registration = Root + "/identity/registration";
+            public const string Login = Root + "/" + Path + "/login";
 
             /// <summary>
-            /// Confirm path.
+            /// Registration endpoint.
             /// </summary>
-            public const string Confirm = Root + "/identity/confirm";
+            public const string Registration = Root + "/" + Path + "/registration";
+
+            /// <summary>
+            /// Confirm endpoint.
+            /// </summary>
+            public const string Confirm = Root + "/" + Path + "/confirm";
+
+            /// <summary>
+            /// Restore endpoint.
+            /// </summary>
+            public const string Restore = Root + "/" + Path + "/restore";
         }
     }
 }
