@@ -21,13 +21,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Registration)]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
-            var registrationResult = await _identityService.RegistrationAsync(request.Email, request.Password);
+            var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.Password);
 
-            if (!registrationResult.IsSuccessful)
+            if (!confirmationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return Conflict(new FailedResponse
                 {
-                    Errors = registrationResult.Errors
+                    Errors = confirmationResult.Errors
                 });
             }
 
@@ -42,27 +42,27 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Login)]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            var authResult = await _identityService.LoginAsync(request.Email, request.Password);
+            var authenticationResult = await _identityService.LoginAsync(request.Email, request.Password);
 
-            if (!authResult.IsSuccessful)
+            if (!authenticationResult.IsSuccessful)
             {
                 return BadRequest(new FailedResponse
                 {
-                    Errors = authResult.Errors
+                    Errors = authenticationResult.Errors
                 });
             }
 
             return Ok(new SuccessfulResponse
             {
-                Token = authResult.Token,
+                Token = authenticationResult.Token,
                 Message = "Email and password successfully accepted."
             });
         }
 
         [HttpGet(ApiRoutes.Identity.Confirm)]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery emailQuery)
+        public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery query)
         {
-            if (emailQuery.UserId == null || emailQuery.Code == null)
+            if (query.Email == null || query.Code == null)
             {
                 return BadRequest(new FailedResponse
                 {
@@ -70,33 +70,33 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
-            var authResult = await _identityService.ConfirmEmailAsync(emailQuery.UserId, emailQuery.Code);
+            var authenticationResult = await _identityService.ConfirmEmailAsync(query.Email, query.Code);
 
-            if (!authResult.IsSuccessful)
+            if (!authenticationResult.IsSuccessful)
             {
                 return BadRequest(new FailedResponse
                 {
-                    Errors = authResult.Errors
+                    Errors = authenticationResult.Errors
                 });
             }
 
             return Ok(new SuccessfulResponse
             {
-                Token = authResult.Token,
+                Token = authenticationResult.Token,
                 Message = "Your mail has been successfully confirmed."
             });
         }
 
         [HttpPost(ApiRoutes.Identity.Restore)]
-        public async Task<IActionResult> RestorePassword([FromBody] UserLoginRequest request)
+        public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
         {
-            var registrationResult = await _identityService.RestorePasswordAsync(request.Email);
+            var confirmationResult = await _identityService.RestorePasswordAsync(request.Email);
 
-            if (!registrationResult.IsSuccessful)
+            if (!confirmationResult.IsSuccessful)
             {
                 return BadRequest(new FailedResponse
                 {
-                    Errors = registrationResult.Errors
+                    Errors = confirmationResult.Errors
                 });
             }
 

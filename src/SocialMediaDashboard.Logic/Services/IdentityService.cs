@@ -30,9 +30,9 @@ namespace SocialMediaDashboard.Logic.Services
         /// <inheritdoc/>
         public async Task<ConfirmationResult> RegistrationAsync(string email, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (user != null)
+            if (identityUser != null)
             {
                 return new ConfirmationResult
                 {
@@ -40,13 +40,13 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var identityUser = new IdentityUser
+            var user = new IdentityUser
             {
                 Email = email,
                 UserName = email // UNDONE: username
             };
 
-            var createdUser = await _userManager.CreateAsync(identityUser, password);
+            var createdUser = await _userManager.CreateAsync(user, password);
 
             if (!createdUser.Succeeded)
             {
@@ -59,17 +59,17 @@ namespace SocialMediaDashboard.Logic.Services
             return new ConfirmationResult
             {
                 IsSuccessful = true,
-                Email = identityUser.Email,
-                Code = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser)
+                Email = user.Email,
+                Code = await _userManager.GenerateEmailConfirmationTokenAsync(user)
             };
         }
 
         /// <inheritdoc/>
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            if (identityUser == null)
             {
                 return new AuthenticationResult
                 {
@@ -77,7 +77,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
+            var userHasValidPassword = await _userManager.CheckPasswordAsync(identityUser, password);
 
             if (!userHasValidPassword)
             {
@@ -87,7 +87,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
 
             if (!emailConfirmationResult.IsSuccessful)
             {
@@ -97,15 +97,15 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            return GenerateAuthenticationResult(user);
+            return GenerateAuthenticationResult(identityUser);
         }
 
         /// <inheritdoc />
-        public async Task<AuthenticationResult> ConfirmEmailAsync(string id, string code)
+        public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            if (identityUser == null)
             {
                 return new AuthenticationResult
                 {
@@ -113,7 +113,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
+            var identityResult = await _userManager.ConfirmEmailAsync(identityUser, code);
 
             if (!identityResult.Succeeded)
             {
@@ -123,7 +123,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            return GenerateAuthenticationResult(user);
+            return GenerateAuthenticationResult(identityUser);
         }
 
         /// <inheritdoc />
@@ -160,57 +160,57 @@ namespace SocialMediaDashboard.Logic.Services
         /// <inheritdoc/>
         public async Task<UserResult> GetUserByEmailAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            if (identityUser == null)
             {
                 return null;
             }
 
             return new UserResult
             {
-                Id = user.Id,
-                Email = user.Email,
-                UserName = user.UserName,
-                PhoneNumber = user.PhoneNumber
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
             };
         }
 
         /// <inheritdoc/>
         public async Task<UserResult> GetUserByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var identityUser = await _userManager.FindByIdAsync(id);
 
-            if (user == null)
+            if (identityUser == null)
             {
                 return null;
             }
 
             return new UserResult
             {
-                Id = user.Id,
-                Email = user.Email,
-                UserName = user.UserName,
-                PhoneNumber = user.PhoneNumber
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
             };
         }
 
         /// <inheritdoc/>
         public async Task<UserResult> GetUserByNameAsync(string username)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var identityUser = await _userManager.FindByNameAsync(username);
 
-            if (user == null)
+            if (identityUser == null)
             {
                 return null;
             }
 
             return new UserResult
             {
-                Id = user.Id,
-                Email = user.Email,
-                UserName = user.UserName,
-                PhoneNumber = user.PhoneNumber
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
             };
         }
 

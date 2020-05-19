@@ -6,9 +6,9 @@
     public class EmailQuery
     {
         /// <summary>
-        /// User identifier.
+        /// Email.
         /// </summary>
-        public string UserId { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Verify code.

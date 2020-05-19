@@ -11,10 +11,10 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <summary>
         /// Confirm email.
         /// </summary>
-        /// <param name="id">User identifier.</param>
+        /// <param name="email">Email.</param>
         /// <param name="code">Verify code.</param>
         /// <returns>Authentication result data transfer object.</returns>
-        Task<AuthenticationResult> ConfirmEmailAsync(string id, string code);
+        Task<AuthenticationResult> ConfirmEmailAsync(string email, string code);
 
         /// <summary>
         /// Get user by Email.
@@ -49,7 +49,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Restore password.
         /// </summary>
         /// <param name="email">Email.</param>
-        /// <returns>Registration result data transfer object.</returns>
+        /// <returns>Confirmation result data transfer object.</returns>
         Task<ConfirmationResult> RestorePasswordAsync(string email);
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
-        /// <returns>Registration result data transfer object.</returns>
+        /// <returns>Confirmation result data transfer object.</returns>
         Task<ConfirmationResult> RegistrationAsync(string email, string password);
     }
 }
