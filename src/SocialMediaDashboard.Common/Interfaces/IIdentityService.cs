@@ -50,7 +50,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="email">Email.</param>
         /// <returns>Registration result data transfer object.</returns>
-        Task<RegistrationResult> RestorePasswordAsync(string email);
+        Task<ConfirmationResult> RestorePasswordAsync(string email);
 
         /// <summary>
         /// Sign up (create new user).
@@ -58,6 +58,6 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
         /// <returns>Registration result data transfer object.</returns>
-        Task<RegistrationResult> RegistrationAsync(string email, string password);
+        Task<ConfirmationResult> RegistrationAsync(string email, string password);
     }
 }

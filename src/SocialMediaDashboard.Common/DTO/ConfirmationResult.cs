@@ -3,14 +3,12 @@
     /// <summary>
     /// Registration data transfet object..
     /// </summary>
-    public class RegistrationResult : ResultBase
+    public class ConfirmationResult : ResultBase
     {
-        // ConfirmationResult
-
         /// <summary>
-        /// User identifier.
+        /// Email.
         /// </summary>
-        public string UserId { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Verify code.

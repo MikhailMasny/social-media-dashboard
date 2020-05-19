@@ -28,13 +28,13 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<RegistrationResult> RegistrationAsync(string email, string password)
+        public async Task<ConfirmationResult> RegistrationAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user != null)
             {
-                return new RegistrationResult
+                return new ConfirmationResult
                 {
                     Errors = new[] { "The email you specified is already in the system." }
                 };
@@ -50,16 +50,16 @@ namespace SocialMediaDashboard.Logic.Services
 
             if (!createdUser.Succeeded)
             {
-                return new RegistrationResult
+                return new ConfirmationResult
                 {
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
             }
 
-            return new RegistrationResult
+            return new ConfirmationResult
             {
                 IsSuccessful = true,
-                UserId = identityUser.Id,
+                Email = identityUser.Email,
                 Code = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser)
             };
         }
@@ -127,13 +127,13 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc />
-        public async Task<RegistrationResult> RestorePasswordAsync(string email)
+        public async Task<ConfirmationResult> RestorePasswordAsync(string email)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
             if (identityUser == null)
             {
-                return new RegistrationResult
+                return new ConfirmationResult
                 {
                     Errors = new[] { "User does not exist." }
                 };
@@ -143,16 +143,16 @@ namespace SocialMediaDashboard.Logic.Services
 
             if (!emailConfirmationResult.IsSuccessful)
             {
-                return new RegistrationResult
+                return new ConfirmationResult
                 {
                     Errors = emailConfirmationResult.Errors
                 };
             }
 
-            return new RegistrationResult
+            return new ConfirmationResult
             {
                 IsSuccessful = true,
-                UserId = identityUser.Id,
+                Email = identityUser.Email,
                 Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser)
             };
         }
@@ -214,19 +214,19 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        private async Task<RegistrationResult> EmailConfirmHandlerAsync(IdentityUser identityUser)
+        private async Task<ConfirmationResult> EmailConfirmHandlerAsync(IdentityUser identityUser)
         {
             var isConfirmed = await _userManager.IsEmailConfirmedAsync(identityUser);
 
             if (!isConfirmed)
             {
-                return new RegistrationResult
+                return new ConfirmationResult
                 {
                     Errors = new[] { "You have not verified your email." }
                 };
             }
 
-            return new RegistrationResult
+            return new ConfirmationResult
             {
                 IsSuccessful = true
             };
