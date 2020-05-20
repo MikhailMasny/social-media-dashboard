@@ -33,7 +33,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             // UNDONE: send mail with token here
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Message = $"For successful login confirm your email. Code: {confirmationResult.Code}"
             });
@@ -52,7 +52,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
                 Message = "Email and password successfully accepted."
@@ -80,7 +80,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
                 Message = "Your mail has been successfully confirmed."
@@ -102,7 +102,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             // UNDONE: send mail with token here
             
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Message = $"To continue resetting the password, follow the link sent to the mail.. Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
@@ -123,7 +123,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             // UNDONE: send mail with token here
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
                 Message = "New password successfully accepted." // UNDONE: RazorViewEngine + SendGrid

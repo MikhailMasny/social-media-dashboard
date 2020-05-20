@@ -1,14 +1,14 @@
-﻿namespace SocialMediaDashboard.WebAPI.Contracts.Responses
+﻿namespace SocialMediaDashboard.WebAPI.Models
 {
     /// <summary>
-    /// Authentication successful response.
+    /// Error model for validation filter.
     /// </summary>
-    public class SuccessfulResponse
+    public class ValidationErrorModel
     {
         /// <summary>
-        /// JWT Token.
+        /// Field name.
         /// </summary>
-        public string Token { get; set; }
+        public string FieldName { get; set; }
 
         /// <summary>
         /// Message.

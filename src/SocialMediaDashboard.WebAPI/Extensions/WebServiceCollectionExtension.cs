@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMediaDashboard.Common.Helpers;
-using System;
+using SocialMediaDashboard.WebAPI.Contracts.Requests;
+using SocialMediaDashboard.WebAPI.Filters;
+using SocialMediaDashboard.WebAPI.Validators;
 using System.Text;
 
 namespace SocialMediaDashboard.WebAPI.Extensions
@@ -79,8 +83,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
                 var securityRequirement = new OpenApiSecurityRequirement
                 {
-                    { 
-                        securitySchema, new[] { "Bearer" } 
+                    {
+                        securitySchema, new[] { "Bearer" }
                     }
                 };
                 config.AddSecurityRequirement(securityRequirement);
@@ -88,8 +92,11 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
             services.AddSwaggerGenNewtonsoftSupport();
 
+            services.AddTransient<IValidator<UserLoginRequest>, UserLoginRequestValidator>();
+
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers(x => x.Filters.Add<ValidationFilter>())
+                .AddFluentValidation();
             services.AddHealthChecks();
 
             return services;
