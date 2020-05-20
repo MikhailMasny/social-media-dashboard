@@ -21,7 +21,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Registration)]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
-            var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.Password);
+            var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
 
             if (!confirmationResult.IsSuccessful)
             {

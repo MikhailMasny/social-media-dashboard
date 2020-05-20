@@ -27,7 +27,7 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<ConfirmationResult> RegistrationAsync(string email, string password)
+        public async Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
@@ -42,7 +42,7 @@ namespace SocialMediaDashboard.Logic.Services
             var user = new IdentityUser
             {
                 Email = email,
-                UserName = email // UNDONE: username
+                UserName = userName
             };
 
             var createdUser = await _userManager.CreateAsync(user, password);

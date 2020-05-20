@@ -65,8 +65,9 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Sign up (create new user).
         /// </summary>
         /// <param name="email">Email.</param>
+        /// <param name="userName">User nickname.</param>
         /// <param name="password">Password.</param>
         /// <returns>Confirmation result data transfer object.</returns>
-        Task<ConfirmationResult> RegistrationAsync(string email, string password);
+        Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password);
     }
 }
