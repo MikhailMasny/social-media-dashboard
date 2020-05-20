@@ -17,10 +17,6 @@ namespace SocialMediaDashboard.Data.Configurations
 
             builder.Property(m => m.AccountName)
                 .IsRequired();
-
-            builder.HasOne(m => m.User)
-                .WithMany(u => u.Medias)
-                .HasForeignKey(m => m.UserId);
         }
     }
 }

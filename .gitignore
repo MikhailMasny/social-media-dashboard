@@ -351,3 +351,4 @@ MigrationBackup/
 
 # User files
 SocialMediaDashboardApp.db
+appsettings.json

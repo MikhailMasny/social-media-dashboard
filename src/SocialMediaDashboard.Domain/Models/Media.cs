@@ -6,7 +6,7 @@ namespace SocialMediaDashboard.Domain.Models
     /// <summary>
     /// Media model.
     /// </summary>
-    public class Media : IHasDbIdentity
+    public class Media : IHasDbIdentity, IHasUserIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
@@ -16,15 +16,8 @@ namespace SocialMediaDashboard.Domain.Models
         /// </summary>
         public string AccountName { get; set; }
 
-        /// <summary>
-        /// User identifier.
-        /// </summary>
-        public int UserId { get; set; }
-
-        /// <summary>
-        /// Navigation property for User.
-        /// </summary>
-        public User User { get; set; }
+        /// <inheritdoc/>
+        public string UserId { get; set; }
 
         /// <summary>
         /// Navigation to Statistic.

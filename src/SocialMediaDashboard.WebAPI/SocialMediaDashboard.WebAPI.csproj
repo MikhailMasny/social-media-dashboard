@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SocialMediaDashboard.Common\SocialMediaDashboard.Common.csproj" />
     <ProjectReference Include="..\SocialMediaDashboard.Logic\SocialMediaDashboard.Logic.csproj" />
   </ItemGroup>
 
