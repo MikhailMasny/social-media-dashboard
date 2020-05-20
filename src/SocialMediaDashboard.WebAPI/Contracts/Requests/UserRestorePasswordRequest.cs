@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SocialMediaDashboard.WebAPI.Contracts.Requests
+﻿namespace SocialMediaDashboard.WebAPI.Contracts.Requests
 {
     /// <summary>
     /// User restore password request.
@@ -10,8 +8,6 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Requests
         /// <summary>
         /// Email.
         /// </summary>
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
     }
 }

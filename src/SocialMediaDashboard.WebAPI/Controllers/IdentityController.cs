@@ -25,7 +25,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!confirmationResult.IsSuccessful)
             {
-                return Conflict(new FailedResponse
+                return Conflict(new AuthFailedResponse
                 {
                     Errors = confirmationResult.Errors
                 });
@@ -46,7 +46,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authenticationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = authenticationResult.Errors
                 });
@@ -64,7 +64,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             if (query.Email == null || query.Code == null)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = new[] { "Data is incorrect." }
                 });
@@ -74,7 +74,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authenticationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = authenticationResult.Errors
                 });
@@ -94,7 +94,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!confirmationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = confirmationResult.Errors
                 });
@@ -115,7 +115,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authenticationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = authenticationResult.Errors
                 });

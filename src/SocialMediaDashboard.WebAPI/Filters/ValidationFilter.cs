@@ -33,7 +33,7 @@ namespace SocialMediaDashboard.WebAPI.Filters
                     {
                         var errorModel = new ValidationErrorModel
                         {
-                            FieldName = error.Key,
+                            Field = error.Key,
                             Message = subError
                         };
 

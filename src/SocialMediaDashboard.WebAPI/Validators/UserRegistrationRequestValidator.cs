@@ -4,14 +4,14 @@ using SocialMediaDashboard.WebAPI.Contracts.Requests;
 namespace SocialMediaDashboard.WebAPI.Validators
 {
     /// <summary>
-    /// User login request validator.
+    /// User registration request validator.
     /// </summary>
-    public class UserLoginRequestValidator : AbstractValidator<UserLoginRequest>
+    public class UserRegistrationRequestValidator : AbstractValidator<UserRegistrationRequest>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserLoginRequestValidator()
+        public UserRegistrationRequestValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty()

@@ -92,11 +92,9 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
             services.AddSwaggerGenNewtonsoftSupport();
 
-            services.AddTransient<IValidator<UserLoginRequest>, UserLoginRequestValidator>();
-
             services.AddCors();
             services.AddControllers(x => x.Filters.Add<ValidationFilter>())
-                .AddFluentValidation();
+                .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddHealthChecks();
 
             return services;
