@@ -269,7 +269,7 @@ namespace SocialMediaDashboard.Logic.Services
                     new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
-                    new Claim(JwtRegisteredClaimNames.NameId, identityUser.Id)
+                    new Claim("id", identityUser.Id)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
