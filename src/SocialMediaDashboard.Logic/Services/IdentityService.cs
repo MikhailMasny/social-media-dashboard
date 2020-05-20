@@ -176,7 +176,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Some error." }
+                    Errors = new[] { "An unexpected error occurred while resetting the password.." }
                 };
             }
 

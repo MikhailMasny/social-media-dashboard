@@ -35,7 +35,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new SuccessfulResponse
             {
-                Message = $"For successful login confirm your email {confirmationResult.Code}"
+                Message = $"For successful login confirm your email. Code: {confirmationResult.Code}"
             });
         }
 
@@ -104,7 +104,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             
             return Ok(new SuccessfulResponse
             {
-                Message = $"For successful login confirm your email {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+                Message = $"To continue resetting the password, follow the link sent to the mail.. Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
