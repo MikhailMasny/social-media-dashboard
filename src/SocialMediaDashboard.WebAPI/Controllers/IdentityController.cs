@@ -21,11 +21,11 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Registration)]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
-            var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.Password);
+            var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
 
             if (!confirmationResult.IsSuccessful)
             {
-                return Conflict(new FailedResponse
+                return Conflict(new AuthFailedResponse
                 {
                     Errors = confirmationResult.Errors
                 });
@@ -33,7 +33,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             // UNDONE: send mail with token here
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Message = $"For successful login confirm your email. Code: {confirmationResult.Code}"
             });
@@ -46,15 +46,16 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authenticationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = authenticationResult.Errors
                 });
             }
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
+                RefreshToken = authenticationResult.RefreshToken,
                 Message = "Email and password successfully accepted."
             });
         }
@@ -64,7 +65,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             if (query.Email == null || query.Code == null)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = new[] { "Data is incorrect." }
                 });
@@ -74,15 +75,16 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authenticationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = authenticationResult.Errors
                 });
             }
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
+                RefreshToken = authenticationResult.RefreshToken,
                 Message = "Your mail has been successfully confirmed."
             });
         }
@@ -94,7 +96,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!confirmationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = confirmationResult.Errors
                 });
@@ -102,7 +104,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             // UNDONE: send mail with token here
             
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Message = $"To continue resetting the password, follow the link sent to the mail.. Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
@@ -115,7 +117,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             if (!authenticationResult.IsSuccessful)
             {
-                return BadRequest(new FailedResponse
+                return BadRequest(new AuthFailedResponse
                 {
                     Errors = authenticationResult.Errors
                 });
@@ -123,10 +125,33 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             // UNDONE: send mail with token here
 
-            return Ok(new SuccessfulResponse
+            return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
                 Message = "New password successfully accepted." // UNDONE: RazorViewEngine + SendGrid
+            });
+        }
+
+        [HttpPost(ApiRoutes.Identity.Refresh)]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            var authenticationResult = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
+
+            if (!authenticationResult.IsSuccessful)
+            {
+                return Conflict(new AuthFailedResponse
+                {
+                    Errors = authenticationResult.Errors
+                });
+            }
+
+            // UNDONE: send mail with token here
+
+            return Ok(new AuthSuccessfulResponse
+            {
+                Token = authenticationResult.Token,
+                RefreshToken = authenticationResult.RefreshToken,
+                Message = $"For successful login confirm your email."
             });
         }
     }

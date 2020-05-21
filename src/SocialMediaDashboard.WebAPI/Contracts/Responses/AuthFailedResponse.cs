@@ -5,7 +5,7 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Responses
     /// <summary>
     /// Authentication failed response.
     /// </summary>
-    public class FailedResponse
+    public class AuthFailedResponse
     {
         /// <summary>
         /// Errors.

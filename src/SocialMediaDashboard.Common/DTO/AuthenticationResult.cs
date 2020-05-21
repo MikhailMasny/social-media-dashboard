@@ -9,5 +9,10 @@
         /// JWT Token.
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// Refresh JWT Token.
+        /// </summary>
+        public string RefreshToken { get; set; }
     }
 }

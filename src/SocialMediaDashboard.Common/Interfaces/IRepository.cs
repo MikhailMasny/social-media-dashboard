@@ -23,7 +23,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="predicate">LINQ predicate.</param>
         /// <returns>T entity.</returns>
-        Task<T> GetEntity(Expression<Func<T, bool>> predicate);
+        Task<T> GetEntityAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Add new entity async.

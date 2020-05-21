@@ -1,4 +1,6 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using SocialMediaDashboard.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialMediaDashboard.Domain.Models
 {
@@ -22,5 +24,12 @@ namespace SocialMediaDashboard.Domain.Models
 
         /// <inheritdoc/>
         public string UserId { get; set; }
+
+        // UNDONE: maybe fix it?
+        /// <summary>
+        /// User.
+        /// </summary>
+        [ForeignKey(nameof(UserId))]
+        public IdentityUser User { get; set; }
     }
 }

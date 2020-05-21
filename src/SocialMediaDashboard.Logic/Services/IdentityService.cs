@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Common.DTO;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Domain.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -17,18 +17,24 @@ namespace SocialMediaDashboard.Logic.Services
     /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
     {
-        private readonly ApplicationSettings _appSettings;
+        private readonly JwtSettings _jwtSettings;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly TokenValidationParameters _tokenValidationParameters;
+        private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
-        public IdentityService(IOptions<ApplicationSettings> appSettings,
-                               UserManager<IdentityUser> userManager)
+        public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
+                               UserManager<IdentityUser> userManager,
+                               IRepository<RefreshToken> refreshTokenRepository,
+                               TokenValidationParameters tokenValidationParameters)
         {
-            _appSettings = appSettings.Value ?? throw new ArgumentNullException(nameof(appSettings));
+            _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
+            _tokenValidationParameters = tokenValidationParameters ?? throw new ArgumentNullException(nameof(tokenValidationParameters));
         }
 
         /// <inheritdoc/>
-        public async Task<ConfirmationResult> RegistrationAsync(string email, string password)
+        public async Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
@@ -43,7 +49,7 @@ namespace SocialMediaDashboard.Logic.Services
             var user = new IdentityUser
             {
                 Email = email,
-                UserName = email // UNDONE: username
+                UserName = userName
             };
 
             var createdUser = await _userManager.CreateAsync(user, password);
@@ -97,7 +103,84 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            return GenerateAuthenticationResult(identityUser);
+            return await GenerateAuthenticationResultAsync(identityUser);
+        }
+
+        /// <inheritdoc/>
+        public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
+        {
+            var validatedToken = GetPrincipalFromToken(token);
+
+            if (validatedToken == null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Invalid token." }
+                };
+            }
+
+            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                .AddSeconds(expiryDateUnix);
+
+            if (expiryDateTimeUtc > DateTime.UtcNow)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This token hasn't expired yet." }
+                };
+            }
+
+            var jti = validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+
+            var storedRefreshToken = await _refreshTokenRepository.GetEntityAsync(x => x.Token == refreshToken);
+
+            if (storedRefreshToken == null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token does not exist" } 
+                };
+            }
+
+            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token has expired" }
+                };
+            }
+
+            if (storedRefreshToken.IsInvalid)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token has been invalidated" }
+                };
+            }
+
+            if (storedRefreshToken.IsUsed)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token has been used" }
+                };
+            }
+
+            if (storedRefreshToken.JwtId != jti)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token does not match this JWT" }
+                };
+            }
+
+            storedRefreshToken.IsUsed = true;
+            _refreshTokenRepository.Update(storedRefreshToken);
+            await _refreshTokenRepository.SaveChangesAsync();
+
+            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+            return await GenerateAuthenticationResultAsync(identityUser);
         }
 
         /// <inheritdoc />
@@ -123,7 +206,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            return GenerateAuthenticationResult(identityUser);
+            return await GenerateAuthenticationResultAsync(identityUser);
         }
 
         /// <inheritdoc />
@@ -180,7 +263,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            return GenerateAuthenticationResult(identityUser);
+            return await GenerateAuthenticationResultAsync(identityUser);
         }
 
         /// <inheritdoc/>
@@ -258,10 +341,36 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        private AuthenticationResult GenerateAuthenticationResult(IdentityUser identityUser)
+        private ClaimsPrincipal GetPrincipalFromToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, _tokenValidationParameters, out var validatedToken);
+                if (!IsJwtWithValidaSecurityAlgorithm(validatedToken))
+                {
+                    return null;
+                }
+
+                return principal;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private bool IsJwtWithValidaSecurityAlgorithm(SecurityToken validatedToken)
+        {
+            return (validatedToken is JwtSecurityToken jwtSecurityToken)
+                && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser identityUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -269,17 +378,30 @@ namespace SocialMediaDashboard.Logic.Services
                     new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
-                    new Claim(JwtRegisteredClaimNames.NameId, identityUser.Id)
+                    new Claim("id", identityUser.Id)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            var refreshToken = new RefreshToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                JwtId = token.Id,
+                UserId = identityUser.Id,
+                CreationDate = DateTime.UtcNow,
+                ExpiryDate = DateTime.UtcNow.AddMonths(6)
+            };
+
+            await _refreshTokenRepository.AddAsync(refreshToken);
+            await _refreshTokenRepository.SaveChangesAsync();
+
             return new AuthenticationResult
             {
                 IsSuccessful = true,
-                Token = tokenHandler.WriteToken(token)
+                Token = tokenHandler.WriteToken(token),
+                RefreshToken = refreshToken.Token
             };
         }
     }
