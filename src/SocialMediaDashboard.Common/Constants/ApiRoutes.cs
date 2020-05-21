@@ -50,5 +50,21 @@
             /// </summary>
             public const string Refresh = Root + "/" + Path + "/refresh";
         }
+
+        /// <summary>
+        /// Config path.
+        /// </summary>
+        public static class Config
+        {
+            /// <summary>
+            /// Config path.
+            /// </summary>
+            public const string Path = "config";
+
+            /// <summary>
+            /// Connection endpoint.
+            /// </summary>
+            public const string Connection = Root + "/" + Path + "/connection";
+        }
     }
 }

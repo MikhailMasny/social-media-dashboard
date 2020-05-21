@@ -4,9 +4,9 @@ using System.Linq;
 namespace SocialMediaDashboard.WebAPI.Extensions
 {
     /// <summary>
-    /// Extension for JWT Token.
+    /// Extensions for JWT Token.
     /// </summary>
-    public static class JwtTokenExtension
+    public static class JwtTokenExtensions
     {
         /// <summary>
         /// Get user identifier.

@@ -99,6 +99,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                 .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddHealthChecks();
 
+            services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
+
             return services;
         }
     }
