@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Common.Constants;
 using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Interfaces;
@@ -7,6 +9,7 @@ using System;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class ConfigController : ControllerBase
     {
         private readonly IConfigService _configService;
@@ -17,7 +20,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [HttpPost(ApiRoutes.Config.Connection)]
-        public IActionResult Test([FromBody] ConnectionStringsRequest request)
+        public IActionResult UpdateConnections([FromBody] ConnectionStringsRequest request)
         {
             _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
             _configService.CheckAndUpdateConnection(request.DockerConnection, DataProviderType.Docker);

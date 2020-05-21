@@ -17,11 +17,11 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         {
             host = host ?? throw new ArgumentNullException(nameof(host));
 
-            using var scope = host.Services.CreateScope();
-
+            using IServiceScope scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
 
             RuntimeMigration.Initialize(services);
+            ContextSeed.Initialize(services);
         }
     }
 }
