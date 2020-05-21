@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMediaDashboard.Common.Helpers;
-using System;
+using SocialMediaDashboard.WebAPI.Filters;
 using System.Text;
 
 namespace SocialMediaDashboard.WebAPI.Extensions
@@ -22,27 +23,35 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddWeb(this IServiceCollection services, IConfiguration configuration)
         {
-            var appSettingsSection = configuration.GetSection("AppSettings");
-            services.Configure<ApplicationSettings>(appSettingsSection);
+            var jwtSettingsSection = configuration.GetSection(nameof(JwtSettings));
+            services.Configure<JwtSettings>(jwtSettingsSection);
 
-            var appSettings = appSettingsSection.Get<ApplicationSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+            var jwtSecretKey = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
+            var tokenValidationParametrs = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(jwtSecretKey),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = true
+            };
+
+            services.AddSingleton(tokenValidationParametrs);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
+                x.TokenValidationParameters = tokenValidationParametrs;
             });
 
             services.AddSwaggerGen(config =>
@@ -55,7 +64,7 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                     Contact = new OpenApiContact()
                     {
                         Name = "Mikhail M. & Alexandr G.",
-                        //Url = new Uri("localhost") // UNDONE: add it after deploy
+                        //Url = new Uri("https://social-media-dashboard-api.herokuapp.com/") // UNDONE: add it after deploy
                     }
                 });
 
@@ -76,8 +85,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
                 var securityRequirement = new OpenApiSecurityRequirement
                 {
-                    { 
-                        securitySchema, new[] { "Bearer" } 
+                    {
+                        securitySchema, new[] { "Bearer" }
                     }
                 };
                 config.AddSecurityRequirement(securityRequirement);
@@ -86,7 +95,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
             services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers(x => x.Filters.Add<ValidationFilter>())
+                .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddHealthChecks();
 
             return services;

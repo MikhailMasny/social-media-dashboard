@@ -1,22 +1,26 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SocialMediaDashboard.Common.Interfaces;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialMediaDashboard.Domain.Models
 {
     /// <summary>
-    /// Media model.
+    /// User profile.
     /// </summary>
-    public class Media : IHasDbIdentity, IHasUserIdentity
+    public class Profile : IHasDbIdentity, IHasUserIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
 
         /// <summary>
-        /// Social media account.
+        /// Avatar.
         /// </summary>
-        public string AccountName { get; set; }
+        public string Avatar { get; set; }
+
+        /// <summary>
+        /// Name.
+        /// </summary>
+        public string Name { get; set; }
 
         /// <inheritdoc/>
         public string UserId { get; set; }
@@ -27,10 +31,5 @@ namespace SocialMediaDashboard.Domain.Models
         /// </summary>
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; }
-
-        /// <summary>
-        /// Navigation to Statistic.
-        /// </summary>
-        public ICollection<Statistic> Statistics { get; set; }
     }
 }

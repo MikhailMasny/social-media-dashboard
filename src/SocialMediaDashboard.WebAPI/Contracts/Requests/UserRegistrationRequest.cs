@@ -1,23 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SocialMediaDashboard.WebAPI.ViewModels
+﻿namespace SocialMediaDashboard.WebAPI.Contracts.Requests
 {
     /// <summary>
-    /// Authenticate ViewModel.
+    /// Registration request.
     /// </summary>
-    public class LoginViewModel
+    public class UserRegistrationRequest
     {
         /// <summary>
         /// Email.
         /// </summary>
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
+
+        /// <summary>
+        /// User nickname.
+        /// </summary>
+        public string UserName { get; set; }
 
         /// <summary>
         /// Password.
         /// </summary>
-        [Required]
         public string Password { get; set; }
     }
 }
