@@ -22,7 +22,7 @@ namespace SocialMediaDashboard.Logic.Services
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
-        public IdentityService(IOptions<JwtSettings> jwtSettings,
+        public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
                                UserManager<IdentityUser> userManager,
                                IRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters)
