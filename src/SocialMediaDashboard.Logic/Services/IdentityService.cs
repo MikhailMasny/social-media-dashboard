@@ -17,17 +17,17 @@ namespace SocialMediaDashboard.Logic.Services
     /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
     {
-        private readonly ApplicationSettings _appSettings;
+        private readonly JwtSettings _jwtSettings;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
-        public IdentityService(IOptions<ApplicationSettings> appSettings,
+        public IdentityService(IOptions<JwtSettings> jwtSettings,
                                UserManager<IdentityUser> userManager,
                                IRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters)
         {
-            _appSettings = appSettings.Value ?? throw new ArgumentNullException(nameof(appSettings));
+            _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
             _tokenValidationParameters = tokenValidationParameters ?? throw new ArgumentNullException(nameof(tokenValidationParameters));
@@ -133,7 +133,7 @@ namespace SocialMediaDashboard.Logic.Services
 
             var jti = validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            var storedRefreshToken = await _refreshTokenRepository.GetEntity(x => x.Token == refreshToken);
+            var storedRefreshToken = await _refreshTokenRepository.GetEntityAsync(x => x.Token == refreshToken);
 
             if (storedRefreshToken == null)
             {
@@ -370,7 +370,7 @@ namespace SocialMediaDashboard.Logic.Services
         private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser identityUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -380,7 +380,7 @@ namespace SocialMediaDashboard.Logic.Services
                     new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
                     new Claim("id", identityUser.Id)
                 }),
-                Expires = DateTime.UtcNow.Add(_appSettings.TokenLifetime),
+                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

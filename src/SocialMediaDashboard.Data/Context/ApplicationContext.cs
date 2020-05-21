@@ -42,6 +42,7 @@ namespace SocialMediaDashboard.Data.Context
             modelBuilder.ApplyConfiguration(new ProfileConfiguration());
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
             modelBuilder.ApplyConfiguration(new StatisticConfiguration());
+            //modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

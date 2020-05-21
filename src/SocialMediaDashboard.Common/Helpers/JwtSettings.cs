@@ -3,9 +3,9 @@
 namespace SocialMediaDashboard.Common.Helpers
 {
     /// <summary>
-    /// Application settings.
+    /// Jwt settings (from appsettings.json).
     /// </summary>
-    public class ApplicationSettings
+    public class JwtSettings
     {
         /// <summary>
         /// Secret JWT key.

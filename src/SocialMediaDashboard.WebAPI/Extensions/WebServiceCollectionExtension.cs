@@ -26,10 +26,10 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddWeb(this IServiceCollection services, IConfiguration configuration)
         {
-            var appSettingsSection = configuration.GetSection("AppSettings");
-            services.Configure<ApplicationSettings>(appSettingsSection);
+            var appSettingsSection = configuration.GetSection("JwtSettings");
+            services.Configure<JwtSettings>(appSettingsSection);
 
-            var appSettings = appSettingsSection.Get<ApplicationSettings>();
+            var appSettings = appSettingsSection.Get<JwtSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             
             var tokenValidationParametrs = new TokenValidationParameters
