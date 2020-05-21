@@ -32,6 +32,11 @@ namespace SocialMediaDashboard.Data.Context
         /// </summary>
         public DbSet<Statistic> Profiles { get; set; }
 
+        /// <summary>
+        /// RefreshToken entities.
+        /// </summary>
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProfileConfiguration());

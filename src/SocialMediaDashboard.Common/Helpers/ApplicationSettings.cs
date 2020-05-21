@@ -1,4 +1,6 @@
-﻿namespace SocialMediaDashboard.Common.Helpers
+﻿using System;
+
+namespace SocialMediaDashboard.Common.Helpers
 {
     /// <summary>
     /// Application settings.
@@ -9,5 +11,10 @@
         /// Secret JWT key.
         /// </summary>
         public string Secret { get; set; }
+
+        /// <summary>
+        /// Token Lifetime.
+        /// </summary>
+        public TimeSpan TokenLifetime { get; set; }
     }
 }

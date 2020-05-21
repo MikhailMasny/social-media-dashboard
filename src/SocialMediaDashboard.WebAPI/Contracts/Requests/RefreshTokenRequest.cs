@@ -1,9 +1,9 @@
-﻿namespace SocialMediaDashboard.WebAPI.Contracts.Responses
+﻿namespace SocialMediaDashboard.WebAPI.Contracts.Requests
 {
     /// <summary>
-    /// Authentication successful response.
+    /// Refresh token request.
     /// </summary>
-    public class AuthSuccessfulResponse
+    public class RefreshTokenRequest
     {
         /// <summary>
         /// JWT Token.
@@ -14,10 +14,5 @@
         /// Refresh token.
         /// </summary>
         public string RefreshToken { get; set; }
-
-        /// <summary>
-        /// Message.
-        /// </summary>
-        public string Message { get; set; }
     }
 }

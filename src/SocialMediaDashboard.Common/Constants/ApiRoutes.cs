@@ -44,6 +44,11 @@
             /// Reset endpoint.
             /// </summary>
             public const string Reset = Root + "/" + Path + "/reset";
+
+            /// <summary>
+            /// Refresh token endpoint.
+            /// </summary>
+            public const string Refresh = Root + "/" + Path + "/refresh";
         }
     }
 }

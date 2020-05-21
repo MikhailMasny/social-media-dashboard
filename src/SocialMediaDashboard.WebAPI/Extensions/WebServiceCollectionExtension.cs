@@ -31,6 +31,19 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
             var appSettings = appSettingsSection.Get<ApplicationSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            
+            var tokenValidationParametrs = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = true
+            };
+
+            services.AddSingleton(tokenValidationParametrs);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,15 +54,7 @@ namespace SocialMediaDashboard.WebAPI.Extensions
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = true
-                };
+                x.TokenValidationParameters = tokenValidationParametrs;
             });
 
             services.AddSwaggerGen(config =>

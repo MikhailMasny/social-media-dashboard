@@ -69,5 +69,13 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="password">Password.</param>
         /// <returns>Confirmation result data transfer object.</returns>
         Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password);
+
+        /// <summary>
+        /// Refresh user token.
+        /// </summary>
+        /// <param name="token">JWT Token.</param>
+        /// <param name="refreshToken">Refresh token.</param>
+        /// <returns>Authentication result data transfer object.</returns>
+        Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken);
     }
 }
