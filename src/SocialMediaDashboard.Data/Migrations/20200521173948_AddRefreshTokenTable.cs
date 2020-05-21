@@ -13,13 +13,13 @@ namespace SocialMediaDashboard.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Token = table.Column<string>(nullable: true),
-                    JwtId = table.Column<string>(nullable: true),
+                    Token = table.Column<string>(nullable: false),
+                    JwtId = table.Column<string>(nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     ExpiryDate = table.Column<DateTime>(nullable: false),
                     IsUsed = table.Column<bool>(nullable: false),
                     IsInvalid = table.Column<bool>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace SocialMediaDashboard.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -10,7 +10,7 @@ using SocialMediaDashboard.Data.Context;
 namespace SocialMediaDashboard.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200521161019_AddRefreshTokenTable")]
+    [Migration("20200521173948_AddRefreshTokenTable")]
     partial class AddRefreshTokenTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,12 +283,15 @@ namespace SocialMediaDashboard.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("JwtId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -379,7 +382,9 @@ namespace SocialMediaDashboard.Data.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Statistic", b =>
