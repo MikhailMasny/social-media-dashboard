@@ -1,14 +1,11 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.WebAPI.Contracts.Requests;
 using SocialMediaDashboard.WebAPI.Filters;
-using SocialMediaDashboard.WebAPI.Validators;
 using System.Text;
 
 namespace SocialMediaDashboard.WebAPI.Extensions
@@ -26,16 +23,16 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddWeb(this IServiceCollection services, IConfiguration configuration)
         {
-            var appSettingsSection = configuration.GetSection("JwtSettings");
-            services.Configure<JwtSettings>(appSettingsSection);
+            var jwtSettingsSection = configuration.GetSection(nameof(JwtSettings));
+            services.Configure<JwtSettings>(jwtSettingsSection);
 
-            var appSettings = appSettingsSection.Get<JwtSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            
+            var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+            var jwtSecretKey = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
             var tokenValidationParametrs = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
+                IssuerSigningKey = new SymmetricSecurityKey(jwtSecretKey),
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 RequireExpirationTime = false,
@@ -67,7 +64,7 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                     Contact = new OpenApiContact()
                     {
                         Name = "Mikhail M. & Alexandr G.",
-                        //Url = new Uri("localhost") // UNDONE: add it after deploy
+                        //Url = new Uri("https://social-media-dashboard-api.herokuapp.com/") // UNDONE: add it after deploy
                     }
                 });
 
