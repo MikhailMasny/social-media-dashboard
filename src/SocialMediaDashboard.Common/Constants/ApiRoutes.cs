@@ -65,6 +65,11 @@
             /// Connection endpoint.
             /// </summary>
             public const string Connection = Root + "/" + Path + "/connection";
+
+            /// <summary>
+            /// JWT settings endpoint.
+            /// </summary>
+            public const string Token = Root + "/" + Path + "/token";
         }
     }
 }

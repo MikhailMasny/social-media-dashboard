@@ -100,6 +100,7 @@ namespace SocialMediaDashboard.WebAPI.Extensions
             services.AddHealthChecks();
 
             services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
+            services.ConfigureWritable<JwtSettings>(configuration.GetSection("JwtSettings"));
 
             return services;
         }

@@ -9,10 +9,13 @@ namespace SocialMediaDashboard.Logic.Services
     public class ConfigService : IConfigService
     {
         private readonly IWritableOptions<ConnectionSettings> _connectionSettings;
+        private readonly IWritableOptions<JwtSettings> _jwtSettings;
 
-        public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings)
+        public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings,
+                             IWritableOptions<JwtSettings> jwtSettings)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+            _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
         }
 
         /// <inheritdoc/>
@@ -46,7 +49,31 @@ namespace SocialMediaDashboard.Logic.Services
                         }
                         break;
 
-                    //default:
+                    // TODO: default:
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public void CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType)
+        {
+            if (!string.IsNullOrEmpty(jwtValue) && jwtValue != "string")
+            {
+                switch (jwtConfigType)
+                {
+                    case JwtConfigType.Secret:
+                        {
+                            _jwtSettings.Update(x => x.Secret = jwtValue);
+                        }
+                        break;
+
+                    case JwtConfigType.TokenLifetime:
+                        {
+                            _jwtSettings.Update(x => x.TokenLifetime = TimeSpan.Parse(jwtValue));
+                        }
+                        break;
+
+                    // TODO: default:
                 }
             }
         }

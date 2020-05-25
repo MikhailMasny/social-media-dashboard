@@ -20,12 +20,21 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [HttpPost(ApiRoutes.Config.Connection)]
-        public IActionResult UpdateConnections([FromBody] ConnectionStringsRequest request)
+        public IActionResult UpdateConnections([FromBody] ConnectionSettingsRequest request)
         {
             _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
             _configService.CheckAndUpdateConnection(request.DockerConnection, DataProviderType.Docker);
             _configService.CheckAndUpdateConnection(request.SQLiteConnection, DataProviderType.SQLite);
             _configService.CheckAndUpdateConnection(request.PostgreSQLConnection, DataProviderType.PostgreSQL);
+
+            return Ok();
+        }
+
+        [HttpPost(ApiRoutes.Config.Token)]
+        public IActionResult UpdateToken([FromBody] JwtSettingsRequest request)
+        {
+            _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
+            _configService.CheckAndUpdateToken(request.TokenLifetime, JwtConfigType.TokenLifetime);
 
             return Ok();
         }

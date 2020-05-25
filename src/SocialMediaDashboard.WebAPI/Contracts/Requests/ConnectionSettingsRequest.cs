@@ -3,7 +3,7 @@
     /// <summary>
     /// ConnectionStrings request.
     /// </summary>
-    public class ConnectionStringsRequest
+    public class ConnectionSettingsRequest
     {
         /// <summary>
         /// MS SQL Server.

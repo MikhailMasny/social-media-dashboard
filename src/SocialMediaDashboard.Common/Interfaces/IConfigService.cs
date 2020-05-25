@@ -13,5 +13,12 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="dataProvider">Data provider.</param>
         /// <param name="dataProviderType">Type of data provider.</param>
         void CheckAndUpdateConnection(string dataProvider, DataProviderType dataProviderType);
+
+        /// <summary>
+        /// Check and update JWT settings.
+        /// </summary>
+        /// <param name="jwtValue">JWT key value.</param>
+        /// <param name="jwtConfigType">Type of JWT key value.</param>
+        void CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType);
     }
 }
