@@ -40,7 +40,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"For successful login confirm your email. Code: {confirmationResult.Code}"
+                Message = $"{Resources.IdentityController.EmailConfirm} Code: {confirmationResult.Code}"
             });
         }
 
@@ -65,7 +65,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = "Email and password successfully accepted."
+                Message = Resources.IdentityController.EmailAndPasswordAccepted
             });
         }
 
@@ -80,7 +80,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return BadRequest(new AuthFailedResponse
                 {
-                    Errors = new[] { "Data is incorrect." }
+                    Errors = new[] { Resources.IdentityController.DataIncorrect }
                 });
             }
 
@@ -98,7 +98,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = "Your mail has been successfully confirmed."
+                Message = Resources.IdentityController.EmailConfirmed
             });
         }
 
@@ -123,7 +123,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"To continue resetting the password, follow the link sent to the mail.. Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+                Message = $"{Resources.IdentityController.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
@@ -149,7 +149,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
-                Message = "New password successfully accepted." // UNDONE: RazorViewEngine + SendGrid
+                Message = Resources.IdentityController.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
@@ -176,7 +176,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = $"For successful login confirm your email."
+                Message = Resources.IdentityController.EmailConfirm
             });
         }
     }
