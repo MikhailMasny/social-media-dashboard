@@ -19,7 +19,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             _configService = configService ?? throw new ArgumentNullException(nameof(configService));
         }
 
-        [HttpPost(ApiRoutes.Config.Connection)]
+        [HttpPut(ApiRoutes.Config.Connection)]
         public IActionResult UpdateConnections([FromBody] ConnectionSettingsRequest request)
         {
             _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
@@ -30,7 +30,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPost(ApiRoutes.Config.Token)]
+        [HttpPut(ApiRoutes.Config.Token)]
         public IActionResult UpdateToken([FromBody] JwtSettingsRequest request)
         {
             _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
