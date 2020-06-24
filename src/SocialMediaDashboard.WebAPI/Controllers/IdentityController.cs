@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Common.Constants;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.WebAPI.Contracts.Queries;
@@ -18,7 +19,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        [HttpPost(ApiRoutes.Identity.Registration)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(Registration))]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
             var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
@@ -39,7 +42,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Login)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(ApiRoutes.Identity.Login, Name = nameof(Login))]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             var authenticationResult = await _identityService.LoginAsync(request.Email, request.Password);
@@ -60,7 +65,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
-        [HttpGet(ApiRoutes.Identity.Confirm)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmail))]
         public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery query)
         {
             if (query.Email == null || query.Code == null)
@@ -89,7 +96,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Restore)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePassword))]
         public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
         {
             var confirmationResult = await _identityService.RestorePasswordAsync(request.Email);
@@ -110,7 +119,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Reset)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPassword))]
         public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
         {
             var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, request.NewPassword, request.Code);
@@ -132,7 +143,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Refresh)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshToken))]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             var authenticationResult = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
