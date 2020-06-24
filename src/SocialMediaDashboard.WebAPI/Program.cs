@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using SocialMediaDashboard.WebAPI.Extensions;
+using SocialMediaDashboard.WebAPI.Utils;
 using System;
 using System.IO;
 

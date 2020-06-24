@@ -4,7 +4,7 @@ using Serilog;
 using SocialMediaDashboard.Data.Context;
 using System;
 
-namespace SocialMediaDashboard.WebAPI.Extensions
+namespace SocialMediaDashboard.WebAPI.Utils
 {
     /// <summary>
     /// Apply migration in real time.
