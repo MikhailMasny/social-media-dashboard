@@ -25,8 +25,8 @@ namespace SocialMediaDashboard.Data.Extensions
 
             // UNDONE: Change it to IdentityServer4
             services.AddDefaultIdentity<IdentityUser>()
-                    .AddEntityFrameworkStores<ApplicationContext>()
-                    .AddDefaultTokenProviders();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

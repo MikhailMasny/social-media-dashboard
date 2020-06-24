@@ -6,6 +6,7 @@ using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Models;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -19,16 +20,19 @@ namespace SocialMediaDashboard.Logic.Services
     {
         private readonly JwtSettings _jwtSettings;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
         public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
                                UserManager<IdentityUser> userManager,
+                               RoleManager<IdentityRole> roleManager,
                                IRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters)
         {
             _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
             _tokenValidationParameters = tokenValidationParameters ?? throw new ArgumentNullException(nameof(tokenValidationParameters));
         }
@@ -61,6 +65,8 @@ namespace SocialMediaDashboard.Logic.Services
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
             }
+
+            await _userManager.AddToRoleAsync(user, "User");
 
             return new ConfirmationResult
             {
@@ -371,15 +377,41 @@ namespace SocialMediaDashboard.Logic.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
+                new Claim("id", identityUser.Id)
+            };
+
+            var userRoles = await _userManager.GetRolesAsync(identityUser);
+            foreach (var userRole in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+
+                var role = await _roleManager.FindByNameAsync(userRole);
+                if (role == null)
+                {
+                    continue;
+                }
+
+                var roleClaims = await _roleManager.GetClaimsAsync(role);
+                foreach (var roleClaim in roleClaims)
+                {
+                    if (claims.Contains(roleClaim))
+                    {
+                        continue;
+                    }
+
+                    claims.Add(roleClaim);
+                }
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
-                    new Claim("id", identityUser.Id)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
