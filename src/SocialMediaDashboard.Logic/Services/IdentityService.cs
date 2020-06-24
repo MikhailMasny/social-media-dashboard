@@ -7,6 +7,7 @@ using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -18,7 +19,7 @@ namespace SocialMediaDashboard.Logic.Services
     /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
     {
-        private readonly JwtSettings _jwtSettings;
+        private readonly IOptionsSnapshot<JwtSettings> _jwtSettings;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
@@ -30,7 +31,7 @@ namespace SocialMediaDashboard.Logic.Services
                                IRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters)
         {
-            _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
+            _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
@@ -125,7 +126,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value, CultureInfo.InvariantCulture);
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
 
@@ -376,7 +377,7 @@ namespace SocialMediaDashboard.Logic.Services
         private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser identityUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Secret);
 
             var claims = new List<Claim>
             {
@@ -412,7 +413,7 @@ namespace SocialMediaDashboard.Logic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
+                Expires = DateTime.UtcNow.Add(_jwtSettings.Value.TokenLifetime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

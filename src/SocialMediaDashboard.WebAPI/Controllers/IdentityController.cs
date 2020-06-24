@@ -24,6 +24,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(Registration))]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
 
             if (!confirmationResult.IsSuccessful)
@@ -47,6 +49,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Login, Name = nameof(Login))]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var authenticationResult = await _identityService.LoginAsync(request.Email, request.Password);
 
             if (!authenticationResult.IsSuccessful)
@@ -70,6 +74,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmail))]
         public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery query)
         {
+            query = query ?? throw new ArgumentNullException(nameof(query));
+
             if (query.Email == null || query.Code == null)
             {
                 return BadRequest(new AuthFailedResponse
@@ -101,6 +107,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePassword))]
         public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var confirmationResult = await _identityService.RestorePasswordAsync(request.Email);
 
             if (!confirmationResult.IsSuccessful)
@@ -124,6 +132,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPassword))]
         public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, request.NewPassword, request.Code);
 
             if (!authenticationResult.IsSuccessful)
@@ -148,6 +158,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshToken))]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var authenticationResult = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
 
             if (!authenticationResult.IsSuccessful)

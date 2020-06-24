@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SocialMediaDashboard.Domain.Models;
+using System;
 
 namespace SocialMediaDashboard.Data.Configurations
 {
@@ -12,6 +13,8 @@ namespace SocialMediaDashboard.Data.Configurations
         /// <inheritdoc/>
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
+            builder = builder ?? throw new ArgumentNullException(nameof(builder));
+
             builder.ToTable("RefreshTokens")
                 .HasKey(r => r.Id);
 

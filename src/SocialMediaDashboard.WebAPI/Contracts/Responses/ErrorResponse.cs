@@ -11,6 +11,6 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Responses
         /// <summary>
         /// Errors.
         /// </summary>
-        public List<ValidationErrorModel> Errors { get; set; } = new List<ValidationErrorModel>();
+        public List<ValidationErrorModel> Errors { get; } = new List<ValidationErrorModel>();
     }
 }

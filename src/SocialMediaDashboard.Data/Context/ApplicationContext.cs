@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Data.Configurations;
 using SocialMediaDashboard.Domain.Models;
+using System;
 
 namespace SocialMediaDashboard.Data.Context
 {
@@ -39,6 +40,8 @@ namespace SocialMediaDashboard.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
+
             modelBuilder.ApplyConfiguration(new ProfileConfiguration());
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
             modelBuilder.ApplyConfiguration(new StatisticConfiguration());

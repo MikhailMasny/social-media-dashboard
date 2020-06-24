@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.WebAPI.Filters;
+using System;
 using System.Text;
 
 namespace SocialMediaDashboard.WebAPI.Extensions
@@ -23,6 +24,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddWeb(this IServiceCollection services, IConfiguration configuration)
         {
+            configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
             var jwtSettingsSection = configuration.GetSection(nameof(JwtSettings));
             services.Configure<JwtSettings>(jwtSettingsSection);
 

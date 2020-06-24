@@ -25,6 +25,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult UpdateConnections([FromBody] ConnectionSettingsRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
             _configService.CheckAndUpdateConnection(request.DockerConnection, DataProviderType.Docker);
             _configService.CheckAndUpdateConnection(request.SQLiteConnection, DataProviderType.SQLite);
@@ -38,6 +40,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult UpdateToken([FromBody] JwtSettingsRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
             _configService.CheckAndUpdateToken(request.TokenLifetime, JwtConfigType.TokenLifetime);
 

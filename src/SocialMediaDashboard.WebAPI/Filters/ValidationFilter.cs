@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using SocialMediaDashboard.WebAPI.Contracts.Responses;
 using SocialMediaDashboard.WebAPI.Models;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,9 @@ namespace SocialMediaDashboard.WebAPI.Filters
         /// <param name="next">Next delegate.</param>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            context = context ?? throw new ArgumentNullException(nameof(context));
+            next = next ?? throw new ArgumentNullException(nameof(next));
+
             if (!context.ModelState.IsValid)
             {
                 var errorsInModelState = context.ModelState
