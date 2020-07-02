@@ -11,12 +11,15 @@ namespace SocialMediaDashboard.Logic.Services
     {
         private readonly IWritableOptions<ConnectionSettings> _connectionSettings;
         private readonly IWritableOptions<JwtSettings> _jwtSettings;
+        private readonly IWritableOptions<SentrySettings> _sentrySettings;
 
         public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings,
-                             IWritableOptions<JwtSettings> jwtSettings)
+                             IWritableOptions<JwtSettings> jwtSettings,
+                             IWritableOptions<SentrySettings> sentrySettings)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
+            _sentrySettings = sentrySettings ?? throw new ArgumentNullException(nameof(sentrySettings));
         }
 
         /// <inheritdoc/>
@@ -75,6 +78,36 @@ namespace SocialMediaDashboard.Logic.Services
                         break;
 
                     // TODO: default:
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public void CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType)
+        {
+            if (!string.IsNullOrEmpty(sentryValue) && sentryValue != "string")
+            {
+                switch (sentryConfigType)
+                {
+                    case SentryConfigType.Dns:
+                        {
+                            _sentrySettings.Update(x => x.Dsn = sentryValue);
+                        }
+                        break;
+
+                    case SentryConfigType.MinimumBreadcrumbLevel:
+                        {
+                            _sentrySettings.Update(x => x.MinimumBreadcrumbLevel = sentryValue);
+                        }
+                        break;
+
+                    case SentryConfigType.MinimumEventLevel:
+                        {
+                            _sentrySettings.Update(x => x.MinimumEventLevel = sentryValue);
+                        }
+                        break;
+
+                        // TODO: default:
                 }
             }
         }

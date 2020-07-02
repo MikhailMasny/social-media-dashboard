@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
+    [ApiController]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;

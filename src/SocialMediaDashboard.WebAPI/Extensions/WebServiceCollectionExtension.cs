@@ -104,6 +104,7 @@ namespace SocialMediaDashboard.WebAPI.Extensions
 
             services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
             services.ConfigureWritable<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.ConfigureWritable<SentrySettings>(configuration.GetSection("Sentry"));
 
             return services;
         }

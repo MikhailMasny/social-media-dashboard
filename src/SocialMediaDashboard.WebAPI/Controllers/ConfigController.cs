@@ -11,6 +11,7 @@ using System;
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [ApiController]
     public class ConfigController : ControllerBase
     {
         private readonly IConfigService _configService;
@@ -44,6 +45,20 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
             _configService.CheckAndUpdateToken(request.TokenLifetime, JwtConfigType.TokenLifetime);
+
+            return Ok();
+        }
+
+        [HttpPut(ApiRoutes.Config.Sentry, Name = nameof(UpdateSentry))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult UpdateSentry([FromBody] SentrySettingsRequest request)
+        {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
+            _configService.CheckAndUpdateSentry(request.Dsn, SentryConfigType.Dns);
+            _configService.CheckAndUpdateSentry(request.MinimumBreadcrumbLevel, SentryConfigType.MinimumBreadcrumbLevel);
+            _configService.CheckAndUpdateSentry(request.MinimumEventLevel, SentryConfigType.MinimumEventLevel);
 
             return Ok();
         }
