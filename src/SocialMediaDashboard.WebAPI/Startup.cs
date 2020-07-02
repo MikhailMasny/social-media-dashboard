@@ -12,23 +12,27 @@ namespace SocialMediaDashboard.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,
+                       IHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
 
+        public IHostEnvironment Environment { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddData(Configuration);
+            services.AddData(Configuration, Environment);
             services.AddLogic();
             services.AddWeb(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

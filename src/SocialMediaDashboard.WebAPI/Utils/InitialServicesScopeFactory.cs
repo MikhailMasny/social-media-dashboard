@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace SocialMediaDashboard.WebAPI.Extensions
+namespace SocialMediaDashboard.WebAPI.Utils
 {
     /// <summary>
     /// Create initial service factory in a specific scope.

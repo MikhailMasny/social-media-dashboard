@@ -3,7 +3,7 @@
     /// <summary>
     /// Authentication data transfet object.
     /// </summary>
-    public class AuthenticationResult : ResultBase
+    public class AuthenticationResult : BaseResult
     {
         /// <summary>
         /// JWT Token.

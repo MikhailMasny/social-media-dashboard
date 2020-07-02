@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Common.Constants;
 using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Common.Resources;
 using SocialMediaDashboard.WebAPI.Contracts.Queries;
 using SocialMediaDashboard.WebAPI.Contracts.Requests;
 using SocialMediaDashboard.WebAPI.Contracts.Responses;
@@ -18,9 +20,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
-        [HttpPost(ApiRoutes.Identity.Registration)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(Registration))]
         public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
 
             if (!confirmationResult.IsSuccessful)
@@ -35,13 +41,17 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"For successful login confirm your email. Code: {confirmationResult.Code}"
+                Message = $"{Identity.EmailConfirm} Code: {confirmationResult.Code}"
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Login)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(ApiRoutes.Identity.Login, Name = nameof(Login))]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var authenticationResult = await _identityService.LoginAsync(request.Email, request.Password);
 
             if (!authenticationResult.IsSuccessful)
@@ -56,18 +66,22 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = "Email and password successfully accepted."
+                Message = Identity.EmailAndPasswordAccepted
             });
         }
 
-        [HttpGet(ApiRoutes.Identity.Confirm)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmail))]
         public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery query)
         {
+            query = query ?? throw new ArgumentNullException(nameof(query));
+
             if (query.Email == null || query.Code == null)
             {
                 return BadRequest(new AuthFailedResponse
                 {
-                    Errors = new[] { "Data is incorrect." }
+                    Errors = new[] { Identity.IncorrectData }
                 });
             }
 
@@ -85,13 +99,17 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = "Your mail has been successfully confirmed."
+                Message = Identity.EmailConfirmed
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Restore)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePassword))]
         public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var confirmationResult = await _identityService.RestorePasswordAsync(request.Email);
 
             if (!confirmationResult.IsSuccessful)
@@ -106,13 +124,17 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"To continue resetting the password, follow the link sent to the mail.. Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+                Message = $"{Identity.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Reset)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPassword))]
         public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, request.NewPassword, request.Code);
 
             if (!authenticationResult.IsSuccessful)
@@ -128,13 +150,17 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
-                Message = "New password successfully accepted." // UNDONE: RazorViewEngine + SendGrid
+                Message = Identity.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Refresh)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshToken))]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
             var authenticationResult = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
 
             if (!authenticationResult.IsSuccessful)
@@ -151,7 +177,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = $"For successful login confirm your email."
+                Message = Identity.EmailConfirm
             });
         }
     }

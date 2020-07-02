@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Linq;
 
 namespace SocialMediaDashboard.WebAPI.Extensions
@@ -15,6 +16,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         /// <returns>Identifier.</returns>
         public static string GetUserId(this HttpContext httpContext)
         {
+            httpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
+
             if (httpContext.User == null)
             {
                 return string.Empty;

@@ -33,6 +33,8 @@ namespace SocialMediaDashboard.Common.Options
         /// <inheritdoc/>
         public void Update(Action<T> applyChanges)
         {
+            applyChanges = applyChanges ?? throw new ArgumentNullException(nameof(applyChanges));
+
             var fileProvider = _environment.ContentRootFileProvider;
             var fileInfo = fileProvider.GetFileInfo(_file);
             var physicalPath = fileInfo.PhysicalPath;

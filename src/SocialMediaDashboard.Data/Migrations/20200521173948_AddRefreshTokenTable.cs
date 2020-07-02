@@ -5,6 +5,7 @@ namespace SocialMediaDashboard.Data.Migrations
 {
     public partial class AddRefreshTokenTable : Migration
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -38,6 +39,7 @@ namespace SocialMediaDashboard.Data.Migrations
                 column: "UserId");
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

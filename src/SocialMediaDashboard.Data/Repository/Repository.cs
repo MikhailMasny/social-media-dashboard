@@ -17,6 +17,8 @@ namespace SocialMediaDashboard.Data.Repository
         
         public Repository(ApplicationContext context)
         {
+            context = context ?? throw new ArgumentNullException(nameof(context));
+
             _context = context;
             _dbSet = context.Set<T>();
         }

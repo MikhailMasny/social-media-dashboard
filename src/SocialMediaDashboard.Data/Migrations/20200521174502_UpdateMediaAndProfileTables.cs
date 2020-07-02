@@ -4,6 +4,7 @@ namespace SocialMediaDashboard.Data.Migrations
 {
     public partial class UpdateMediaAndProfileTables : Migration
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
@@ -49,6 +50,7 @@ namespace SocialMediaDashboard.Data.Migrations
                 onDelete: ReferentialAction.Restrict);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

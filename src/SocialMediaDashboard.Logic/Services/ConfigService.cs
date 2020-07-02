@@ -2,6 +2,7 @@
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
 using System;
+using System.Globalization;
 
 namespace SocialMediaDashboard.Logic.Services
 {
@@ -69,7 +70,7 @@ namespace SocialMediaDashboard.Logic.Services
 
                     case JwtConfigType.TokenLifetime:
                         {
-                            _jwtSettings.Update(x => x.TokenLifetime = TimeSpan.Parse(jwtValue));
+                            _jwtSettings.Update(x => x.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
                         }
                         break;
 

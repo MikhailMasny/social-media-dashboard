@@ -7,18 +7,20 @@ using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using SocialMediaDashboard.Common.Resources;
 
 namespace SocialMediaDashboard.Logic.Services
 {
     /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
     {
-        private readonly JwtSettings _jwtSettings;
+        private readonly IOptionsSnapshot<JwtSettings> _jwtSettings;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
@@ -30,7 +32,7 @@ namespace SocialMediaDashboard.Logic.Services
                                IRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters)
         {
-            _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
+            _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
@@ -46,7 +48,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { "The email you specified is already in the system." }
+                    Errors = new[] { Identity.AlreadyCreated }
                 };
             }
 
@@ -66,7 +68,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, Identity.UserRole);
 
             return new ConfirmationResult
             {
@@ -85,7 +87,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { Identity.UserNotExist }
                 };
             }
 
@@ -95,7 +97,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Email or password is incorrect." }
+                    Errors = new[] { Identity.IncorrectData }
                 };
             }
 
@@ -121,11 +123,11 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Invalid token." }
+                    Errors = new[] { Identity.TokenInvalid }
                 };
             }
 
-            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value, CultureInfo.InvariantCulture);
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
 
@@ -133,7 +135,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This token hasn't expired yet." }
+                    Errors = new[] { Identity.TokenNotExpired }
                 };
             }
 
@@ -145,7 +147,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token does not exist" } 
+                    Errors = new[] { Identity.RefreshTokenNotExist } 
                 };
             }
 
@@ -153,7 +155,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token has expired" }
+                    Errors = new[] { Identity.RefreshTokenExpired }
                 };
             }
 
@@ -161,7 +163,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token has been invalidated" }
+                    Errors = new[] { Identity.RefreshTokenInvalid }
                 };
             }
 
@@ -169,7 +171,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token has been used" }
+                    Errors = new[] { Identity.RefreshTokenUsed }
                 };
             }
 
@@ -177,7 +179,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token does not match this JWT" }
+                    Errors = new[] { Identity.RefreshTokenNotMatch }
                 };
             }
 
@@ -185,7 +187,7 @@ namespace SocialMediaDashboard.Logic.Services
             _refreshTokenRepository.Update(storedRefreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == Identity.Id).Value);
             return await GenerateAuthenticationResultAsync(identityUser);
         }
 
@@ -198,7 +200,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { Identity.UserNotExist }
                 };
             }
 
@@ -208,7 +210,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Unexpected token issues.." }
+                    Errors = new[] { Identity.TokenException }
                 };
             }
 
@@ -224,7 +226,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { Identity.UserNotExist }
                 };
             }
 
@@ -337,7 +339,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { "You have not verified your email." }
+                    Errors = new[] { Identity.EmailNotVerified }
                 };
             }
 
@@ -376,7 +378,7 @@ namespace SocialMediaDashboard.Logic.Services
         private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser identityUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Secret);
 
             var claims = new List<Claim>
             {
@@ -412,7 +414,7 @@ namespace SocialMediaDashboard.Logic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
+                Expires = DateTime.UtcNow.Add(_jwtSettings.Value.TokenLifetime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

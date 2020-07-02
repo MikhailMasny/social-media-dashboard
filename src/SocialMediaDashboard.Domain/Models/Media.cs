@@ -31,6 +31,6 @@ namespace SocialMediaDashboard.Domain.Models
         /// <summary>
         /// Navigation to Statistic.
         /// </summary>
-        public ICollection<Statistic> Statistics { get; set; }
+        public ICollection<Statistic> Statistics { get; }
     }
 }
