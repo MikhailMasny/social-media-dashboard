@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EntityFrameworkCore.Cacheable;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,10 @@ namespace SocialMediaDashboard.Data.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));
+            services.AddDbContext<ApplicationContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection"));
+                options.UseSecondLevelCache();
+            });
 
             // UNDONE: Change it to IdentityServer4
             services.AddDefaultIdentity<IdentityUser>()
