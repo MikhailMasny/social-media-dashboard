@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DataIncorrect" xml:space="preserve">
-    <value>Data is incorrect.</value>
+  <data name="AlreadyCreated" xml:space="preserve">
+    <value>The email you specified is already in the system.</value>
   </data>
   <data name="EmailAndPasswordAccepted" xml:space="preserve">
     <value>Email and password successfully accepted.</value>
@@ -129,10 +129,49 @@
   <data name="EmailConfirmed" xml:space="preserve">
     <value>Your mail has been successfully confirmed.</value>
   </data>
+  <data name="EmailNotVerified" xml:space="preserve">
+    <value>You have not verified your email.</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>id</value>
+  </data>
+  <data name="IncorrectData" xml:space="preserve">
+    <value>Email or password is incorrect.</value>
+  </data>
   <data name="PasswordAccepted" xml:space="preserve">
     <value>New password successfully accepted.</value>
   </data>
   <data name="PasswordResetting" xml:space="preserve">
     <value>To continue resetting the password, follow the link sent to the mail..</value>
+  </data>
+  <data name="RefreshTokenExpired" xml:space="preserve">
+    <value>This refresh token has expired</value>
+  </data>
+  <data name="RefreshTokenInvalid" xml:space="preserve">
+    <value>This refresh token has been invalidated.</value>
+  </data>
+  <data name="RefreshTokenNotExist" xml:space="preserve">
+    <value>This refresh token does not exist.</value>
+  </data>
+  <data name="RefreshTokenNotMatch" xml:space="preserve">
+    <value>This refresh token does not match this JWT.</value>
+  </data>
+  <data name="RefreshTokenUsed" xml:space="preserve">
+    <value>This refresh token has been used.</value>
+  </data>
+  <data name="TokenException" xml:space="preserve">
+    <value>Unexpected token issues..</value>
+  </data>
+  <data name="TokenInvalid" xml:space="preserve">
+    <value>Invalid token.</value>
+  </data>
+  <data name="TokenNotExpired" xml:space="preserve">
+    <value>This token hasn't expired yet.</value>
+  </data>
+  <data name="UserNotExist" xml:space="preserve">
+    <value>User does not exist.</value>
+  </data>
+  <data name="UserRole" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>

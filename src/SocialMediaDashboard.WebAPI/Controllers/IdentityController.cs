@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Common.Constants;
 using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Common.Resources;
 using SocialMediaDashboard.WebAPI.Contracts.Queries;
 using SocialMediaDashboard.WebAPI.Contracts.Requests;
 using SocialMediaDashboard.WebAPI.Contracts.Responses;
@@ -40,7 +41,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"{Resources.IdentityController.EmailConfirm} Code: {confirmationResult.Code}"
+                Message = $"{Identity.EmailConfirm} Code: {confirmationResult.Code}"
             });
         }
 
@@ -65,7 +66,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = Resources.IdentityController.EmailAndPasswordAccepted
+                Message = Identity.EmailAndPasswordAccepted
             });
         }
 
@@ -80,7 +81,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return BadRequest(new AuthFailedResponse
                 {
-                    Errors = new[] { Resources.IdentityController.DataIncorrect }
+                    Errors = new[] { Identity.IncorrectData }
                 });
             }
 
@@ -98,7 +99,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = Resources.IdentityController.EmailConfirmed
+                Message = Identity.EmailConfirmed
             });
         }
 
@@ -123,7 +124,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"{Resources.IdentityController.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+                Message = $"{Identity.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
@@ -149,7 +150,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
-                Message = Resources.IdentityController.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
+                Message = Identity.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
@@ -176,7 +177,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = Resources.IdentityController.EmailConfirm
+                Message = Identity.EmailConfirm
             });
         }
     }

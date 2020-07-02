@@ -25,20 +25,5 @@
     <ProjectReference Include="..\SocialMediaDashboard.Logic\SocialMediaDashboard.Logic.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\IdentityController.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IdentityController.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\IdentityController.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>IdentityController.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
 
 </Project>

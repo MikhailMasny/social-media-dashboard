@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using SocialMediaDashboard.Common.Resources;
 
 namespace SocialMediaDashboard.Logic.Services
 {
@@ -47,7 +48,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { "The email you specified is already in the system." }
+                    Errors = new[] { Identity.AlreadyCreated }
                 };
             }
 
@@ -67,7 +68,7 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, Identity.UserRole);
 
             return new ConfirmationResult
             {
@@ -86,7 +87,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { Identity.UserNotExist }
                 };
             }
 
@@ -96,7 +97,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Email or password is incorrect." }
+                    Errors = new[] { Identity.IncorrectData }
                 };
             }
 
@@ -122,7 +123,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Invalid token." }
+                    Errors = new[] { Identity.TokenInvalid }
                 };
             }
 
@@ -134,7 +135,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This token hasn't expired yet." }
+                    Errors = new[] { Identity.TokenNotExpired }
                 };
             }
 
@@ -146,7 +147,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token does not exist" } 
+                    Errors = new[] { Identity.RefreshTokenNotExist } 
                 };
             }
 
@@ -154,7 +155,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token has expired" }
+                    Errors = new[] { Identity.RefreshTokenExpired }
                 };
             }
 
@@ -162,7 +163,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token has been invalidated" }
+                    Errors = new[] { Identity.RefreshTokenInvalid }
                 };
             }
 
@@ -170,7 +171,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token has been used" }
+                    Errors = new[] { Identity.RefreshTokenUsed }
                 };
             }
 
@@ -178,7 +179,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "This refresh token does not match this JWT" }
+                    Errors = new[] { Identity.RefreshTokenNotMatch }
                 };
             }
 
@@ -186,7 +187,7 @@ namespace SocialMediaDashboard.Logic.Services
             _refreshTokenRepository.Update(storedRefreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == Identity.Id).Value);
             return await GenerateAuthenticationResultAsync(identityUser);
         }
 
@@ -199,7 +200,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { Identity.UserNotExist }
                 };
             }
 
@@ -209,7 +210,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Unexpected token issues.." }
+                    Errors = new[] { Identity.TokenException }
                 };
             }
 
@@ -225,7 +226,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { Identity.UserNotExist }
                 };
             }
 
@@ -338,7 +339,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { "You have not verified your email." }
+                    Errors = new[] { Identity.EmailNotVerified }
                 };
             }
 
