@@ -5,7 +5,7 @@ namespace SocialMediaDashboard.Common.DTO
     /// <summary>
     /// Result (base object).
     /// </summary>
-    public abstract class ResultBase
+    public abstract class BaseResult
     {
         /// <summary>
         /// Result of operation.
