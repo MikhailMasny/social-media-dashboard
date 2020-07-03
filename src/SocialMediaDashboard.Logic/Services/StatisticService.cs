@@ -13,12 +13,17 @@ namespace SocialMediaDashboard.Logic.Services
 
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly IMediaService _mediaService;
+        private readonly ISubscriptionService _subscriptionService;
         private readonly IVkService _vkService;
 
-        public StatisticService(IRepository<Statistic> statisticRepository, IMediaService mediaService, IVkService vkService)
+        public StatisticService(IRepository<Statistic> statisticRepository,
+                                IMediaService mediaService,
+                                ISubscriptionService subscriptionService,
+                                IVkService vkService)
         {
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
             _mediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
+            _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
             _vkService = vkService ?? throw new ArgumentNullException(nameof(vkService));
         }
 
@@ -26,7 +31,7 @@ namespace SocialMediaDashboard.Logic.Services
         public async Task AddFollowersFromVk()
         {
             var statistics = new List<Statistic>();
-            var subscriptions = await _mediaService.GetAllSubscriptionsByType(AccountType.Vk, SubscriptionType.Follower);
+            var subscriptions = await _subscriptionService.GetAllSubscriptionsByType(AccountType.Vk, SubscriptionType.Follower);
 
             foreach (var subscription in subscriptions)
             {

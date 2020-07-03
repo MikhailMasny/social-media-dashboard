@@ -16,8 +16,6 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <returns>List of media data transfet objects.</returns>
         Task<IEnumerable<MediaDto>> GetAllAccounts();
 
-        Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsByType(AccountType accountType, SubscriptionType subscriptionType);
-
         /// <summary>
         /// Get account by media identifier.
         /// </summary>

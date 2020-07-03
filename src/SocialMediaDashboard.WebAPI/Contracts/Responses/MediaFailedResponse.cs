@@ -6,7 +6,7 @@
     public class MediaFailedResponse
     {
         /// <summary>
-        /// Errors.
+        /// Error.
         /// </summary>
         public string Error { get; set; }
     }

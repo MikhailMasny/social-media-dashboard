@@ -26,6 +26,7 @@ namespace SocialMediaDashboard.Logic.Extensions
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IConfigService, ConfigService>();
             services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IVkService, VkService>();
 

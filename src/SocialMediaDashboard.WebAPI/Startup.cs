@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using SocialMediaDashboard.Common.Extensions;
 using SocialMediaDashboard.Data.Extensions;
 using SocialMediaDashboard.Logic.Extensions;
 using SocialMediaDashboard.WebAPI.Extensions;
@@ -26,7 +25,6 @@ namespace SocialMediaDashboard.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCommon();
             services.AddData(Configuration, Environment);
             services.AddLogic();
             services.AddWeb(Configuration);

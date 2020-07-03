@@ -33,9 +33,9 @@ namespace SocialMediaDashboard.Logic.Services
             var media = await _mediaRepository.GetAll()
                 .ToListAsync();
 
-            var mediaDtos = _mapper.Map<List<MediaDto>>(media);
+            var mediaDto = _mapper.Map<List<MediaDto>>(media);
 
-            return mediaDtos;
+            return mediaDto;
         }
 
         /// <inheritdoc/>
@@ -44,47 +44,9 @@ namespace SocialMediaDashboard.Logic.Services
             var media = await _mediaRepository.GetAll()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            // TODO: Try to fix it
-            //var mediaDto = _mapper.Map<MediaDto>(media);
-
-            var mediaDto = new MediaDto
-            {
-                Id = media.Id,
-                AccountName = media.AccountName,
-                Type = media.Type,
-                UserId = media.UserId
-            };
+            var mediaDto = _mapper.Map<MediaDto>(media);
 
             return mediaDto;
-        }
-
-        // TODO: replace to SubService
-        /// <inheritdoc/>
-        public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsByType(AccountType accountType, SubscriptionType subscriptionType)
-        {
-            var subscriptions = await _subscriptionRepository.GetAll()
-                .Include(s => s.Media)
-                .Where(s => s.Type == subscriptionType && s.Media.Type == accountType)
-                .ToListAsync();
-
-            var subscriptionDtos = new List<SubscriptionDto>();
-            foreach (var subscription in subscriptions)
-            {
-                var subDto = new SubscriptionDto
-                {
-                    Id = subscription.Id,
-                    IsDisplayed = subscription.IsDisplayed,
-                    Type = subscription.Type,
-                    MediaId = subscription.MediaId
-                };
-
-                subscriptionDtos.Add(subDto);
-            }
-
-            // TODO: Try to fix it
-            //var subscriptionDtos = _mapper.Map<List<SubscriptionDto>>(subscriptions); 
-
-            return subscriptionDtos;
         }
 
         /// <inheritdoc/>

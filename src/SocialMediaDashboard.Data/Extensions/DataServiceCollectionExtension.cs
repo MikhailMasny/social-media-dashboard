@@ -1,4 +1,5 @@
-﻿using EntityFrameworkCore.Cacheable;
+﻿using AutoMapper;
+using EntityFrameworkCore.Cacheable;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Data.Context;
 using SocialMediaDashboard.Data.Repository;
+using System.Reflection;
 
 namespace SocialMediaDashboard.Data.Extensions
 {
@@ -41,6 +43,7 @@ namespace SocialMediaDashboard.Data.Extensions
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>();
 
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             return services;
