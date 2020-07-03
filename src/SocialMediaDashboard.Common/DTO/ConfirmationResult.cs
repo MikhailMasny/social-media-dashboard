@@ -1,7 +1,7 @@
 ﻿namespace SocialMediaDashboard.Common.DTO
 {
     /// <summary>
-    /// Registration data transfet object..
+    /// Registration data transfet object.
     /// </summary>
     public class ConfirmationResult : BaseResult
     {

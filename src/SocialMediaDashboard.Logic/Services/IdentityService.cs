@@ -48,7 +48,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.AlreadyCreated }
+                    Errors = new[] { Identity.EmailAlreadyExist }
                 };
             }
 

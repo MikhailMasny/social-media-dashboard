@@ -76,5 +76,21 @@
             /// </summary>
             public const string Sentry = Root + "/" + Path + "/sentry";
         }
+
+        /// <summary>
+        /// Media path.
+        /// </summary>
+        public static class Media
+        {
+            /// <summary>
+            /// Config path.
+            /// </summary>
+            public const string Path = "media";
+
+            /// <summary>
+            /// Create endpoint.
+            /// </summary>
+            public const string Create = Root + "/" + Path;
+        }
     }
 }

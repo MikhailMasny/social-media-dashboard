@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Common.Constants;
 using SocialMediaDashboard.Common.Interfaces;
@@ -11,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, User")]
     [ApiController]
     public class IdentityController : ControllerBase
     {
@@ -21,6 +24,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(Registration))]
@@ -46,6 +50,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(ApiRoutes.Identity.Login, Name = nameof(Login))]
@@ -71,6 +76,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmail))]
@@ -104,6 +110,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePassword))]
@@ -129,6 +136,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             });
         }
 
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPassword))]

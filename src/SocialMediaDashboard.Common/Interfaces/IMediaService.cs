@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using SocialMediaDashboard.Common.DTO;
+using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Common.Interfaces
 {
@@ -12,6 +13,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="userId">User identifier.</param>
         /// <param name="account">Media account.</param>
-        Task AddUserAccount(string userId, string account);
+        /// <returns>Media data transfet object.</returns>
+        Task<MediaDto> AddUserAccount(string userId, string account);
     }
 }
