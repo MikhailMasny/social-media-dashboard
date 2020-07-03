@@ -26,6 +26,8 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         {
             configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
+            services.Configure<VkSettings>(configuration.GetSection(nameof(VkSettings)));
+
             var jwtSettingsSection = configuration.GetSection(nameof(JwtSettings));
             services.Configure<JwtSettings>(jwtSettingsSection);
 
@@ -41,7 +43,6 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                 RequireExpirationTime = false,
                 ValidateLifetime = true
             };
-
             services.AddSingleton(tokenValidationParametrs);
 
             services.AddAuthentication(x =>
@@ -98,9 +99,9 @@ namespace SocialMediaDashboard.WebAPI.Extensions
             services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddCors();
+            services.AddHealthChecks();
             services.AddControllers(x => x.Filters.Add<ValidationFilter>())
                 .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
-            services.AddHealthChecks();
 
             services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
             services.ConfigureWritable<JwtSettings>(configuration.GetSection("JwtSettings"));
