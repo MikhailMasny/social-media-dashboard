@@ -11,8 +11,13 @@
         None = 0,
 
         /// <summary>
-        /// Followers.
+        /// Follower.
         /// </summary>
-        Followers = 1,
+        Follower = 1,
+
+        /// <summary>
+        /// Friend.
+        /// </summary>
+        Friend = 2,
     }
 }

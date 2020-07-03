@@ -32,7 +32,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.AccountName))
+            if (string.IsNullOrEmpty(request.AccountName)
+                || request.AccountType == 0
+                || request.SubscriptionType == 0)
             {
                 return BadRequest(new MediaFailedResponse
                 {
@@ -41,9 +43,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var mediaDto = await _mediaService.AddUserAccount(userId, request.AccountName);
+            var result = await _mediaService.AddUserAccount(userId, request.AccountName, request.AccountType, request.SubscriptionType);
 
-            if (mediaDto == null)
+            if (!result)
             {
                 return Conflict(new MediaFailedResponse
                 {
@@ -53,7 +55,6 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             return Ok(new MediaSuccessfulResponse
             {
-                AccountName = mediaDto.AccountName,
                 Message = Media.AccountAdded
             });
         }

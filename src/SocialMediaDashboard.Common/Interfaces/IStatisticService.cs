@@ -8,8 +8,8 @@ namespace SocialMediaDashboard.Common.Interfaces
     public interface IStatisticService
     {
         /// <summary>
-        /// Add statistics data from Vk accounts.
+        /// Add followers data from Vk accounts.
         /// </summary>
-        Task AddDataByVkAccounts();
+        Task AddFollowersFromVk();
     }
 }

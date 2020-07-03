@@ -1,4 +1,5 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
+﻿using SocialMediaDashboard.Common.Enums;
+using SocialMediaDashboard.Common.Interfaces;
 
 namespace SocialMediaDashboard.Common.Models
 {
@@ -14,6 +15,11 @@ namespace SocialMediaDashboard.Common.Models
         /// Social media account.
         /// </summary>
         public string AccountName { get; set; }
+
+        /// <summary>
+        /// Type.
+        /// </summary>
+        public AccountType Type { get; set; }
 
         /// <inheritdoc/>
         public string UserId { get; set; }

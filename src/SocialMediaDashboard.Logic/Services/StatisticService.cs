@@ -1,4 +1,5 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
+﻿using SocialMediaDashboard.Common.Enums;
+using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace SocialMediaDashboard.Logic.Services
     /// <inheritdoc cref="IMediaService"/>
     public class StatisticService : IStatisticService
     {
+
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly IMediaService _mediaService;
         private readonly IVkService _vkService;
@@ -21,21 +23,22 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task AddDataByVkAccounts()
+        public async Task AddFollowersFromVk()
         {
             var statistics = new List<Statistic>();
-            var accounts = await _mediaService.GetAllAccounts();
-            foreach (var account in accounts)
+            var subscriptions = await _mediaService.GetAllSubscriptionsByType(AccountType.Vk, SubscriptionType.Follower);
+
+            foreach (var subscription in subscriptions)
             {
-                var count = await _vkService.GetFollowers(account.AccountName);
+                var media = await _mediaService.GetAccount(subscription.MediaId);
+                var count = await _vkService.GetFollowers(media.AccountName);
 
                 var statistic = new Statistic
                 {
                     Count = count.Value,
                     Date = DateTime.Now,
-                    //MediaId = account.Id // TODO: FIX IT
+                    SubscriptionId = subscription.Id
                 };
-
                 statistics.Add(statistic);
             }
 
