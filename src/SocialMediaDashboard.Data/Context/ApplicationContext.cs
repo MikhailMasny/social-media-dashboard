@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Data.Configurations;
-using SocialMediaDashboard.Domain.Models;
+using SocialMediaDashboard.Domain.Entities;
 using System;
 
 namespace SocialMediaDashboard.Data.Context

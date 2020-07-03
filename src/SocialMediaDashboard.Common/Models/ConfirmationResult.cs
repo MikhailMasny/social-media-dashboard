@@ -1,4 +1,4 @@
-﻿namespace SocialMediaDashboard.Common.DTO
+﻿namespace SocialMediaDashboard.Common.Models
 {
     /// <summary>
     /// Registration data transfet object.

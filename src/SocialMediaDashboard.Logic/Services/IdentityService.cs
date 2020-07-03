@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SocialMediaDashboard.Common.DTO;
 using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Domain.Models;
+using SocialMediaDashboard.Common.Models;
+using SocialMediaDashboard.Common.Resources;
+using SocialMediaDashboard.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,7 +14,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using SocialMediaDashboard.Common.Resources;
 
 namespace SocialMediaDashboard.Logic.Services
 {
@@ -147,7 +147,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.RefreshTokenNotExist } 
+                    Errors = new[] { Identity.RefreshTokenNotExist }
                 };
             }
 

@@ -1,4 +1,4 @@
-﻿using SocialMediaDashboard.Common.DTO;
+﻿using SocialMediaDashboard.Common.Models;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Common.Interfaces

@@ -219,7 +219,7 @@ namespace SocialMediaDashboard.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Media", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Media", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -240,7 +240,7 @@ namespace SocialMediaDashboard.Data.Migrations
                     b.ToTable("Medias");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Profile", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,7 +265,7 @@ namespace SocialMediaDashboard.Data.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.RefreshToken", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,7 +303,7 @@ namespace SocialMediaDashboard.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Statistic", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Statistic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -380,21 +380,21 @@ namespace SocialMediaDashboard.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Media", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Media", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Profile", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Profile", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.RefreshToken", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -403,9 +403,9 @@ namespace SocialMediaDashboard.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Models.Statistic", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Statistic", b =>
                 {
-                    b.HasOne("SocialMediaDashboard.Domain.Models.Media", "Media")
+                    b.HasOne("SocialMediaDashboard.Domain.Entities.Media", "Media")
                         .WithMany("Statistics")
                         .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)

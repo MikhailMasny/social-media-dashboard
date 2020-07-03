@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SocialMediaDashboard.Common.DTO
+namespace SocialMediaDashboard.Common.Models
 {
     /// <summary>
     /// Result (base object).

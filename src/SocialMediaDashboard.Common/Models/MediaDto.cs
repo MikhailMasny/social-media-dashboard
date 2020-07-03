@@ -1,6 +1,6 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
 
-namespace SocialMediaDashboard.Common.DTO
+namespace SocialMediaDashboard.Common.Models
 {
     /// <summary>
     /// Media data transfet object.

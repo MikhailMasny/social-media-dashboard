@@ -3,7 +3,7 @@ using SocialMediaDashboard.Common.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SocialMediaDashboard.Domain.Models
+namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// Media model.

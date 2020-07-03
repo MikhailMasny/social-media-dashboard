@@ -1,7 +1,7 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
 using System;
 
-namespace SocialMediaDashboard.Domain.Models
+namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// Statistic model.

@@ -1,6 +1,6 @@
-﻿using SocialMediaDashboard.Common.DTO;
-using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Domain.Models;
+﻿using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Common.Models;
+using SocialMediaDashboard.Domain.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace SocialMediaDashboard.Logic.Services
         /// <inheritdoc/>
         public async Task<MediaDto> AddUserAccount(string userId, string account)
         {
-            var selectedMedia = 
+            var selectedMedia =
                 _mediaRepository.GetAll()
                 .Where(m => m.UserId == userId)
                 .FirstOrDefault(m => m.AccountName == account);
