@@ -20,6 +20,7 @@ namespace SocialMediaDashboard.Data.Extensions
         /// </summary>
         /// <param name="services">Service collection.</param>
         /// <param name="configuration">Configuration.</param>
+        /// <param name="environment">Host environment.</param>
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
