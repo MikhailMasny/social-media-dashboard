@@ -21,6 +21,8 @@ namespace SocialMediaDashboard.Domain.Models
         /// <inheritdoc/>
         public string UserId { get; set; }
 
+        // TODO: IsDisplayed
+
         // UNDONE: maybe fix it?
         /// <summary>
         /// User.
