@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200521161019_AddRefreshTokenTable.cs" />
     <Compile Remove="Migrations\20200521161019_AddRefreshTokenTable.Designer.cs" />
+    <Compile Remove="Migrations\20200703161540_UpdateMediaAndStatisticTables.cs" />
+    <Compile Remove="Migrations\20200703161540_UpdateMediaAndStatisticTables.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

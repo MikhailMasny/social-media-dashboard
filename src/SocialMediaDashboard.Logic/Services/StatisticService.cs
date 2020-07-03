@@ -31,10 +31,9 @@ namespace SocialMediaDashboard.Logic.Services
 
                 var statistic = new Statistic
                 {
-                    Type = 1,
                     Count = count.Value,
                     Date = DateTime.Now,
-                    MediaId = account.Id
+                    //MediaId = account.Id // TODO: FIX IT
                 };
 
                 statistics.Add(statistic);

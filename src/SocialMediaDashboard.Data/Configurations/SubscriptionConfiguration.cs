@@ -6,21 +6,21 @@ using System;
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Statistic model.
+    /// EF Configuration for Subscription model.
     /// </summary>
-    public class StatisticConfiguration : IEntityTypeConfiguration<Statistic>
+    public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     {
         /// <inheritdoc/>
-        public void Configure(EntityTypeBuilder<Statistic> builder)
+        public void Configure(EntityTypeBuilder<Subscription> builder)
         {
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable("Statistics")
+            builder.ToTable("Subscriptions")
                 .HasKey(s => s.Id);
 
-            builder.HasOne(s => s.Subscription)
-                .WithMany(s => s.Statistics)
-                .HasForeignKey(s => s.SubscriptionId);
+            builder.HasOne(s => s.Media)
+                .WithMany(m => m.Subscriptions)
+                .HasForeignKey(s => s.MediaId);
         }
     }
 }

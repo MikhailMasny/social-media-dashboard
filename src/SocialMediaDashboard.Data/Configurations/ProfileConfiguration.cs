@@ -16,9 +16,9 @@ namespace SocialMediaDashboard.Data.Configurations
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
             builder.ToTable("Profiles")
-                .HasKey(u => u.Id);
+                .HasKey(p => p.Id);
 
-            builder.Property(u => u.Name)
+            builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(20);
         }

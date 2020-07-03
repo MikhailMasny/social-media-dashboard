@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// User profile.
+    /// User profile entity.
     /// </summary>
     public class Profile : IHasDbIdentity, IHasUserIdentity
     {

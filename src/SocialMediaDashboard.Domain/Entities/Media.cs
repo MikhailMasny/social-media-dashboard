@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Media model.
+    /// Media entity.
     /// </summary>
     public class Media : IHasDbIdentity, IHasUserIdentity
     {
@@ -16,14 +17,15 @@ namespace SocialMediaDashboard.Domain.Entities
         /// <summary>
         /// Social media account.
         /// </summary>
-        public string AccountName { get; set; }
+        public string AccountName { get; set; } // TODO: change it to Account
+
+        /// <summary>
+        /// Type.
+        /// </summary>
+        public AccountType Type { get; set; }
 
         /// <inheritdoc/>
         public string UserId { get; set; }
-
-        // TODO: IsDisplayed
-
-        // TODO: Account Type
 
         // UNDONE: maybe fix it?
         /// <summary>
@@ -33,8 +35,8 @@ namespace SocialMediaDashboard.Domain.Entities
         public IdentityUser User { get; set; }
 
         /// <summary>
-        /// Navigation to Statistic.
+        /// Navigation to Subscription.
         /// </summary>
-        public ICollection<Statistic> Statistics { get; }
+        public ICollection<Subscription> Subscriptions { get; }
     }
 }
