@@ -20,5 +20,12 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="jwtValue">JWT key value.</param>
         /// <param name="jwtConfigType">Type of JWT key value.</param>
         void CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType);
+
+        /// <summary>
+        /// Check and update Sentry settings.
+        /// </summary>
+        /// <param name="sentryValue">Sentry key value.</param>
+        /// <param name="sentryConfigType">Type of Sentry key value.</param>
+        void CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType);
     }
 }

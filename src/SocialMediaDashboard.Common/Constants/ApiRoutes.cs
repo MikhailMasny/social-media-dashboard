@@ -70,6 +70,11 @@
             /// JWT settings endpoint.
             /// </summary>
             public const string Token = Root + "/" + Path + "/token";
+
+            /// <summary>
+            /// Sentry settings endpoint.
+            /// </summary>
+            public const string Sentry = Root + "/" + Path + "/sentry";
         }
     }
 }

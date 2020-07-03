@@ -19,7 +19,7 @@ namespace SocialMediaDashboard.WebAPI
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                //.WriteTo.Seq("http://localhost:5341")
+                .WriteTo.Sentry()
                 .CreateLogger();
 
             try
@@ -53,6 +53,7 @@ namespace SocialMediaDashboard.WebAPI
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseSentry();
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog();
