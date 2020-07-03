@@ -1,7 +1,9 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Common.Models;
 using SocialMediaDashboard.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,10 +20,31 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
+        public async Task<IEnumerable<MediaDto>> GetAllAccounts()
+        {
+            var allMedia = await _mediaRepository.GetAll()
+                .ToListAsync();
+
+            // TODO: Use Automapper
+            var mediaDtos = new List<MediaDto>();
+            foreach (var media in allMedia)
+            {
+                var m = new MediaDto
+                {
+                    Id = media.Id,
+                    AccountName = media.AccountName,
+                    UserId = media.UserId
+                };
+                mediaDtos.Add(m);
+            }
+
+            return mediaDtos;
+        }
+
+        /// <inheritdoc/>
         public async Task<MediaDto> AddUserAccount(string userId, string account)
         {
-            var selectedMedia =
-                _mediaRepository.GetAll()
+            var selectedMedia = _mediaRepository.GetAll()
                 .Where(m => m.UserId == userId)
                 .FirstOrDefault(m => m.AccountName == account);
 

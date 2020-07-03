@@ -1,4 +1,5 @@
 ﻿using SocialMediaDashboard.Common.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Common.Interfaces
@@ -8,6 +9,12 @@ namespace SocialMediaDashboard.Common.Interfaces
     /// </summary>
     public interface IMediaService
     {
+        /// <summary>
+        /// Get all accounts.
+        /// </summary>
+        /// <returns>List of media data transfet objects.</returns>
+        Task<IEnumerable<MediaDto>> GetAllAccounts();
+
         /// <summary>
         /// Add user media account.
         /// </summary>

@@ -5,8 +5,11 @@ namespace SocialMediaDashboard.Common.Models
     /// <summary>
     /// Media data transfet object.
     /// </summary>
-    public class MediaDto : IHasUserIdentity
+    public class MediaDto : IHasDbIdentity, IHasUserIdentity
     {
+        /// <inheritdoc/>
+        public int Id { get; set; }
+
         /// <summary>
         /// Social media account.
         /// </summary>

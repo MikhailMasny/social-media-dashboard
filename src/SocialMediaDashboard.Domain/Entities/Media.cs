@@ -23,6 +23,8 @@ namespace SocialMediaDashboard.Domain.Entities
 
         // TODO: IsDisplayed
 
+        // TODO: Account Type
+
         // UNDONE: maybe fix it?
         /// <summary>
         /// User.
