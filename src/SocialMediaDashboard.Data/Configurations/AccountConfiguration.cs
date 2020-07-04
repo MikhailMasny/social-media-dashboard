@@ -6,19 +6,19 @@ using System;
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Media model.
+    /// EF Configuration for Social media account entity.
     /// </summary>
-    public class MediaConfiguration : IEntityTypeConfiguration<Media>
+    public class AccountConfiguration : IEntityTypeConfiguration<Account>
     {
         /// <inheritdoc/>
-        public void Configure(EntityTypeBuilder<Media> builder)
+        public void Configure(EntityTypeBuilder<Account> builder)
         {
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable("Medias")
-                .HasKey(m => m.Id);
+            builder.ToTable("Accounts")
+                .HasKey(a => a.Id);
 
-            builder.Property(m => m.AccountName)
+            builder.Property(a => a.Name)
                 .IsRequired();
         }
     }

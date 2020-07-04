@@ -8,9 +8,9 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Requests
     public class SubscriptionCreateRequest
     {
         /// <summary>
-        /// Media identifier.
+        /// Account identifier.
         /// </summary>
-        public int MediaId { get; set; }
+        public int AccountId { get; set; }
 
         /// <summary>
         /// Subscription type.

@@ -4,16 +4,16 @@ using SocialMediaDashboard.Domain.Entities;
 namespace SocialMediaDashboard.Data.Mappings
 {
     /// <summary>
-    /// Профиль AutoMapper для Media.
+    /// Профиль AutoMapper для Account.
     /// </summary>
-    public class MediaProfile : AutoMapper.Profile
+    public class AccountProfile : AutoMapper.Profile
     {
         /// <summary>
         /// Пустой конструктор.
         /// </summary>
-        public MediaProfile()
+        public AccountProfile()
         {
-            CreateMap<Media, MediaDto>().ReverseMap();
+            CreateMap<Account, AccountDto>().ReverseMap();
         }
     }
 }

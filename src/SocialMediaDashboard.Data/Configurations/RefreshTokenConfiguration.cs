@@ -6,7 +6,7 @@ using System;
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for RefreshToken model.
+    /// EF Configuration for RefreshToken entity.
     /// </summary>
     public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {

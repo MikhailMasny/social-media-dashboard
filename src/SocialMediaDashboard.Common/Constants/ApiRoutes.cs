@@ -83,14 +83,14 @@
         }
 
         /// <summary>
-        /// Media path.
+        /// Account path.
         /// </summary>
-        public static class Media
+        public static class Account
         {
             /// <summary>
             /// Config path.
             /// </summary>
-            public const string Path = "media";
+            public const string Path = "account";
 
             /// <summary>
             /// GetAll endpoint.

@@ -25,7 +25,7 @@ namespace SocialMediaDashboard.Logic.Extensions
             services.AddSingleton(new VkApi());
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IConfigService, ConfigService>();
-            services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IVkService, VkService>();

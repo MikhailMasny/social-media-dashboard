@@ -19,13 +19,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
     public class SubscriptionController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
-        private readonly IMediaService _mediaService;
+        private readonly IAccountService _accountService;
 
         public SubscriptionController(ISubscriptionService subscriptionService,
-                                      IMediaService mediaService)
+                                      IAccountService accountService)
         {
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
-            _mediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
+            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -37,7 +37,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (request.MediaId == 0 || request.SubscriptionType == 0) // TODO: fix to check value
+            if (request.AccountId == 0 || request.SubscriptionType == 0) // TODO: fix to check value
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
@@ -45,18 +45,18 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
-            var mediaExist = await _mediaService.AccountExistAsync(request.MediaId);
-            if (!mediaExist)
+            var accountExist = await _accountService.AccountExistAsync(request.AccountId);
+            if (!accountExist)
             {
                 return NotFound(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.MediaNotFound
+                    Error = Subscription.AccountNotFound
                 });
             }
 
             var userId = HttpContext.GetUserId();
-            var media = await _mediaService.GetAccountAsync(request.MediaId);
-            var result = await _subscriptionService.AddSubscriptionAsync(userId, media.Id, media.AccountName, media.Type, request.SubscriptionType);
+            var account = await _accountService.GetAccountAsync(request.AccountId);
+            var result = await _subscriptionService.AddSubscriptionAsync(userId, account.Id, account.Name, account.Type, request.SubscriptionType);
 
             if (!result)
             {
@@ -89,11 +89,11 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
-            var mediaSuccessfulResponse = new SubscriptionSuccessfulResponse();
-            mediaSuccessfulResponse.Subscriptions.AddRange(subscriptions);
-            mediaSuccessfulResponse.Message = Subscription.Successful;
+            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
+            subscriptionSuccessfulResponse.Subscriptions.AddRange(subscriptions);
+            subscriptionSuccessfulResponse.Message = Subscription.Successful;
 
-            return Ok(mediaSuccessfulResponse);
+            return Ok(subscriptionSuccessfulResponse);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -118,7 +118,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return NotFound(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.NotFound
+                    Error = Subscription.SubscriptionNotFound
                 });
             }
 

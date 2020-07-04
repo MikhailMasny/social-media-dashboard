@@ -3,14 +3,14 @@
 namespace SocialMediaDashboard.WebAPI.Contracts.Requests
 {
     /// <summary>
-    /// Media create request.
+    /// Social media account create request.
     /// </summary>
-    public class MediaCreateRequest
+    public class AccountCreateRequest
     {
         /// <summary>
-        /// Social media account.
+        /// Name.
         /// </summary>
-        public string AccountName { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Account type.

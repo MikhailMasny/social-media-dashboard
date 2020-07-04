@@ -61,20 +61,20 @@ namespace SocialMediaDashboard.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specified account not found..
+        /// </summary>
+        public static string AccountNotFound {
+            get {
+                return ResourceManager.GetString("AccountNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data for create subscription is incorrect..
         /// </summary>
         public static string IncorrectData {
             get {
                 return ResourceManager.GetString("IncorrectData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Specified media not found..
-        /// </summary>
-        public static string MediaNotFound {
-            get {
-                return ResourceManager.GetString("MediaNotFound", resourceCulture);
             }
         }
         
@@ -129,6 +129,15 @@ namespace SocialMediaDashboard.Common.Resources {
         public static string SubscriptionDeleteException {
             get {
                 return ResourceManager.GetString("SubscriptionDeleteException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified subscription not found..
+        /// </summary>
+        public static string SubscriptionNotFound {
+            get {
+                return ResourceManager.GetString("SubscriptionNotFound", resourceCulture);
             }
         }
         

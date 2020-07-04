@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.WebAPI.Contracts.Responses
 {
     /// <summary>
-    /// Media failed response.
+    /// Social media account failed response.
     /// </summary>
-    public class MediaFailedResponse
+    public class AccountFailedResponse
     {
         /// <summary>
         /// Error.

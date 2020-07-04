@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace SocialMediaDashboard.WebAPI.Contracts.Responses
 {
     /// <summary>
-    /// Media successful response.
+    /// Social media account successful response.
     /// </summary>
-    public class MediaSuccessfulResponse
+    public class AccountSuccessfulResponse
     {
         /// <summary>
         /// Message.
@@ -14,8 +14,8 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Responses
         public string Message { get; set; }
 
         /// <summary>
-        /// All media.
+        /// Accounts.
         /// </summary>
-        public List<MediaDto> MediaAll { get; } = new List<MediaDto>();
+        public List<AccountDto> Accounts { get; } = new List<AccountDto>();
     }
 }

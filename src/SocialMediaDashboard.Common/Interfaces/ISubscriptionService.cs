@@ -14,12 +14,12 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Create subscription.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <param name="mediaId">Media identifier.</param>
+        /// <param name="accountId">Account identifier.</param>
         /// <param name="account">User account.</param>
         /// <param name="accountType">Account type.</param>
         /// <param name="subscriptionType">Subscription type.</param>
         /// <returns>Operation result.</returns>
-        Task<bool> AddSubscriptionAsync(string userId, int mediaId, string account, AccountType accountType, SubscriptionType subscriptionType);
+        Task<bool> AddSubscriptionAsync(string userId, int accountId, string account, AccountType accountType, SubscriptionType subscriptionType);
 
         /// <summary>
         /// Get all subscription by user identifier.
@@ -29,7 +29,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<IEnumerable<SubscriptionDto>> GetAllUserSubscriptionsAsync(string userId);
 
         /// <summary>
-        /// Get all subscription by media type.
+        /// Get all subscription by account type.
         /// </summary>
         /// <param name="accountType">Account type.</param>
         /// <param name="subscriptionType">Subscription type.</param>

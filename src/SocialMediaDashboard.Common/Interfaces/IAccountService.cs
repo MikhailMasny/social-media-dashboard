@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 namespace SocialMediaDashboard.Common.Interfaces
 {
     /// <summary>
-    /// Interface for implement media service.
+    /// Interface for implement account service.
     /// </summary>
-    public interface IMediaService
+    public interface IAccountService
     {
         /// <summary>
         /// Get all accounts.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <returns>List of media data transfet objects.</returns>
-        Task<IEnumerable<MediaDto>> GetAllUserAccountsAsync(string userId);
+        /// <returns>List of account data transfet objects.</returns>
+        Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId);
 
         /// <summary>
-        /// Get account by media identifier.
+        /// Get account by identifier.
         /// </summary>
-        /// <param name="id">Media identifier.</param>
-        /// <returns>Media data transfet objects.</returns>
-        Task<MediaDto> GetAccountAsync(int id);
+        /// <param name="id">Account identifier.</param>
+        /// <returns>Account data transfet objects.</returns>
+        Task<AccountDto> GetAccountAsync(int id);
 
         /// <summary>
-        /// Add user media account.
+        /// Add user social media account.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <param name="account">Media account.</param>
+        /// <param name="account">Account account.</param>
         /// <param name="accountType">Account type.</param>
         /// <returns>Operation result.</returns>
         Task<bool> AddAccountAsync(string userId, string account, AccountType accountType);
@@ -36,7 +36,7 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <summary>
         /// Check account.
         /// </summary>
-        /// <param name="id">Media identifier.</param>
+        /// <param name="id">Account identifier.</param>
         /// <returns>Operation result.</returns>
         Task<bool> AccountExistAsync(int id);
     }

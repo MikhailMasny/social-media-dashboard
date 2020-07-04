@@ -4,17 +4,17 @@ using SocialMediaDashboard.Common.Interfaces;
 namespace SocialMediaDashboard.Common.Models
 {
     /// <summary>
-    /// Media data transfet object.
+    /// Social media account data transfet object.
     /// </summary>
-    public class MediaDto : IHasDbIdentity, IHasUserIdentity
+    public class AccountDto : IHasDbIdentity, IHasUserIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
 
         /// <summary>
-        /// Social media account.
+        /// Name.
         /// </summary>
-        public string AccountName { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Type.

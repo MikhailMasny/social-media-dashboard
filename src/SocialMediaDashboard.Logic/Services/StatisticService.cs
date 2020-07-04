@@ -10,24 +10,24 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Logic.Services
 {
-    /// <inheritdoc cref="IMediaService"/>
+    /// <inheritdoc cref="IAccountService"/>
     public class StatisticService : IStatisticService
     {
 
         private readonly IRepository<Statistic> _statisticRepository;
-        private readonly IMediaService _mediaService;
+        private readonly IAccountService _accountService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IVkService _vkService;
         private readonly ILogger<StatisticService> _logger;
 
         public StatisticService(IRepository<Statistic> statisticRepository,
-                                IMediaService mediaService,
+                                IAccountService accountService,
                                 ISubscriptionService subscriptionService,
                                 IVkService vkService,
                                 ILogger<StatisticService> logger)
         {
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
-            _mediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
+            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
             _vkService = vkService ?? throw new ArgumentNullException(nameof(vkService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -43,12 +43,12 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 foreach (var subscription in subscriptions)
                 {
-                    var media = await _mediaService.GetAccountAsync(subscription.MediaId);
+                    var account = await _accountService.GetAccountAsync(subscription.AccountId);
                     int? count;
 
                     try
                     {
-                        count = await _vkService.GetFollowersAsync(media.AccountName);
+                        count = await _vkService.GetFollowersAsync(account.Name);
                     }
                     catch (Exception ex)
                     {

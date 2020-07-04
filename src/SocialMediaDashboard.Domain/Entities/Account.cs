@@ -7,17 +7,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Media entity.
+    /// Social media account entity.
     /// </summary>
-    public class Media : IHasDbIdentity, IHasUserIdentity
+    public class Account : IHasDbIdentity, IHasUserIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
 
         /// <summary>
-        /// Social media account.
+        /// Name.
         /// </summary>
-        public string AccountName { get; set; } // TODO: change it to Account
+        public string Name { get; set; } // TODO: change it to Account
 
         /// <summary>
         /// Type.
@@ -27,7 +27,6 @@ namespace SocialMediaDashboard.Domain.Entities
         /// <inheritdoc/>
         public string UserId { get; set; }
 
-        // UNDONE: maybe fix it?
         /// <summary>
         /// User.
         /// </summary>

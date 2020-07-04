@@ -22,8 +22,8 @@ namespace SocialMediaDashboard.Common.Models
         public bool IsDisplayed { get; set; }
 
         /// <summary>
-        /// Media identifier.
+        /// Account identifier.
         /// </summary>
-        public int MediaId { get; set; }
+        public int AccountId { get; set; }
     }
 }

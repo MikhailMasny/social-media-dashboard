@@ -6,7 +6,7 @@ using System;
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Statistic model.
+    /// EF Configuration for Statistic entity.
     /// </summary>
     public class StatisticConfiguration : IEntityTypeConfiguration<Statistic>
     {

@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountNotFound" xml:space="preserve">
+    <value>Specified account not found.</value>
+  </data>
   <data name="IncorrectData" xml:space="preserve">
     <value>Data for create subscription is incorrect.</value>
-  </data>
-  <data name="MediaNotFound" xml:space="preserve">
-    <value>Specified media not found.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nothing found.</value>
@@ -140,6 +140,9 @@
   </data>
   <data name="SubscriptionDeleteException" xml:space="preserve">
     <value>Unexpected delete issues..</value>
+  </data>
+  <data name="SubscriptionNotFound" xml:space="preserve">
+    <value>Specified subscription not found.</value>
   </data>
   <data name="Successful" xml:space="preserve">
     <value>Successful operation.</value>

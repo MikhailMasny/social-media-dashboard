@@ -1,7 +1,7 @@
 ﻿namespace SocialMediaDashboard.Common.Enums
 {
     /// <summary>
-    /// Media type.
+    /// Subscription type.
     /// </summary>
     public enum SubscriptionType
     {

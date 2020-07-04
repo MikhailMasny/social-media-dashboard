@@ -25,7 +25,7 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<bool> AddSubscriptionAsync(string userId, int mediaId, string account, AccountType accountType, SubscriptionType subscriptionType)
+        public async Task<bool> AddSubscriptionAsync(string userId, int accountId, string account, AccountType accountType, SubscriptionType subscriptionType)
         {
             var canCreateSubscription = await CanUserCreateSubscription(userId, account, accountType, subscriptionType);
             if (!canCreateSubscription)
@@ -37,7 +37,7 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Type = subscriptionType,
                 IsDisplayed = true,
-                MediaId = mediaId
+                AccountId = accountId
             };
 
             await _subscriptionRepository.AddAsync(subscription);
@@ -50,8 +50,8 @@ namespace SocialMediaDashboard.Logic.Services
         public async Task<IEnumerable<SubscriptionDto>> GetAllUserSubscriptionsAsync(string userId)
         {
             var subscriptions = await _subscriptionRepository.GetAllWithoutTracking()
-                .Include(s => s.Media)
-                .Where(s => s.Media.UserId == userId)
+                .Include(s => s.Account)
+                .Where(s => s.Account.UserId == userId)
                 .ToListAsync();
 
             var subscriptionsDto = _mapper.Map<List<SubscriptionDto>>(subscriptions);
@@ -63,8 +63,8 @@ namespace SocialMediaDashboard.Logic.Services
         public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsByTypeAsync(AccountType accountType, SubscriptionType subscriptionType)
         {
             var subscriptions = await _subscriptionRepository.GetAllWithoutTracking()
-                .Include(s => s.Media)
-                .Where(s => s.Type == subscriptionType && s.Media.Type == accountType)
+                .Include(s => s.Account)
+                .Where(s => s.Type == subscriptionType && s.Account.Type == accountType)
                 .ToListAsync();
 
             var subscriptionsDto = _mapper.Map<List<SubscriptionDto>>(subscriptions);
@@ -76,8 +76,8 @@ namespace SocialMediaDashboard.Logic.Services
         public async Task<bool> DeleteSubscriptionAsync(int id, string userId)
         {
             var subscription = await _subscriptionRepository.GetAll()
-                .Include(s => s.Media)
-                .FirstOrDefaultAsync(s => s.Media.UserId == userId && s.Id == id);
+                .Include(s => s.Account)
+                .FirstOrDefaultAsync(s => s.Account.UserId == userId && s.Id == id);
 
 
             //var subscription = await _subscriptionRepository
@@ -107,8 +107,8 @@ namespace SocialMediaDashboard.Logic.Services
         private async Task<bool> CanUserCreateSubscription(string userId, string account, AccountType accountType, SubscriptionType subscriptionType)
         {
             var selectedSubscriptions = await _subscriptionRepository.GetAllWithoutTracking()
-                .Include(s => s.Media)
-                .Where(s => s.Media.UserId == userId && s.Media.AccountName == account && s.Media.Type == accountType)
+                .Include(s => s.Account)
+                .Where(s => s.Account.UserId == userId && s.Account.Name == account && s.Account.Type == accountType)
                 .ToListAsync();
 
             foreach (var subscription in selectedSubscriptions)

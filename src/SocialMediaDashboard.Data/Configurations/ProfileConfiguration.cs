@@ -6,7 +6,7 @@ using System;
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Profile model.
+    /// EF Configuration for Profile entity.
     /// </summary>
     public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {

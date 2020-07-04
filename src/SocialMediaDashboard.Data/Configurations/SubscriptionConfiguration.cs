@@ -6,7 +6,7 @@ using System;
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Subscription model.
+    /// EF Configuration for Subscription entity.
     /// </summary>
     public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     {
@@ -18,9 +18,9 @@ namespace SocialMediaDashboard.Data.Configurations
             builder.ToTable("Subscriptions")
                 .HasKey(s => s.Id);
 
-            builder.HasOne(s => s.Media)
+            builder.HasOne(s => s.Account)
                 .WithMany(m => m.Subscriptions)
-                .HasForeignKey(s => s.MediaId);
+                .HasForeignKey(s => s.AccountId);
         }
     }
 }

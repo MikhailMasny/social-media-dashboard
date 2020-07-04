@@ -23,14 +23,14 @@ namespace SocialMediaDashboard.Domain.Entities
         public bool IsDisplayed { get; set; }
 
         /// <summary>
-        /// Media identifier.
+        /// Social media account identifier.
         /// </summary>
-        public int MediaId { get; set; }
+        public int AccountId { get; set; }
 
         /// <summary>
-        /// Navigation property for Media.
+        /// Navigation property for Social media account.
         /// </summary>
-        public Media Media { get; set; }
+        public Account Account { get; set; }
 
         /// <summary>
         /// Navigation to Statistic.

@@ -127,7 +127,7 @@
     <value>This account is already tied to the user.</value>
   </data>
   <data name="IncorrectData" xml:space="preserve">
-    <value>Data for create media is incorrect.</value>
+    <value>Data for create account is incorrect.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nothing found.</value>

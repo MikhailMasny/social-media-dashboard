@@ -19,9 +19,9 @@ namespace SocialMediaDashboard.Data.Context
             : base(options) { }
 
         /// <summary>
-        /// Media entities.
+        /// Social media account entities.
         /// </summary>
-        public DbSet<Media> Medias { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
         /// <summary>
         /// Subscription entities.
@@ -48,7 +48,7 @@ namespace SocialMediaDashboard.Data.Context
             modelBuilder = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
 
             modelBuilder.ApplyConfiguration(new ProfileConfiguration());
-            modelBuilder.ApplyConfiguration(new MediaConfiguration());
+            modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new StatisticConfiguration());
             modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());

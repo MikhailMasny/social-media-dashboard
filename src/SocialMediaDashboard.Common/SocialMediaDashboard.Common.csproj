@@ -20,10 +20,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Identity.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Media.Designer.cs">
+    <Compile Update="Resources\Account.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Media.resx</DependentUpon>
+      <DependentUpon>Account.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Subscription.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -37,9 +37,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Identity.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Media.resx">
+    <EmbeddedResource Update="Resources\Account.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Media.Designer.cs</LastGenOutput>
+      <LastGenOutput>Account.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Subscription.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
