@@ -164,6 +164,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshTokenAsync))]
         public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request)

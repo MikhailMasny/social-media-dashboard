@@ -22,7 +22,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             _configService = configService ?? throw new ArgumentNullException(nameof(configService));
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoutes.Config.Connection, Name = nameof(UpdateConnections))]
@@ -35,10 +35,10 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             await _configService.CheckAndUpdateConnection(request.SQLiteConnection, DataProviderType.SQLite);
             await _configService.CheckAndUpdateConnection(request.PostgreSQLConnection, DataProviderType.PostgreSQL);
 
-            return Ok();
+            return NoContent();
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoutes.Config.Token, Name = nameof(UpdateToken))]
@@ -49,10 +49,10 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             await _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
             await _configService.CheckAndUpdateToken(request.TokenLifetime, JwtConfigType.TokenLifetime);
 
-            return Ok();
+            return NoContent();
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoutes.Config.Sentry, Name = nameof(UpdateSentry))]
@@ -64,10 +64,10 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             await _configService.CheckAndUpdateSentry(request.MinimumBreadcrumbLevel, SentryConfigType.MinimumBreadcrumbLevel);
             await _configService.CheckAndUpdateSentry(request.MinimumEventLevel, SentryConfigType.MinimumEventLevel);
 
-            return Ok();
+            return NoContent();
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoutes.Config.Vk, Name = nameof(UpdateVk))]
@@ -77,7 +77,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
             await _configService.CheckAndUpdateVk(request.AccessToken, VkConfigType.AccessToken);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

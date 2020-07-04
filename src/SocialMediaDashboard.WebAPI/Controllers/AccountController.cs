@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using SocialMediaDashboard.Common.Constants;
+using SocialMediaDashboard.Common.Extensions;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Common.Resources;
 using SocialMediaDashboard.WebAPI.Contracts.Requests;
@@ -34,7 +35,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Name) || request.AccountType == 0) // TODO: fix to check value
+            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountValue())
             {
                 return BadRequest(new AccountFailedResponse
                 {
@@ -53,6 +54,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
+            // Must return Created
             return Ok(new AccountSuccessfulResponse
             {
                 Message = Account.AccountAdded

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Common.Constants;
+using SocialMediaDashboard.Common.Extensions;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Common.Resources;
 using SocialMediaDashboard.WebAPI.Contracts.Requests;
@@ -37,7 +38,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (request.AccountId == 0 || request.SubscriptionType == 0) // TODO: fix to check value
+            if (request.AccountId == 0 || request.SubscriptionType.CheckSubscriptionValue())
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
@@ -96,7 +97,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             return Ok(subscriptionSuccessfulResponse);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -132,10 +133,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
                 });
             }
 
-            return Ok(new SubscriptionSuccessfulResponse
-            {
-                Message = Subscription.SubscriptionDeleted
-            });
+            return NoContent();
         }
     }
 }
