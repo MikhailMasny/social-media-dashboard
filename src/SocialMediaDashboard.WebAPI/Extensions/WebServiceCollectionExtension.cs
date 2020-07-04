@@ -26,8 +26,6 @@ namespace SocialMediaDashboard.WebAPI.Extensions
         {
             configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-            services.Configure<VkSettings>(configuration.GetSection(nameof(VkSettings)));
-
             var jwtSettingsSection = configuration.GetSection(nameof(JwtSettings));
             services.Configure<JwtSettings>(jwtSettingsSection);
 
@@ -104,8 +102,9 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                 .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
-            services.ConfigureWritable<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.ConfigureWritable<SentrySettings>(configuration.GetSection("Sentry"));
+            services.ConfigureWritable<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
+            services.ConfigureWritable<VkSettings>(configuration.GetSection(nameof(VkSettings)));
 
             return services;
         }

@@ -75,6 +75,11 @@
             /// Sentry settings endpoint.
             /// </summary>
             public const string Sentry = Root + "/" + Path + "/sentry";
+
+            /// <summary>
+            /// Vk settings endpoint.
+            /// </summary>
+            public const string Vk = Root + "/" + Path + "/vk";
         }
 
         /// <summary>
