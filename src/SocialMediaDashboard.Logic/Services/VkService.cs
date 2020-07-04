@@ -23,7 +23,7 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public async Task<int?> GetFollowers(string userName)
+        public async Task<int?> GetFollowersAsync(string userName)
         {
             await _api.AuthorizeAsync(new ApiAuthParams
             {
@@ -31,20 +31,6 @@ namespace SocialMediaDashboard.Logic.Services
             });
 
             var response = await _api.Users.GetAsync(new string[] { userName }, VkNet.Enums.Filters.ProfileFields.Counters);
-            var user = response.FirstOrDefault();
-
-            return user.Counters.Followers;
-        }
-
-        /// <inheritdoc/>
-        public async Task<int?> GetFollowers(long userId)
-        {
-            await _api.AuthorizeAsync(new ApiAuthParams
-            {
-                AccessToken = _vkSettings.Value.AccessToken
-            });
-
-            var response = await _api.Users.GetAsync(new long[] { userId }, VkNet.Enums.Filters.ProfileFields.Counters);
             var user = response.FirstOrDefault();
 
             return user.Counters.Followers;

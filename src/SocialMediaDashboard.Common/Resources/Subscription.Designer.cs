@@ -22,14 +22,14 @@ namespace SocialMediaDashboard.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Media {
+    public class Subscription {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Media() {
+        internal Subscription() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace SocialMediaDashboard.Common.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Common.Resources.Media", typeof(Media).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Common.Resources.Subscription", typeof(Subscription).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,20 @@ namespace SocialMediaDashboard.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account successfully added to user..
-        /// </summary>
-        public static string AccountAdded {
-            get {
-                return ResourceManager.GetString("AccountAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unexpected add issues...
-        /// </summary>
-        public static string AccountAddException {
-            get {
-                return ResourceManager.GetString("AccountAddException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This account is already tied to the user..
-        /// </summary>
-        public static string AccountAlreadyExist {
-            get {
-                return ResourceManager.GetString("AccountAlreadyExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Data for create media is incorrect..
+        ///   Looks up a localized string similar to Data for create subscription is incorrect..
         /// </summary>
         public static string IncorrectData {
             get {
                 return ResourceManager.GetString("IncorrectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified media not found..
+        /// </summary>
+        public static string MediaNotFound {
+            get {
+                return ResourceManager.GetString("MediaNotFound", resourceCulture);
             }
         }
         
@@ -102,6 +84,51 @@ namespace SocialMediaDashboard.Common.Resources {
         public static string NotFound {
             get {
                 return ResourceManager.GetString("NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscription successfully added to user media..
+        /// </summary>
+        public static string SubscriptionAdded {
+            get {
+                return ResourceManager.GetString("SubscriptionAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected add issues...
+        /// </summary>
+        public static string SubscriptionAddException {
+            get {
+                return ResourceManager.GetString("SubscriptionAddException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This subscription is already tied to the user media..
+        /// </summary>
+        public static string SubscriptionAlreadyExist {
+            get {
+                return ResourceManager.GetString("SubscriptionAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscription successfully deleted from user media..
+        /// </summary>
+        public static string SubscriptionDeleted {
+            get {
+                return ResourceManager.GetString("SubscriptionDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected delete issues...
+        /// </summary>
+        public static string SubscriptionDeleteException {
+            get {
+                return ResourceManager.GetString("SubscriptionDeleteException", resourceCulture);
             }
         }
         

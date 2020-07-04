@@ -20,7 +20,7 @@ namespace SocialMediaDashboard.Logic.Tasks
         /// <inheritdoc/>
         public async Task Invoke()
         {
-            await _statisticService.AddFollowersFromVk();
+            await _statisticService.AddFollowersFromVkAsync();
         }
     }
 }

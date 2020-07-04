@@ -3,18 +3,18 @@
 namespace SocialMediaDashboard.WebAPI.Contracts.Requests
 {
     /// <summary>
-    /// Media create request.
+    /// Subscription create request.
     /// </summary>
-    public class MediaCreateRequest
+    public class SubscriptionCreateRequest
     {
         /// <summary>
-        /// Social media account.
+        /// Media identifier.
         /// </summary>
-        public string AccountName { get; set; }
+        public int MediaId { get; set; }
 
         /// <summary>
-        /// Account type.
+        /// Subscription type.
         /// </summary>
-        public AccountType AccountType { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
     }
 }

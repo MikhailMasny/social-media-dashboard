@@ -15,51 +15,20 @@ namespace SocialMediaDashboard.Logic.Services
     public class MediaService : IMediaService
     {
         private readonly IRepository<Media> _mediaRepository;
-        private readonly IRepository<Subscription> _subscriptionRepository;
         private readonly IMapper _mapper;
 
         public MediaService(IRepository<Media> mediaRepository,
-                            IRepository<Subscription> subscriptionRepository,
                             IMapper mapper)
         {
             _mediaRepository = mediaRepository ?? throw new ArgumentNullException(nameof(mediaRepository));
-            _subscriptionRepository = subscriptionRepository ?? throw new ArgumentNullException(nameof(subscriptionRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<MediaDto>> GetAllAccounts()
-        {
-            var media = await _mediaRepository.GetAll()
-                .ToListAsync();
-
-            var mediaDto = _mapper.Map<List<MediaDto>>(media);
-
-            return mediaDto;
-        }
-
-        /// <inheritdoc/>
-        public async Task<MediaDto> GetAccount(int id)
-        {
-            var media = await _mediaRepository.GetAll()
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            var mediaDto = _mapper.Map<MediaDto>(media);
-
-            return mediaDto;
-        }
-
-        /// <inheritdoc/>
-        public async Task<bool> AddUserAccount(string userId, string account, AccountType accountType, SubscriptionType subscriptionType)
+        public async Task<bool> AddAccountAsync(string userId, string account, AccountType accountType)
         {
             var canCreateMedia = await CanUserCreateMedia(userId, account, accountType);
             if (!canCreateMedia)
-            {
-                return false;
-            }
-
-            var canCreateSubscription = await CanUserCreateSubscription(userId, account, accountType, subscriptionType);
-            if (!canCreateSubscription)
             {
                 return false;
             }
@@ -74,26 +43,37 @@ namespace SocialMediaDashboard.Logic.Services
             await _mediaRepository.AddAsync(media);
             await _mediaRepository.SaveChangesAsync();
 
-            var subscription = new Subscription
-            {
-                Type = subscriptionType,
-                IsDisplayed = true,
-                MediaId = media.Id
-            };
-
-            await _subscriptionRepository.AddAsync(subscription);
-            await _subscriptionRepository.SaveChangesAsync();
-
             return true;
         }
 
-        private async Task<bool> CanUserCreateMedia(string userId, string account, AccountType accountType)
+        /// <inheritdoc/>
+        public async Task<IEnumerable<MediaDto>> GetAllUserAccountsAsync(string userId)
         {
-            var selectedMedia = await _mediaRepository.GetAll()
+            var media = await _mediaRepository.GetAllWithoutTracking()
                 .Where(m => m.UserId == userId)
-                .FirstOrDefaultAsync(m => m.AccountName == account && m.Type == accountType);
+                .ToListAsync();
 
-            if (selectedMedia != null)
+            var mediaDto = _mapper.Map<List<MediaDto>>(media);
+
+            return mediaDto;
+        }
+
+        /// <inheritdoc/>
+        public async Task<MediaDto> GetAccountAsync(int id)
+        {
+            var media = await _mediaRepository.GetAllWithoutTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            var mediaDto = _mapper.Map<MediaDto>(media);
+
+            return mediaDto;
+        }
+
+        /// <inheritdoc/>
+        public async Task<bool> AccountExistAsync(int id)
+        {
+            var media = await _mediaRepository.GetEntityAsync(m => m.Id == id);
+            if (media == null)
             {
                 return false;
             }
@@ -101,19 +81,15 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        private async Task<bool> CanUserCreateSubscription(string userId, string account, AccountType accountType, SubscriptionType subscriptionType)
+        private async Task<bool> CanUserCreateMedia(string userId, string account, AccountType accountType)
         {
-            var selectedSubscriptions = await _subscriptionRepository.GetAll()
-                .Include(s => s.Media)
-                .Where(s => s.Media.UserId == userId && s.Media.AccountName == account && s.Media.Type == accountType)
-                .ToListAsync();
+            var selectedMedia = await _mediaRepository.GetAllWithoutTracking()
+                .Where(m => m.UserId == userId)
+                .FirstOrDefaultAsync(m => m.AccountName == account && m.Type == accountType);
 
-            foreach (var subscription in selectedSubscriptions)
+            if (selectedMedia != null)
             {
-                if (subscription.Type == subscriptionType)
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;

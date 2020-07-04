@@ -25,6 +25,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Media.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Subscription.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Subscription.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +40,10 @@
     <EmbeddedResource Update="Resources\Media.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Media.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Subscription.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Subscription.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

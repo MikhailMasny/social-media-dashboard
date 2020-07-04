@@ -10,6 +10,6 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <summary>
         /// Add followers data from Vk accounts.
         /// </summary>
-        Task AddFollowersFromVk();
+        Task AddFollowersFromVkAsync();
     }
 }

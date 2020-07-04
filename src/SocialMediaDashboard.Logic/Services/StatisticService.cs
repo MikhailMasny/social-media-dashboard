@@ -1,8 +1,11 @@
-﻿using SocialMediaDashboard.Common.Enums;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
+using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Logic.Services
@@ -15,40 +18,56 @@ namespace SocialMediaDashboard.Logic.Services
         private readonly IMediaService _mediaService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IVkService _vkService;
+        private readonly ILogger<StatisticService> _logger;
 
         public StatisticService(IRepository<Statistic> statisticRepository,
                                 IMediaService mediaService,
                                 ISubscriptionService subscriptionService,
-                                IVkService vkService)
+                                IVkService vkService,
+                                ILogger<StatisticService> logger)
         {
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
             _mediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
             _vkService = vkService ?? throw new ArgumentNullException(nameof(vkService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <inheritdoc/>
-        public async Task AddFollowersFromVk()
+        public async Task AddFollowersFromVkAsync()
         {
             var statistics = new List<Statistic>();
-            var subscriptions = await _subscriptionService.GetAllSubscriptionsByType(AccountType.Vk, SubscriptionType.Follower);
+            var subscriptions = await _subscriptionService.GetAllSubscriptionsByTypeAsync(AccountType.Vk, SubscriptionType.Follower);
 
-            foreach (var subscription in subscriptions)
+            if (subscriptions.Any())
             {
-                var media = await _mediaService.GetAccount(subscription.MediaId);
-                var count = await _vkService.GetFollowers(media.AccountName);
-
-                var statistic = new Statistic
+                foreach (var subscription in subscriptions)
                 {
-                    Count = count.Value,
-                    Date = DateTime.Now,
-                    SubscriptionId = subscription.Id
-                };
-                statistics.Add(statistic);
-            }
+                    var media = await _mediaService.GetAccountAsync(subscription.MediaId);
+                    int? count;
 
-            await _statisticRepository.AddRangeAsync(statistics);
-            await _statisticRepository.SaveChangesAsync();
+                    try
+                    {
+                        count = await _vkService.GetFollowersAsync(media.AccountName);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, ex.Message);
+                        throw;
+                    }
+
+                    var statistic = new Statistic
+                    {
+                        Count = count.Value,
+                        Date = DateTime.Now,
+                        SubscriptionId = subscription.Id
+                    };
+                    statistics.Add(statistic);
+                }
+
+                await _statisticRepository.AddRangeAsync(statistics);
+                await _statisticRepository.SaveChangesAsync();
+            }
         }
     }
 }

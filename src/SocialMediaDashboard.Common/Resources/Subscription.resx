@@ -117,20 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountAdded" xml:space="preserve">
-    <value>Account successfully added to user.</value>
-  </data>
-  <data name="AccountAddException" xml:space="preserve">
-    <value>Unexpected add issues..</value>
-  </data>
-  <data name="AccountAlreadyExist" xml:space="preserve">
-    <value>This account is already tied to the user.</value>
-  </data>
   <data name="IncorrectData" xml:space="preserve">
-    <value>Data for create media is incorrect.</value>
+    <value>Data for create subscription is incorrect.</value>
+  </data>
+  <data name="MediaNotFound" xml:space="preserve">
+    <value>Specified media not found.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nothing found.</value>
+  </data>
+  <data name="SubscriptionAdded" xml:space="preserve">
+    <value>Subscription successfully added to user media.</value>
+  </data>
+  <data name="SubscriptionAddException" xml:space="preserve">
+    <value>Unexpected add issues..</value>
+  </data>
+  <data name="SubscriptionAlreadyExist" xml:space="preserve">
+    <value>This subscription is already tied to the user media.</value>
+  </data>
+  <data name="SubscriptionDeleted" xml:space="preserve">
+    <value>Subscription successfully deleted from user media.</value>
+  </data>
+  <data name="SubscriptionDeleteException" xml:space="preserve">
+    <value>Unexpected delete issues..</value>
   </data>
   <data name="Successful" xml:space="preserve">
     <value>Successful operation.</value>

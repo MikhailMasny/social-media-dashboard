@@ -13,15 +13,16 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <summary>
         /// Get all accounts.
         /// </summary>
+        /// <param name="userId">User identifier.</param>
         /// <returns>List of media data transfet objects.</returns>
-        Task<IEnumerable<MediaDto>> GetAllAccounts();
+        Task<IEnumerable<MediaDto>> GetAllUserAccountsAsync(string userId);
 
         /// <summary>
         /// Get account by media identifier.
         /// </summary>
         /// <param name="id">Media identifier.</param>
         /// <returns>Media data transfet objects.</returns>
-        Task<MediaDto> GetAccount(int id);
+        Task<MediaDto> GetAccountAsync(int id);
 
         /// <summary>
         /// Add user media account.
@@ -29,8 +30,14 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="userId">User identifier.</param>
         /// <param name="account">Media account.</param>
         /// <param name="accountType">Account type.</param>
-        /// <param name="subscriptionType">Subscription type.</param>
-        /// <returns>Operation result</returns>
-        Task<bool> AddUserAccount(string userId, string account, AccountType accountType, SubscriptionType subscriptionType);
+        /// <returns>Operation result.</returns>
+        Task<bool> AddAccountAsync(string userId, string account, AccountType accountType);
+
+        /// <summary>
+        /// Check account.
+        /// </summary>
+        /// <param name="id">Media identifier.</param>
+        /// <returns>Operation result.</returns>
+        Task<bool> AccountExistAsync(int id);
     }
 }

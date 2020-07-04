@@ -27,8 +27,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(Registration))]
-        public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
+        [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(RegistrationAsync))]
+        public async Task<IActionResult> RegistrationAsync([FromBody] UserRegistrationRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -53,8 +53,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(ApiRoutes.Identity.Login, Name = nameof(Login))]
-        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
+        [HttpPost(ApiRoutes.Identity.Login, Name = nameof(LoginAsync))]
+        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -79,8 +79,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmail))]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery query)
+        [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmailAsync))]
+        public async Task<IActionResult> ConfirmEmailAsync([FromQuery] EmailQuery query)
         {
             query = query ?? throw new ArgumentNullException(nameof(query));
 
@@ -113,8 +113,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePassword))]
-        public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
+        [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePasswordAsync))]
+        public async Task<IActionResult> RestorePasswordAsync([FromBody] UserRestorePasswordRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -139,8 +139,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPassword))]
-        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
+        [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPasswordAsync))]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] UserResetPasswordRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -165,8 +165,8 @@ namespace SocialMediaDashboard.WebAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshToken))]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshTokenAsync))]
+        public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 

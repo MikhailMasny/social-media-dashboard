@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using SocialMediaDashboard.Common.Constants;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Common.Resources;
@@ -9,6 +10,7 @@ using SocialMediaDashboard.WebAPI.Contracts.Requests;
 using SocialMediaDashboard.WebAPI.Contracts.Responses;
 using SocialMediaDashboard.WebAPI.Extensions;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
@@ -27,14 +29,12 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost(ApiRoutes.Media.Create, Name = nameof(CreateAsync))]
-        public async Task<IActionResult> CreateAsync([FromBody] MediaCreateRequest request)
+        [HttpPost(ApiRoutes.Media.Create, Name = nameof(CreateMediaAsync))]
+        public async Task<IActionResult> CreateMediaAsync([FromBody] MediaCreateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.AccountName)
-                || request.AccountType == 0
-                || request.SubscriptionType == 0)
+            if (string.IsNullOrEmpty(request.AccountName) || request.AccountType == 0) // TODO: fix to check value
             {
                 return BadRequest(new MediaFailedResponse
                 {
@@ -43,13 +43,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var result = await _mediaService.AddUserAccount(userId, request.AccountName, request.AccountType, request.SubscriptionType);
+            var result = await _mediaService.AddAccountAsync(userId, request.AccountName, request.AccountType);
 
             if (!result)
             {
                 return Conflict(new MediaFailedResponse
                 {
-                    Error = Media.AccountAlreadyExist
+                    Error = Media.AccountAddException
                 });
             }
 
@@ -57,6 +57,30 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 Message = Media.AccountAdded
             });
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet(ApiRoutes.Media.GetAll, Name = nameof(GetAllMediaAsync))]
+        public async Task<IActionResult> GetAllMediaAsync()
+        {
+            var userId = HttpContext.GetUserId();
+            var media = await _mediaService.GetAllUserAccountsAsync(userId);
+
+            if (!media.Any())
+            {
+                return NotFound(new MediaFailedResponse
+                {
+                    Error = Media.NotFound
+                });
+            }
+
+            var mediaSuccessfulResponse = new MediaSuccessfulResponse();
+            mediaSuccessfulResponse.MediaAll.AddRange(media);
+            mediaSuccessfulResponse.Message = Media.Successful;
+
+            return Ok(mediaSuccessfulResponse);
         }
     }
 }
