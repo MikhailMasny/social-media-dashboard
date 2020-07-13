@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SocialMediaDashboard.Domain.Models;
+using SocialMediaDashboard.Domain.Entities;
 using System;
 
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Statistic model.
+    /// EF Configuration for Statistic entity.
     /// </summary>
     public class StatisticConfiguration : IEntityTypeConfiguration<Statistic>
     {
@@ -18,9 +18,9 @@ namespace SocialMediaDashboard.Data.Configurations
             builder.ToTable("Statistics")
                 .HasKey(s => s.Id);
 
-            builder.HasOne(s => s.Media)
-                .WithMany(m => m.Statistics)
-                .HasForeignKey(s => s.MediaId);
+            builder.HasOne(s => s.Subscription)
+                .WithMany(s => s.Statistics)
+                .HasForeignKey(s => s.SubscriptionId);
         }
     }
 }

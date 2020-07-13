@@ -41,7 +41,6 @@ namespace SocialMediaDashboard.WebAPI.Extensions
                 RequireExpirationTime = false,
                 ValidateLifetime = true
             };
-
             services.AddSingleton(tokenValidationParametrs);
 
             services.AddAuthentication(x =>
@@ -98,13 +97,14 @@ namespace SocialMediaDashboard.WebAPI.Extensions
             services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddCors();
+            services.AddHealthChecks();
             services.AddControllers(x => x.Filters.Add<ValidationFilter>())
                 .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
-            services.AddHealthChecks();
 
             services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
-            services.ConfigureWritable<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.ConfigureWritable<SentrySettings>(configuration.GetSection("Sentry"));
+            services.ConfigureWritable<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
+            services.ConfigureWritable<VkSettings>(configuration.GetSection(nameof(VkSettings)));
 
             return services;
         }

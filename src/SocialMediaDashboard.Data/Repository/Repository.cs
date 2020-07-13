@@ -48,9 +48,15 @@ namespace SocialMediaDashboard.Data.Repository
         }
 
         /// <inheritdoc/>
-        public IQueryable<T> GetAll()
+        public IQueryable<T> GetAllWithoutTracking()
         {
             return _dbSet.AsNoTracking();
+        }
+
+        /// <inheritdoc/>
+        public IQueryable<T> GetAll()
+        {
+            return _dbSet;
         }
 
         /// <inheritdoc/>

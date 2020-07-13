@@ -13,6 +13,12 @@ namespace SocialMediaDashboard.Common.Interfaces
     public interface IRepository<T> where T : class
     {
         /// <summary>
+        /// Get all queries without tracking.
+        /// </summary>
+        /// <returns>IQueryable queries.</returns>
+        IQueryable<T> GetAllWithoutTracking();
+
+        /// <summary>
         /// Get all queries.
         /// </summary>
         /// <returns>IQueryable queries.</returns>

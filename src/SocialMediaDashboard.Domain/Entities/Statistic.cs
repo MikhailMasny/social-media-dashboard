@@ -1,20 +1,15 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
 using System;
 
-namespace SocialMediaDashboard.Domain.Models
+namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Statistic model.
+    /// Statistic entity.
     /// </summary>
     public class Statistic : IHasDbIdentity
     {
         /// <inheritdoc/>
         public int Id { get; set; }
-
-        /// <summary>
-        /// Type.
-        /// </summary>
-        public int Type { get; set; }
 
         /// <summary>
         /// Count.
@@ -27,13 +22,13 @@ namespace SocialMediaDashboard.Domain.Models
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// Media identifier.
+        /// Subscription identifier.
         /// </summary>
-        public int MediaId { get; set; }
+        public int SubscriptionId { get; set; }
 
         /// <summary>
-        /// Navigation property for Media.
+        /// Navigation property for Subscription.
         /// </summary>
-        public Media Media { get; set; }
+        public Subscription Subscription { get; set; }
     }
 }

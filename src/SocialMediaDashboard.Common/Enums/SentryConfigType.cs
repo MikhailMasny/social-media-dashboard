@@ -11,7 +11,7 @@
         None = 0,
 
         /// <summary>
-        /// Domain Name System..
+        /// Domain Name System.
         /// </summary>
         Dns = 1,
 

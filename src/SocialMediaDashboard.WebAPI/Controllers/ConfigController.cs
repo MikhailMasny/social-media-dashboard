@@ -7,6 +7,7 @@ using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.WebAPI.Contracts.Requests;
 using System;
+using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
@@ -21,46 +22,62 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             _configService = configService ?? throw new ArgumentNullException(nameof(configService));
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoutes.Config.Connection, Name = nameof(UpdateConnections))]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult UpdateConnections([FromBody] ConnectionSettingsRequest request)
+        public async Task<IActionResult> UpdateConnections([FromBody] ConnectionSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
-            _configService.CheckAndUpdateConnection(request.DockerConnection, DataProviderType.Docker);
-            _configService.CheckAndUpdateConnection(request.SQLiteConnection, DataProviderType.SQLite);
-            _configService.CheckAndUpdateConnection(request.PostgreSQLConnection, DataProviderType.PostgreSQL);
+            await _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
+            await _configService.CheckAndUpdateConnection(request.DockerConnection, DataProviderType.Docker);
+            await _configService.CheckAndUpdateConnection(request.SQLiteConnection, DataProviderType.SQLite);
+            await _configService.CheckAndUpdateConnection(request.PostgreSQLConnection, DataProviderType.PostgreSQL);
 
-            return Ok();
+            return NoContent();
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoutes.Config.Token, Name = nameof(UpdateToken))]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult UpdateToken([FromBody] JwtSettingsRequest request)
+        public async Task<IActionResult> UpdateToken([FromBody] JwtSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
-            _configService.CheckAndUpdateToken(request.TokenLifetime, JwtConfigType.TokenLifetime);
+            await _configService.CheckAndUpdateToken(request.Secret, JwtConfigType.Secret);
+            await _configService.CheckAndUpdateToken(request.TokenLifetime, JwtConfigType.TokenLifetime);
 
-            return Ok();
+            return NoContent();
         }
 
-        [HttpPut(ApiRoutes.Config.Sentry, Name = nameof(UpdateSentry))]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult UpdateSentry([FromBody] SentrySettingsRequest request)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [HttpPut(ApiRoutes.Config.Sentry, Name = nameof(UpdateSentry))]
+        public async Task<IActionResult> UpdateSentry([FromBody] SentrySettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            _configService.CheckAndUpdateSentry(request.Dsn, SentryConfigType.Dns);
-            _configService.CheckAndUpdateSentry(request.MinimumBreadcrumbLevel, SentryConfigType.MinimumBreadcrumbLevel);
-            _configService.CheckAndUpdateSentry(request.MinimumEventLevel, SentryConfigType.MinimumEventLevel);
+            await _configService.CheckAndUpdateSentry(request.Dsn, SentryConfigType.Dns);
+            await _configService.CheckAndUpdateSentry(request.MinimumBreadcrumbLevel, SentryConfigType.MinimumBreadcrumbLevel);
+            await _configService.CheckAndUpdateSentry(request.MinimumEventLevel, SentryConfigType.MinimumEventLevel);
 
-            return Ok();
+            return NoContent();
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [HttpPut(ApiRoutes.Config.Vk, Name = nameof(UpdateVk))]
+        public async Task<IActionResult> UpdateVk([FromBody] VkSettingsRequest request)
+        {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
+            await _configService.CheckAndUpdateVk(request.AccessToken, VkConfigType.AccessToken);
+
+            return NoContent();
         }
     }
 }

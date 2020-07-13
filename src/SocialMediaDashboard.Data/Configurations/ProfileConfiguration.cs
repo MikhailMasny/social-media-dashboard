@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SocialMediaDashboard.Domain.Models;
+using SocialMediaDashboard.Domain.Entities;
 using System;
 
 namespace SocialMediaDashboard.Data.Configurations
 {
     /// <summary>
-    /// EF Configuration for Profile model.
+    /// EF Configuration for Profile entity.
     /// </summary>
     public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {
@@ -16,9 +16,9 @@ namespace SocialMediaDashboard.Data.Configurations
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
             builder.ToTable("Profiles")
-                .HasKey(u => u.Id);
+                .HasKey(p => p.Id);
 
-            builder.Property(u => u.Name)
+            builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(20);
         }

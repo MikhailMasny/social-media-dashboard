@@ -39,6 +39,8 @@ namespace SocialMediaDashboard.WebAPI
 
             app.UseSerilogRequestLogging();
 
+            app.UseCoravel();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

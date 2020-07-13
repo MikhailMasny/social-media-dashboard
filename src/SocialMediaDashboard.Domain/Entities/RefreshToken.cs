@@ -3,10 +3,10 @@ using SocialMediaDashboard.Common.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SocialMediaDashboard.Domain.Models
+namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Refresh Token.
+    /// Refresh Token entity.
     /// </summary>
     public class RefreshToken : IHasDbIdentity, IHasUserIdentity
     {

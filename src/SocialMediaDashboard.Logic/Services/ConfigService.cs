@@ -3,6 +3,7 @@ using SocialMediaDashboard.Common.Helpers;
 using SocialMediaDashboard.Common.Interfaces;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Logic.Services
 {
@@ -12,18 +13,21 @@ namespace SocialMediaDashboard.Logic.Services
         private readonly IWritableOptions<ConnectionSettings> _connectionSettings;
         private readonly IWritableOptions<JwtSettings> _jwtSettings;
         private readonly IWritableOptions<SentrySettings> _sentrySettings;
+        private readonly IWritableOptions<VkSettings> _vkSettings;
 
         public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings,
                              IWritableOptions<JwtSettings> jwtSettings,
-                             IWritableOptions<SentrySettings> sentrySettings)
+                             IWritableOptions<SentrySettings> sentrySettings,
+                             IWritableOptions<VkSettings> vkSettings)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _sentrySettings = sentrySettings ?? throw new ArgumentNullException(nameof(sentrySettings));
+            _vkSettings = vkSettings ?? throw new ArgumentNullException(nameof(vkSettings));
         }
 
         /// <inheritdoc/>
-        public void CheckAndUpdateConnection(string dataProvider, DataProviderType dataProviderType)
+        public Task CheckAndUpdateConnection(string dataProvider, DataProviderType dataProviderType)
         {
             if (!string.IsNullOrEmpty(dataProvider) && dataProvider != "string")
             {
@@ -56,10 +60,12 @@ namespace SocialMediaDashboard.Logic.Services
                     // TODO: default:
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public void CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType)
+        public Task CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType)
         {
             if (!string.IsNullOrEmpty(jwtValue) && jwtValue != "string")
             {
@@ -80,10 +86,12 @@ namespace SocialMediaDashboard.Logic.Services
                     // TODO: default:
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public void CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType)
+        public Task CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType)
         {
             if (!string.IsNullOrEmpty(sentryValue) && sentryValue != "string")
             {
@@ -110,6 +118,28 @@ namespace SocialMediaDashboard.Logic.Services
                         // TODO: default:
                 }
             }
+
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public Task CheckAndUpdateVk(string vkValue, VkConfigType vkConfigType)
+        {
+            if (!string.IsNullOrEmpty(vkValue) && vkValue != "string")
+            {
+                switch (vkConfigType)
+                {
+                    case VkConfigType.AccessToken:
+                        {
+                            _vkSettings.Update(x => x.AccessToken = vkValue);
+                        }
+                        break;
+
+                        // TODO: default:
+                }
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

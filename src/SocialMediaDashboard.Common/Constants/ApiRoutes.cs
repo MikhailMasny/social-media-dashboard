@@ -75,6 +75,58 @@
             /// Sentry settings endpoint.
             /// </summary>
             public const string Sentry = Root + "/" + Path + "/sentry";
+
+            /// <summary>
+            /// Vk settings endpoint.
+            /// </summary>
+            public const string Vk = Root + "/" + Path + "/vk";
+        }
+
+        /// <summary>
+        /// Account path.
+        /// </summary>
+        public static class Account
+        {
+            /// <summary>
+            /// Config path.
+            /// </summary>
+            public const string Path = "account";
+
+            /// <summary>
+            /// GetAll endpoint.
+            /// </summary>
+            public const string GetAll = Root + "/" + Path + "/all";
+
+            /// <summary>
+            /// Create endpoint.
+            /// </summary>
+            public const string Create = Root + "/" + Path;
+        }
+
+        /// <summary>
+        /// Subscription path.
+        /// </summary>
+        public static class Subscription
+        {
+            /// <summary>
+            /// Config path.
+            /// </summary>
+            public const string Path = "subscription";
+
+            /// <summary>
+            /// GetAll endpoint.
+            /// </summary>
+            public const string GetAll = Root + "/" + Path + "/all";
+
+            /// <summary>
+            /// Create endpoint.
+            /// </summary>
+            public const string Create = Root + "/" + Path;
+
+            /// <summary>
+            /// Delete endpoint.
+            /// </summary>
+            public const string Delete = Root + "/" + Path;
         }
     }
 }

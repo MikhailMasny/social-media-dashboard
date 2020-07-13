@@ -63,9 +63,9 @@ namespace SocialMediaDashboard.Common.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The email you specified is already in the system..
         /// </summary>
-        public static string AlreadyCreated {
+        public static string EmailAlreadyExist {
             get {
-                return ResourceManager.GetString("AlreadyCreated", resourceCulture);
+                return ResourceManager.GetString("EmailAlreadyExist", resourceCulture);
             }
         }
         
