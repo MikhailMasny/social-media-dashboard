@@ -14,5 +14,10 @@
         /// Vk.
         /// </summary>
         Vk = 1,
+
+        /// <summary>
+        /// Instagram.
+        /// </summary>
+        Instagram = 2,
     }
 }
