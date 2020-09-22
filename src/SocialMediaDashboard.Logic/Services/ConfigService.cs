@@ -129,9 +129,21 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 switch (socialNetworkConfigType)
                 {
-                    case SocialNetworkConfigType.Vk:
+                    case SocialNetworkConfigType.VkAccessToken:
                         {
                             _vkSettings.Update(x => x.VkAccessToken = tokenValue);
+                        }
+                        break;
+
+                    case SocialNetworkConfigType.InstagramUsername:
+                        {
+                            _vkSettings.Update(x => x.InstagramAccount.Username = tokenValue);
+                        }
+                        break;
+
+                    case SocialNetworkConfigType.InstagramPassword:
+                        {
+                            _vkSettings.Update(x => x.InstagramAccount.Password = tokenValue);
                         }
                         break;
 

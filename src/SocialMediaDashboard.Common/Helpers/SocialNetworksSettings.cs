@@ -9,5 +9,7 @@
         /// VKontakte Access token.
         /// </summary>
         public string VkAccessToken { get; set; }
+
+        public InstagramAccountSettings InstagramAccount { get; set; }
     }
 }

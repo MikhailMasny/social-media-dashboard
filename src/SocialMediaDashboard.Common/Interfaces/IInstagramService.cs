@@ -3,15 +3,15 @@
 namespace SocialMediaDashboard.Common.Interfaces
 {
     /// <summary>
-    /// Interface for implement Vk service.
+    /// Interface for implement Instagram service.
     /// </summary>
-    public interface IVkService
+    public interface IInstagramService
     {
         /// <summary>
         /// Get user followers by user name.
         /// </summary>
         /// <param name="userName">User name.</param>
         /// <returns>Count of followers.</returns>
-        Task<int?> GetFollowersByUserNameAsync(string userName);
+        Task<int> GetFollowersByUserNameAsync(string userName);
     }
 }

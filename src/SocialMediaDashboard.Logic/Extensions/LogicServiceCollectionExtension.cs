@@ -29,6 +29,7 @@ namespace SocialMediaDashboard.Logic.Extensions
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IVkService, VkService>();
+            services.AddScoped<IInstagramService, InstagramService>();
 
             return services;
         }

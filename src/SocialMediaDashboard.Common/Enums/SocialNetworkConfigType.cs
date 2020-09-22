@@ -13,6 +13,16 @@
         /// <summary>
         /// Vk.
         /// </summary>
-        Vk = 1
+        VkAccessToken = 1,
+
+        /// <summary>
+        /// Instagram username.
+        /// </summary>
+        InstagramUsername = 2,
+
+        /// <summary>
+        /// Instagram password.
+        /// </summary>
+        InstagramPassword = 3,
     }
 }

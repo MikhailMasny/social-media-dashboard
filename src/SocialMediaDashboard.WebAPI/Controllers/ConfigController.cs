@@ -75,7 +75,9 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            await _configService.CheckAndUpdateSocialNetworks(request.VkAccessToken, SocialNetworkConfigType.Vk);
+            await _configService.CheckAndUpdateSocialNetworks(request.VkAccessToken, SocialNetworkConfigType.VkAccessToken);
+            await _configService.CheckAndUpdateSocialNetworks(request.InstagramAccount.Username, SocialNetworkConfigType.InstagramUsername);
+            await _configService.CheckAndUpdateSocialNetworks(request.InstagramAccount.Password, SocialNetworkConfigType.InstagramPassword);
 
             return NoContent();
         }

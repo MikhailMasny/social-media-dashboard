@@ -48,7 +48,7 @@ namespace SocialMediaDashboard.Logic.Services
 
                     try
                     {
-                        count = await _vkService.GetFollowersAsync(account.Name);
+                        count = await _vkService.GetFollowersByUserNameAsync(account.Name);
                     }
                     catch (Exception ex)
                     {

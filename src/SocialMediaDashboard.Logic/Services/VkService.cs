@@ -12,27 +12,27 @@ namespace SocialMediaDashboard.Logic.Services
     /// <inheritdoc cref="IVkService"/>
     public class VkService : IVkService
     {
-        private readonly IOptionsSnapshot<SocialNetworksSettings> _vkSettings;
+        private readonly IOptionsSnapshot<SocialNetworksSettings> _socialNetworksSettings;
         private readonly VkApi _api;
 
-        public VkService(IOptionsSnapshot<SocialNetworksSettings> vkSettings,
+        public VkService(IOptionsSnapshot<SocialNetworksSettings> socialNetworksSettings,
                          VkApi api)
         {
-            _vkSettings = vkSettings ?? throw new ArgumentNullException(nameof(vkSettings));
+            _socialNetworksSettings = socialNetworksSettings ?? throw new ArgumentNullException(nameof(socialNetworksSettings));
             _api = api ?? throw new ArgumentNullException(nameof(api));
         }
 
-        /// <inheritdoc/>
-        public async Task<int?> GetFollowersAsync(string userName)
+        public async Task<int?> GetFollowersByUserNameAsync(string userName)
         {
             await _api.AuthorizeAsync(new ApiAuthParams
             {
-                AccessToken = _vkSettings.Value.VkAccessToken
+                AccessToken = _socialNetworksSettings.Value.VkAccessToken
             });
 
             var response = await _api.Users.GetAsync(new string[] { userName }, VkNet.Enums.Filters.ProfileFields.Counters);
             var user = response.FirstOrDefault();
 
+            // TODO: fix it without null
             return user.Counters.Followers;
         }
     }
