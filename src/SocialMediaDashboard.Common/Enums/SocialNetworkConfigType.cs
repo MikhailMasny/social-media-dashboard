@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Common.Enums
 {
     /// <summary>
-    /// Application Vk configuration.
+    /// Application social networks configuration.
     /// </summary>
-    public enum VkConfigType
+    public enum SocialNetworkConfigType
     {
         /// <summary>
         /// None.
@@ -11,8 +11,8 @@
         None = 0,
 
         /// <summary>
-        /// Access token.
+        /// Vk.
         /// </summary>
-        AccessToken = 1
+        Vk = 1
     }
 }

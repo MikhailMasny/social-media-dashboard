@@ -3,11 +3,11 @@
     /// <summary>
     /// Vk request.
     /// </summary>
-    public class VkSettingsRequest
+    public class SocialNetworksSettingsRequest
     {
         /// <summary>
         /// Access token.
         /// </summary>
-        public string AccessToken { get; set; }
+        public string VkAccessToken { get; set; }
     }
 }

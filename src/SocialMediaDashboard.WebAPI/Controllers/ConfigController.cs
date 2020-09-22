@@ -70,12 +70,12 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpPut(ApiRoutes.Config.Vk, Name = nameof(UpdateVk))]
-        public async Task<IActionResult> UpdateVk([FromBody] VkSettingsRequest request)
+        [HttpPut(ApiRoutes.Config.SocialNetworks, Name = nameof(UpdateSocialNetworks))]
+        public async Task<IActionResult> UpdateSocialNetworks([FromBody] SocialNetworksSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            await _configService.CheckAndUpdateVk(request.AccessToken, VkConfigType.AccessToken);
+            await _configService.CheckAndUpdateSocialNetworks(request.VkAccessToken, SocialNetworkConfigType.Vk);
 
             return NoContent();
         }

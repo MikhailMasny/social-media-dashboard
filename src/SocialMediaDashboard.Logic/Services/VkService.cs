@@ -12,10 +12,10 @@ namespace SocialMediaDashboard.Logic.Services
     /// <inheritdoc cref="IVkService"/>
     public class VkService : IVkService
     {
-        private readonly IOptionsSnapshot<VkSettings> _vkSettings;
+        private readonly IOptionsSnapshot<SocialNetworksSettings> _vkSettings;
         private readonly VkApi _api;
 
-        public VkService(IOptionsSnapshot<VkSettings> vkSettings,
+        public VkService(IOptionsSnapshot<SocialNetworksSettings> vkSettings,
                          VkApi api)
         {
             _vkSettings = vkSettings ?? throw new ArgumentNullException(nameof(vkSettings));
@@ -27,7 +27,7 @@ namespace SocialMediaDashboard.Logic.Services
         {
             await _api.AuthorizeAsync(new ApiAuthParams
             {
-                AccessToken = _vkSettings.Value.AccessToken
+                AccessToken = _vkSettings.Value.VkAccessToken
             });
 
             var response = await _api.Users.GetAsync(new string[] { userName }, VkNet.Enums.Filters.ProfileFields.Counters);

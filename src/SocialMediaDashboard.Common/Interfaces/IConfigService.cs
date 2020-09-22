@@ -30,10 +30,10 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType);
 
         /// <summary>
-        /// Check and update Vk settings.
+        /// Check and update social networks settings.
         /// </summary>
-        /// <param name="vkValue">Vk key value.</param>
-        /// <param name="vkConfigType">Type of Vk key value.</param>
-        Task CheckAndUpdateVk(string vkValue, VkConfigType vkConfigType);
+        /// <param name="tokenValue">Token key value.</param>
+        /// <param name="socialNetworkConfigType">Type of social network key value.</param>
+        Task CheckAndUpdateSocialNetworks(string tokenValue, SocialNetworkConfigType socialNetworkConfigType);
     }
 }

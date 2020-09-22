@@ -77,9 +77,9 @@
             public const string Sentry = Root + "/" + Path + "/sentry";
 
             /// <summary>
-            /// Vk settings endpoint.
+            /// Social networks settings endpoint.
             /// </summary>
-            public const string Vk = Root + "/" + Path + "/vk";
+            public const string SocialNetworks = Root + "/" + Path + "/social-networks";
         }
 
         /// <summary>
