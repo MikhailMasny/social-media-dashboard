@@ -6,10 +6,18 @@
     public class SocialNetworksSettings
     {
         /// <summary>
-        /// VKontakte Access token.
+        /// Vk access token.
         /// </summary>
         public string VkAccessToken { get; set; }
 
+        /// <summary>
+        /// Instagram account settings.
+        /// </summary>
         public InstagramAccountSettings InstagramAccount { get; set; }
+
+        /// <summary>
+        /// YouTube access token.
+        /// </summary>
+        public string YouTubeAccessToken { get; set; }
     }
 }

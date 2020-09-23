@@ -147,6 +147,12 @@ namespace SocialMediaDashboard.Logic.Services
                         }
                         break;
 
+                    case SocialNetworkConfigType.YouTubeAccessToken:
+                        {
+                            _vkSettings.Update(x => x.YouTubeAccessToken = tokenValue);
+                        }
+                        break;
+
                         // TODO: default:
                 }
             }
