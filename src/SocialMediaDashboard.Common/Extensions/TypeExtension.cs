@@ -18,6 +18,7 @@ namespace SocialMediaDashboard.Common.Extensions
             {
                 AccountType.Vk => false,
                 AccountType.Instagram => false,
+                AccountType.YouTube => false,
                 _ => true
             };
         }
@@ -33,6 +34,7 @@ namespace SocialMediaDashboard.Common.Extensions
             {
                 SubscriptionType.Follower => false,
                 SubscriptionType.Friend => false,
+                SubscriptionType.Subscriber => false,
                 _ => true
             };
         }

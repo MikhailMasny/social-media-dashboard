@@ -16,5 +16,10 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Add followers data from Instagram accounts.
         /// </summary>
         Task AddFollowersFromInstagramAsync();
+
+        /// <summary>
+        /// Add subscribers data from YouTube channel.
+        /// </summary>
+        Task AddSubscribersFromYouTubeAsync();
     }
 }

@@ -19,5 +19,10 @@
         /// Friend.
         /// </summary>
         Friend = 2,
+
+        /// <summary>
+        /// Subscriber.
+        /// </summary>
+        Subscriber = 3
     }
 }

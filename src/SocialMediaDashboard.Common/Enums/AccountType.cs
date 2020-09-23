@@ -19,5 +19,10 @@
         /// Instagram.
         /// </summary>
         Instagram = 2,
+
+        /// <summary>
+        /// YouTube.
+        /// </summary>
+        YouTube = 3,
     }
 }
