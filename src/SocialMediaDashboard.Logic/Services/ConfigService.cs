@@ -13,12 +13,12 @@ namespace SocialMediaDashboard.Logic.Services
         private readonly IWritableOptions<ConnectionSettings> _connectionSettings;
         private readonly IWritableOptions<JwtSettings> _jwtSettings;
         private readonly IWritableOptions<SentrySettings> _sentrySettings;
-        private readonly IWritableOptions<VkSettings> _vkSettings;
+        private readonly IWritableOptions<SocialNetworksSettings> _vkSettings;
 
         public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings,
                              IWritableOptions<JwtSettings> jwtSettings,
                              IWritableOptions<SentrySettings> sentrySettings,
-                             IWritableOptions<VkSettings> vkSettings)
+                             IWritableOptions<SocialNetworksSettings> vkSettings)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
@@ -123,15 +123,27 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         /// <inheritdoc/>
-        public Task CheckAndUpdateVk(string vkValue, VkConfigType vkConfigType)
+        public Task CheckAndUpdateSocialNetworks(string tokenValue, SocialNetworkConfigType socialNetworkConfigType)
         {
-            if (!string.IsNullOrEmpty(vkValue) && vkValue != "string")
+            if (!string.IsNullOrEmpty(tokenValue) && tokenValue != "string")
             {
-                switch (vkConfigType)
+                switch (socialNetworkConfigType)
                 {
-                    case VkConfigType.AccessToken:
+                    case SocialNetworkConfigType.VkAccessToken:
                         {
-                            _vkSettings.Update(x => x.AccessToken = vkValue);
+                            _vkSettings.Update(x => x.VkAccessToken = tokenValue);
+                        }
+                        break;
+
+                    case SocialNetworkConfigType.InstagramUsername:
+                        {
+                            _vkSettings.Update(x => x.InstagramAccount.Username = tokenValue);
+                        }
+                        break;
+
+                    case SocialNetworkConfigType.InstagramPassword:
+                        {
+                            _vkSettings.Update(x => x.InstagramAccount.Password = tokenValue);
                         }
                         break;
 

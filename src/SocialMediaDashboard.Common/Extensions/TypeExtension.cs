@@ -14,22 +14,12 @@ namespace SocialMediaDashboard.Common.Extensions
         /// <returns>Operation result.</returns>
         public static bool CheckAccountValue(this AccountType accountType)
         {
-            bool result;
-            switch (accountType)
+            return accountType switch
             {
-                case AccountType.Vk:
-                    {
-                        result = false;
-                    }
-                    break;
-                default:
-                    {
-                        result = true;
-                    }
-                    break;
-            }
-
-            return result;
+                AccountType.Vk => false,
+                AccountType.Instagram => false,
+                _ => true
+            };
         }
 
         /// <summary>
@@ -39,23 +29,12 @@ namespace SocialMediaDashboard.Common.Extensions
         /// <returns>Operation result.</returns>
         public static bool CheckSubscriptionValue(this SubscriptionType subscriptionType)
         {
-            bool result;
-            switch (subscriptionType)
+            return subscriptionType switch
             {
-                case SubscriptionType.Follower:
-                case SubscriptionType.Friend:
-                    {
-                        result = false;
-                    }
-                    break;
-                default:
-                    {
-                        result = true;
-                    }
-                    break;
-            }
-
-            return result;
+                SubscriptionType.Follower => false,
+                SubscriptionType.Friend => false,
+                _ => true
+            };
         }
     }
 }

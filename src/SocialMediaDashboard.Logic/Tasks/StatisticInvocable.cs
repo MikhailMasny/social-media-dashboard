@@ -21,6 +21,7 @@ namespace SocialMediaDashboard.Logic.Tasks
         public async Task Invoke()
         {
             await _statisticService.AddFollowersFromVkAsync();
+            await _statisticService.AddFollowersFromInstagramAsync();
         }
     }
 }
