@@ -40,8 +40,9 @@ namespace SocialMediaDashboard.Common.Options
             var physicalPath = fileInfo.PhysicalPath;
 
             var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(physicalPath));
-            var sectionObject = jObject.TryGetValue(_section, out JToken section) ?
-                JsonConvert.DeserializeObject<T>(section.ToString()) : (Value ?? new T());
+            var sectionObject = jObject.TryGetValue(_section, out JToken section)
+                ? JsonConvert.DeserializeObject<T>(section.ToString())
+                : (Value ?? new T());
 
             applyChanges(sectionObject);
 

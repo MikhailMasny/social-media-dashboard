@@ -78,6 +78,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             await _configService.CheckAndUpdateSocialNetworks(request.VkAccessToken, SocialNetworkConfigType.VkAccessToken);
             await _configService.CheckAndUpdateSocialNetworks(request.InstagramAccount.Username, SocialNetworkConfigType.InstagramUsername);
             await _configService.CheckAndUpdateSocialNetworks(request.InstagramAccount.Password, SocialNetworkConfigType.InstagramPassword);
+            await _configService.CheckAndUpdateSocialNetworks(request.YouTubeAccessToken, SocialNetworkConfigType.YouTubeAccessToken);
 
             return NoContent();
         }

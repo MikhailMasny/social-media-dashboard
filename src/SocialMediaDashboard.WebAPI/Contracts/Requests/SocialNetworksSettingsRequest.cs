@@ -8,7 +8,7 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Requests
     public class SocialNetworksSettingsRequest
     {
         /// <summary>
-        /// Access token.
+        /// Vk access token.
         /// </summary>
         public string VkAccessToken { get; set; }
 
@@ -16,5 +16,10 @@ namespace SocialMediaDashboard.WebAPI.Contracts.Requests
         /// Instagram account.
         /// </summary>
         public InstagramAccountSettings InstagramAccount { get; set; }
+
+        /// <summary>
+        /// YouTube access token.
+        /// </summary>
+        public string YouTubeAccessToken { get; set; }
     }
 }

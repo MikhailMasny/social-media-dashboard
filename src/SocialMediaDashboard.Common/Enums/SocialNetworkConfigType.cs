@@ -11,7 +11,7 @@
         None = 0,
 
         /// <summary>
-        /// Vk.
+        /// Vk access token.
         /// </summary>
         VkAccessToken = 1,
 
@@ -24,5 +24,10 @@
         /// Instagram password.
         /// </summary>
         InstagramPassword = 3,
+
+        /// <summary>
+        /// YouTube access token.
+        /// </summary>
+        YouTubeAccessToken = 4,
     }
 }
