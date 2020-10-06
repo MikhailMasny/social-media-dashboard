@@ -1,5 +1,6 @@
 ﻿using SocialMediaDashboard.Common.Interfaces;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,16 +17,16 @@ namespace SocialMediaDashboard.Logic.Services
         }
 
         // TODO: change it to answer + result
-        public async Task<string> GetSubscribersByChannelAsync(string channel)
+        public async Task<int> GetSubscribersByChannelAsync(string channel)
         {
             var statistic = await _requestService.GetDataByChannelFromYouTubeApiAsync(channel);
             var data = statistic.Items;
             if (!data.Any())
             {
-                return "0";
+                return 0;
             }
 
-            return data.FirstOrDefault().Statistics.SubscriberCount;
+            return int.Parse(data.FirstOrDefault().Statistics.SubscriberCount, CultureInfo.InvariantCulture);
         }
     }
 }

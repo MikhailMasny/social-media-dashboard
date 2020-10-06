@@ -12,8 +12,6 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// </summary>
         /// <param name="channel">Channel.</param>
         /// <returns>Count of subscribers.</returns>
-        Task<string> GetSubscribersByChannelAsync(string channel);
-
-        // TODO: change it to int
+        Task<int> GetSubscribersByChannelAsync(string channel);
     }
 }

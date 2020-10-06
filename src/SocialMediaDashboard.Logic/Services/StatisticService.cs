@@ -122,7 +122,7 @@ namespace SocialMediaDashboard.Logic.Services
                 foreach (var subscription in subscriptions)
                 {
                     var account = await _accountService.GetAccountAsync(subscription.AccountId);
-                    int? count;
+                    int count;
 
                     try
                     {
@@ -136,7 +136,7 @@ namespace SocialMediaDashboard.Logic.Services
 
                     var statistic = new Statistic
                     {
-                        Count = count.Value,
+                        Count = count,
                         Date = DateTime.Now,
                         SubscriptionId = subscription.Id
                     };
