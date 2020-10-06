@@ -16,11 +16,11 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
+    // TODO: use AppRoles by constants
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, User")]
     [ApiController]
     public class AccountController : ControllerBase
     {
-        // CRUD
         private readonly IAccountService _accountService;
 
         public AccountController(IAccountService accountService)
@@ -70,9 +70,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         public async Task<IActionResult> GetAccountAsync(int id)
         {
             var userId = HttpContext.GetUserId();
-            var userRole = HttpContext.GetUserRole();
-
-            var (accountDto, accountResult) = await _accountService.GetAccountByUserIdAsync(userId, userRole, id);
+            var (accountDto, accountResult) = await _accountService.GetAccountByUserIdAsync(userId, id);
             if (!accountResult.Result)
             {
                 return BadRequest(new AccountFailedResponse
@@ -130,9 +128,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var userRole = HttpContext.GetUserRole();
-
-            var operationResult = await _accountService.UpdateAccountByUserIdAsync(userId, userRole, id, request.Name, request.AccountType);
+            var operationResult = await _accountService.UpdateAccountByUserIdAsync(userId, id, request.Name, request.AccountType);
             if (!operationResult.Result)
             {
                 return BadRequest(new AccountFailedResponse
@@ -152,9 +148,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         public async Task<IActionResult> DeleteAccountAsync(int id)
         {
             var userId = HttpContext.GetUserId();
-            var userRole = HttpContext.GetUserRole();
-
-            var operationResult = await _accountService.DeleteAccountByUserIdAsync(userId, userRole, id);
+            var operationResult = await _accountService.DeleteAccountByUserIdAsync(userId, id);
             if (!operationResult.Result)
             {
                 return BadRequest(new AccountFailedResponse

@@ -66,23 +66,11 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        public async Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, string userRole, int accountId)
+        public async Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, int accountId)
         {
             AccountResult accountResult;
 
-            var canUserGetAccount = await CanUserInteractWithAccountAsync(userId, userRole, accountId);
-            if (!canUserGetAccount)
-            {
-                accountResult = new AccountResult
-                {
-                    Result = false,
-                    Message = AccountResource.Denied,
-                };
-
-                return (null, accountResult);
-            }
-
-            var account = await _accountRepository.GetEntityAsync(account => account.Id == accountId);
+            var account = await _accountRepository.GetEntityAsync(account => account.UserId == userId && account.Id == accountId);
             if (account is null)
             {
                 accountResult = new AccountResult
@@ -113,9 +101,9 @@ namespace SocialMediaDashboard.Logic.Services
             return _mapper.Map<List<AccountDto>>(accounts);
         }
 
-        public async Task<AccountResult> DeleteAccountByUserIdAsync(string userId, string userRole, int accountId)
+        public async Task<AccountResult> DeleteAccountByUserIdAsync(string userId, int accountId)
         {
-            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, userRole, accountId);
+            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, accountId);
             if (!canUserDeleteAccount)
             {
                 return new AccountResult
@@ -145,9 +133,9 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        public async Task<AccountResult> UpdateAccountByUserIdAsync(string userId, string userRole, int accountId, string accountName, AccountType accountType)
+        public async Task<AccountResult> UpdateAccountByUserIdAsync(string userId, int accountId, string accountName, AccountType accountType)
         {
-            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, userRole, accountId);
+            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, accountId);
             if (!canUserDeleteAccount)
             {
                 return new AccountResult
@@ -194,14 +182,8 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        private async Task<bool> CanUserInteractWithAccountAsync(string userId, string userRole, int accountId)
+        private async Task<bool> CanUserInteractWithAccountAsync(string userId, int accountId)
         {
-            // TODO: change it
-            if (RoleExtension.IsAdmin(userRole))
-            {
-                return true;
-            }
-
             var selectedAccount = await _accountRepository.GetAllWithoutTracking()
                 .FirstOrDefaultAsync(account => account.UserId == userId && account.Id == accountId);
 

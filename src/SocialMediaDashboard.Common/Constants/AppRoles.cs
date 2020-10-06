@@ -1,23 +1,23 @@
-﻿namespace SocialMediaDashboard.Common.Enums
+﻿namespace SocialMediaDashboard.Common.Constants
 {
     /// <summary>
     /// Application roles.
     /// </summary>
-    public enum AppRole
+    public static class AppRoles
     {
         /// <summary>
         /// Unknown.
         /// </summary>
-        Unknown = 0,
+        public const string Unknown = nameof(Unknown);
 
         /// <summary>
         /// Admin.
         /// </summary>
-        Admin = 0,
+        public const string Admin = nameof(Admin);
 
         /// <summary>
         /// User.
         /// </summary>
-        User = 2,
+        public const string User = nameof(User);
     }
 }

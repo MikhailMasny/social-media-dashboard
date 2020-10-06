@@ -28,10 +28,9 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Get account by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <param name="userRole">User role.</param>
         /// <param name="accountId">Account identifier.</param>
         /// <returns>Account data transfet objects with operation result.</returns>
-        Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, string userRole, int accountId);
+        Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, int accountId);
 
         /// <summary>
         /// Get all accounts by user identifier.
@@ -53,20 +52,18 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Delete user social media account by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <param name="userRole">User role.</param>
         /// <param name="accountId">Account identifier.</param>
         /// <returns>Account operation result.</returns>
-        Task<AccountResult> DeleteAccountByUserIdAsync(string userId, string userRole, int accountId);
+        Task<AccountResult> DeleteAccountByUserIdAsync(string userId, int accountId);
 
         /// <summary>
         /// Update user social media account by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <param name="userRole">User role.</param>
         /// <param name="accountId">Account identifier account.</param>
         /// <param name="accountName">Account account.</param>
         /// <param name="accountType">Account type.</param>
         /// <returns>Account operation result.</returns>
-        Task<AccountResult> UpdateAccountByUserIdAsync(string userId, string userRole, int accountId, string accountName, AccountType accountType);
+        Task<AccountResult> UpdateAccountByUserIdAsync(string userId, int accountId, string accountName, AccountType accountType);
     }
 }

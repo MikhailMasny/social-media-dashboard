@@ -1,4 +1,6 @@
-﻿namespace SocialMediaDashboard.Common.Extensions
+﻿using SocialMediaDashboard.Common.Constants;
+
+namespace SocialMediaDashboard.Common.Extensions
 {
     /// <summary>
     /// Extensions for roles.
@@ -14,7 +16,7 @@
         {
             return role switch
             {
-                "Admin" => true,
+                AppRoles.Admin => true,
                 _ => false
             };
         }
