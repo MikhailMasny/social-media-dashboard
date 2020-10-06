@@ -93,14 +93,19 @@
             public const string Path = "account";
 
             /// <summary>
+            /// Create endpoint.
+            /// </summary>
+            public const string Create = Root + "/" + Path;
+
+            /// <summary>
             /// GetAll endpoint.
             /// </summary>
             public const string GetAll = Root + "/" + Path + "/all";
 
             /// <summary>
-            /// Create endpoint.
+            /// Update endpoint.
             /// </summary>
-            public const string Create = Root + "/" + Path;
+            public const string Update = Root + "/" + Path + "/update";
 
             /// <summary>
             /// Detele endpoint.

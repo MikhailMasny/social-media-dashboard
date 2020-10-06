@@ -29,10 +29,11 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost(ApiRoutes.Account.Create, Name = nameof(CreateAccountAsync))]
-        public async Task<IActionResult> CreateAccountAsync([FromBody] AccountCreateRequest request)
+        public async Task<IActionResult> CreateAccountAsync([FromBody] AccountCreateOrUpdateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -87,6 +88,39 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPut(ApiRoutes.Account.Update + "/{id}", Name = nameof(UpdateAccountAsync))]
+        public async Task<IActionResult> UpdateAccountAsync(int id, [FromBody] AccountCreateOrUpdateRequest request)
+        {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
+            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountValue())
+            {
+                return BadRequest(new AccountFailedResponse
+                {
+                    Error = AccountResource.IncorrectData
+                });
+            }
+
+            var userId = HttpContext.GetUserId();
+            var userRole = HttpContext.GetUserRole();
+
+            var operationResult = await _accountService.UpdateAccountAsync(userId, userRole, id, request.Name, request.AccountType);
+            if (!operationResult.Result)
+            {
+                return BadRequest(new AccountFailedResponse
+                {
+                    Error = operationResult.Message,
+                });
+            }
+
+            return NoContent();
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete(ApiRoutes.Account.Delete + "/{id}", Name = nameof(DeleteAccountAsync))]

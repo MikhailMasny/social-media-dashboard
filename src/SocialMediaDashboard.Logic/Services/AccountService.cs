@@ -46,9 +46,30 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
+        public async Task<AccountDto> GetAccountAsync(int id)
+        {
+            var account = await _accountRepository.GetAllWithoutTracking()
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            var accountDto = _mapper.Map<AccountDto>(account);
+
+            return accountDto;
+        }
+
+        public async Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId)
+        {
+            var account = await _accountRepository.GetAllWithoutTracking()
+                .Where(a => a.UserId == userId)
+                .ToListAsync();
+
+            var mediaDto = _mapper.Map<List<AccountDto>>(account);
+
+            return mediaDto;
+        }
+
         public async Task<AccountResult> DeleteAccountAsync(string userId, string userRole, int accountId)
         {
-            var canUserDeleteAccount = await CanUserDeleteAccountAsync(userId, userRole, accountId);
+            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, userRole, accountId);
             if (!canUserDeleteAccount)
             {
                 return new AccountResult
@@ -78,25 +99,38 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId)
+        public async Task<AccountResult> UpdateAccountAsync(string userId, string userRole, int accountId, string accountName, AccountType accountType)
         {
-            var account = await _accountRepository.GetAllWithoutTracking()
-                .Where(a => a.UserId == userId)
-                .ToListAsync();
+            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, userRole, accountId);
+            if (!canUserDeleteAccount)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.Denied,
+                };
+            }
 
-            var mediaDto = _mapper.Map<List<AccountDto>>(account);
+            var account = await _accountRepository.GetEntityAsync(account => account.Id == accountId);
+            if (account is null)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.NotFound,
+                };
+            }
 
-            return mediaDto;
-        }
+            account.Name = accountName;
+            account.Type = accountType;
+            _accountRepository.Update(account);
+            await _accountRepository.SaveChangesAsync();
 
-        public async Task<AccountDto> GetAccountAsync(int id)
-        {
-            var account = await _accountRepository.GetAllWithoutTracking()
-                .FirstOrDefaultAsync(a => a.Id == id);
-
-            var accountDto = _mapper.Map<AccountDto>(account);
-
-            return accountDto;
+            return new AccountResult
+            {
+                Result = true,
+                Message = string.Empty,
+            };
         }
 
         public async Task<bool> AccountExistAsync(int id)
@@ -125,7 +159,7 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        private async Task<bool> CanUserDeleteAccountAsync(string userId, string userRole, int accountId)
+        private async Task<bool> CanUserInteractWithAccountAsync(string userId, string userRole, int accountId)
         {
             if (userRole == "Admin")
             {

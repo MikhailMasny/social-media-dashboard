@@ -43,6 +43,17 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<AccountResult> DeleteAccountAsync(string userId, string userRole, int accountId);
 
         /// <summary>
+        /// Update user social media account.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="userRole">User role.</param>
+        /// <param name="accountId">Account identifier account.</param>
+        /// <param name="accountName">Account account.</param>
+        /// <param name="accountType">Account type.</param>
+        /// <returns>Account operation result.</returns>
+        Task<AccountResult> UpdateAccountAsync(string userId, string userRole, int accountId, string accountName, AccountType accountType);
+
+        /// <summary>
         /// Check account.
         /// </summary>
         /// <param name="id">Account identifier.</param>

@@ -3,9 +3,9 @@
 namespace SocialMediaDashboard.WebAPI.Contracts.Requests
 {
     /// <summary>
-    /// Social media account create request.
+    /// Social media account create or update request.
     /// </summary>
-    public class AccountCreateRequest
+    public class AccountCreateOrUpdateRequest
     {
         /// <summary>
         /// Name.
