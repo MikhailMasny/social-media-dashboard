@@ -37,7 +37,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountValue())
+            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountType())
             {
                 return BadRequest(new AccountFailedResponse
                 {
@@ -46,7 +46,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var result = await _accountService.AddAccountAsync(userId, request.Name, request.AccountType);
+            var result = await _accountService.AddAccountByUserIdAsync(userId, request.Name, request.AccountType);
 
             if (!result)
             {
@@ -66,8 +66,33 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoutes.Account.GetAll, Name = nameof(GetAllAccountsByUserIdAsync))]
-        public async Task<IActionResult> GetAllAccountsByUserIdAsync()
+        [HttpGet(ApiRoutes.Account.Get + "/{id}", Name = nameof(GetAccountAsync))]
+        public async Task<IActionResult> GetAccountAsync(int id)
+        {
+            var userId = HttpContext.GetUserId();
+            var userRole = HttpContext.GetUserRole();
+
+            var (accountDto, accountResult) = await _accountService.GetAccountByUserIdAsync(userId, userRole, id);
+            if (!accountResult.Result)
+            {
+                return BadRequest(new AccountFailedResponse
+                {
+                    Error = accountResult.Message,
+                });
+            }
+
+            var accountSuccessfulResponse = new AccountSuccessfulResponse();
+            accountSuccessfulResponse.Accounts.Add(accountDto);
+            accountSuccessfulResponse.Message = AccountResource.Successful;
+
+            return Ok(accountSuccessfulResponse);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet(ApiRoutes.Account.GetAll, Name = nameof(GetAllAccountsAsync))]
+        public async Task<IActionResult> GetAllAccountsAsync()
         {
             var userId = HttpContext.GetUserId();
             var accounts = await _accountService.GetAllUserAccountsAsync(userId);
@@ -96,7 +121,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountValue())
+            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountType())
             {
                 return BadRequest(new AccountFailedResponse
                 {
@@ -107,7 +132,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             var userId = HttpContext.GetUserId();
             var userRole = HttpContext.GetUserRole();
 
-            var operationResult = await _accountService.UpdateAccountAsync(userId, userRole, id, request.Name, request.AccountType);
+            var operationResult = await _accountService.UpdateAccountByUserIdAsync(userId, userRole, id, request.Name, request.AccountType);
             if (!operationResult.Result)
             {
                 return BadRequest(new AccountFailedResponse
@@ -129,7 +154,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             var userId = HttpContext.GetUserId();
             var userRole = HttpContext.GetUserRole();
 
-            var operationResult = await _accountService.DeleteAccountAsync(userId, userRole, id);
+            var operationResult = await _accountService.DeleteAccountByUserIdAsync(userId, userRole, id);
             if (!operationResult.Result)
             {
                 return BadRequest(new AccountFailedResponse

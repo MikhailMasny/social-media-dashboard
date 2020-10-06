@@ -12,7 +12,7 @@ namespace SocialMediaDashboard.Common.Extensions
         /// </summary>
         /// <param name="accountType">Account type.</param>
         /// <returns>Operation result.</returns>
-        public static bool CheckAccountValue(this AccountType accountType)
+        public static bool CheckAccountType(this AccountType accountType)
         {
             return accountType switch
             {
@@ -28,7 +28,7 @@ namespace SocialMediaDashboard.Common.Extensions
         /// </summary>
         /// <param name="subscriptionType">Subscription type.</param>
         /// <returns>Operation result.</returns>
-        public static bool CheckSubscriptionValue(this SubscriptionType subscriptionType)
+        public static bool CheckSubscriptionType(this SubscriptionType subscriptionType)
         {
             return subscriptionType switch
             {

@@ -38,7 +38,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (request.AccountId == 0 || request.SubscriptionType.CheckSubscriptionValue())
+            if (request.AccountId == 0 || request.SubscriptionType.CheckSubscriptionType())
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {

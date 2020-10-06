@@ -79,7 +79,7 @@ namespace SocialMediaDashboard.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are trying to delete data that does not belong to you...
+        ///   Looks up a localized string similar to You don&apos;t have permission to interact with the current account...
         /// </summary>
         public static string Denied {
             get {

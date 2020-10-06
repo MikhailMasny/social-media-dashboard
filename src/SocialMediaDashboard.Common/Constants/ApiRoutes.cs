@@ -98,7 +98,12 @@
             public const string Create = Root + "/" + Path;
 
             /// <summary>
-            /// GetAll endpoint.
+            /// Get endpoint.
+            /// </summary>
+            public const string Get = Root + "/" + Path;
+
+            /// <summary>
+            /// Get all endpoint.
             /// </summary>
             public const string GetAll = Root + "/" + Path + "/all";
 

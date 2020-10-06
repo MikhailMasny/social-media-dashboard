@@ -11,11 +11,11 @@ namespace SocialMediaDashboard.Common.Interfaces
     public interface IAccountService
     {
         /// <summary>
-        /// Get all accounts.
+        /// Check account.
         /// </summary>
-        /// <param name="userId">User identifier.</param>
-        /// <returns>List of account data transfet objects.</returns>
-        Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId);
+        /// <param name="id">Account identifier.</param>
+        /// <returns>Operation result.</returns>
+        Task<bool> AccountExistAsync(int id);
 
         /// <summary>
         /// Get account by identifier.
@@ -25,25 +25,41 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<AccountDto> GetAccountAsync(int id);
 
         /// <summary>
-        /// Add user social media account.
+        /// Get account by user identifier.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="userRole">User role.</param>
+        /// <param name="accountId">Account identifier.</param>
+        /// <returns>Account data transfet objects with operation result.</returns>
+        Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, string userRole, int accountId);
+
+        /// <summary>
+        /// Get all accounts by user identifier.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>List of account data transfet objects.</returns>
+        Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId);
+
+        /// <summary>
+        /// Add user social media account by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
         /// <param name="account">Account account.</param>
         /// <param name="accountType">Account type.</param>
         /// <returns>Operation result.</returns>
-        Task<bool> AddAccountAsync(string userId, string account, AccountType accountType);
+        Task<bool> AddAccountByUserIdAsync(string userId, string account, AccountType accountType);
 
         /// <summary>
-        /// Delete user social media account.
+        /// Delete user social media account by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
         /// <param name="userRole">User role.</param>
-        /// <param name="accountId">Account identifier account.</param>
+        /// <param name="accountId">Account identifier.</param>
         /// <returns>Account operation result.</returns>
-        Task<AccountResult> DeleteAccountAsync(string userId, string userRole, int accountId);
+        Task<AccountResult> DeleteAccountByUserIdAsync(string userId, string userRole, int accountId);
 
         /// <summary>
-        /// Update user social media account.
+        /// Update user social media account by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
         /// <param name="userRole">User role.</param>
@@ -51,13 +67,6 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// <param name="accountName">Account account.</param>
         /// <param name="accountType">Account type.</param>
         /// <returns>Account operation result.</returns>
-        Task<AccountResult> UpdateAccountAsync(string userId, string userRole, int accountId, string accountName, AccountType accountType);
-
-        /// <summary>
-        /// Check account.
-        /// </summary>
-        /// <param name="id">Account identifier.</param>
-        /// <returns>Operation result.</returns>
-        Task<bool> AccountExistAsync(int id);
+        Task<AccountResult> UpdateAccountByUserIdAsync(string userId, string userRole, int accountId, string accountName, AccountType accountType);
     }
 }

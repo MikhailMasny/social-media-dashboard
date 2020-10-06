@@ -124,7 +124,7 @@
     <value>This account is already tied to the user.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>You are trying to delete data that does not belong to you..</value>
+    <value>You don't have permission to interact with the current account..</value>
   </data>
   <data name="Exception" xml:space="preserve">
     <value>Unexpected add issues..</value>
