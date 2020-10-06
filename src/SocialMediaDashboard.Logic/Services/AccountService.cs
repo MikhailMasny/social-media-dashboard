@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Common.Enums;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Common.Models;
+using SocialMediaDashboard.Common.Resources;
 using SocialMediaDashboard.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,9 @@ namespace SocialMediaDashboard.Logic.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        /// <inheritdoc/>
         public async Task<bool> AddAccountAsync(string userId, string name, AccountType accountType)
         {
-            var canCreateAccount = await CanUserCreateAccount(userId, name, accountType);
+            var canCreateAccount = await CanUserCreateAccountAsync(userId, name, accountType);
             if (!canCreateAccount)
             {
                 return false;
@@ -46,7 +46,38 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        /// <inheritdoc/>
+        public async Task<AccountResult> DeleteAccountAsync(string userId, string userRole, int accountId)
+        {
+            var canUserDeleteAccount = await CanUserDeleteAccountAsync(userId, userRole, accountId);
+            if (!canUserDeleteAccount)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.Denied,
+                };
+            }
+
+            var account = await _accountRepository.GetEntityAsync(account => account.Id == accountId);
+            if (account is null)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.NotFound,
+                };
+            }
+
+            _accountRepository.Delete(account);
+            await _accountRepository.SaveChangesAsync();
+
+            return new AccountResult
+            {
+                Result = true,
+                Message = string.Empty,
+            };
+        }
+
         public async Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId)
         {
             var account = await _accountRepository.GetAllWithoutTracking()
@@ -58,7 +89,6 @@ namespace SocialMediaDashboard.Logic.Services
             return mediaDto;
         }
 
-        /// <inheritdoc/>
         public async Task<AccountDto> GetAccountAsync(int id)
         {
             var account = await _accountRepository.GetAllWithoutTracking()
@@ -69,7 +99,6 @@ namespace SocialMediaDashboard.Logic.Services
             return accountDto;
         }
 
-        /// <inheritdoc/>
         public async Task<bool> AccountExistAsync(int id)
         {
             var account = await _accountRepository.GetEntityAsync(m => m.Id == id);
@@ -81,13 +110,32 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        private async Task<bool> CanUserCreateAccount(string userId, string name, AccountType accountType)
+        private async Task<bool> CanUserCreateAccountAsync(string userId, string name, AccountType accountType)
         {
             var selectedAccount = await _accountRepository.GetAllWithoutTracking()
-                .Where(a => a.UserId == userId)
-                .FirstOrDefaultAsync(a => a.Name == name && a.Type == accountType);
+                .FirstOrDefaultAsync(account => account.UserId == userId
+                    && account.Name == name
+                    && account.Type == accountType);
 
             if (selectedAccount != null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<bool> CanUserDeleteAccountAsync(string userId, string userRole, int accountId)
+        {
+            if (userRole == "Admin")
+            {
+                return true;
+            }
+
+            var selectedAccount = await _accountRepository.GetAllWithoutTracking()
+                .FirstOrDefaultAsync(account => account.UserId == userId && account.Id == accountId);
+
+            if (selectedAccount is null)
             {
                 return false;
             }

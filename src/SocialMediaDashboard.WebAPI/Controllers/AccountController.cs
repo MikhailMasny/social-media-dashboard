@@ -20,6 +20,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        // CRUD
         private readonly IAccountService _accountService;
 
         public AccountController(IAccountService accountService)
@@ -39,7 +40,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return BadRequest(new AccountFailedResponse
                 {
-                    Error = Account.IncorrectData
+                    Error = AccountResource.IncorrectData
                 });
             }
 
@@ -50,14 +51,14 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return Conflict(new AccountFailedResponse
                 {
-                    Error = Account.AccountAddException
+                    Error = AccountResource.Exception
                 });
             }
 
             // Must return Created
             return Ok(new AccountSuccessfulResponse
             {
-                Message = Account.AccountAdded
+                Message = AccountResource.Added
             });
         }
 
@@ -74,15 +75,36 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return NotFound(new AccountFailedResponse
                 {
-                    Error = Account.NotFound
+                    Error = AccountResource.NotFound
                 });
             }
 
             var accountSuccessfulResponse = new AccountSuccessfulResponse();
             accountSuccessfulResponse.Accounts.AddRange(accounts);
-            accountSuccessfulResponse.Message = Account.Successful;
+            accountSuccessfulResponse.Message = AccountResource.Successful;
 
             return Ok(accountSuccessfulResponse);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete(ApiRoutes.Account.Delete + "/{id}", Name = nameof(DeleteAccountAsync))]
+        public async Task<IActionResult> DeleteAccountAsync(int id)
+        {
+            var userId = HttpContext.GetUserId();
+            var userRole = HttpContext.GetUserRole();
+
+            var operationResult = await _accountService.DeleteAccountAsync(userId, userRole, id);
+            if (!operationResult.Result)
+            {
+                return BadRequest(new AccountFailedResponse
+                {
+                    Error = operationResult.Message,
+                });
+            }
+
+            return NoContent();
         }
     }
 }

@@ -34,6 +34,15 @@ namespace SocialMediaDashboard.Common.Interfaces
         Task<bool> AddAccountAsync(string userId, string account, AccountType accountType);
 
         /// <summary>
+        /// Delete user social media account.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="userRole">User role.</param>
+        /// <param name="accountId">Account identifier account.</param>
+        /// <returns>Account operation result.</returns>
+        Task<AccountResult> DeleteAccountAsync(string userId, string userRole, int accountId);
+
+        /// <summary>
         /// Check account.
         /// </summary>
         /// <param name="id">Account identifier.</param>

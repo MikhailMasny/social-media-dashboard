@@ -101,6 +101,11 @@
             /// Create endpoint.
             /// </summary>
             public const string Create = Root + "/" + Path;
+
+            /// <summary>
+            /// Detele endpoint.
+            /// </summary>
+            public const string Delete = Root + "/" + Path + "/delete";
         }
 
         /// <summary>

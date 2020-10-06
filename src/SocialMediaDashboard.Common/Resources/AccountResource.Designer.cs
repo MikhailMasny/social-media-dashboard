@@ -22,14 +22,14 @@ namespace SocialMediaDashboard.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Account {
+    public class AccountResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Account() {
+        internal AccountResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace SocialMediaDashboard.Common.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Common.Resources.Account", typeof(Account).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Common.Resources.AccountResource", typeof(AccountResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,27 +63,36 @@ namespace SocialMediaDashboard.Common.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Account successfully added to user..
         /// </summary>
-        public static string AccountAdded {
+        public static string Added {
             get {
-                return ResourceManager.GetString("AccountAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unexpected add issues...
-        /// </summary>
-        public static string AccountAddException {
-            get {
-                return ResourceManager.GetString("AccountAddException", resourceCulture);
+                return ResourceManager.GetString("Added", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to This account is already tied to the user..
         /// </summary>
-        public static string AccountAlreadyExist {
+        public static string AlreadyExist {
             get {
-                return ResourceManager.GetString("AccountAlreadyExist", resourceCulture);
+                return ResourceManager.GetString("AlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are trying to delete data that does not belong to you...
+        /// </summary>
+        public static string Denied {
+            get {
+                return ResourceManager.GetString("Denied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected add issues...
+        /// </summary>
+        public static string Exception {
+            get {
+                return ResourceManager.GetString("Exception", resourceCulture);
             }
         }
         
