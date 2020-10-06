@@ -36,8 +36,8 @@ namespace SocialMediaDashboard.Common.Interfaces
         /// Get all accounts by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <returns>List of account data transfet objects.</returns>
-        Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId);
+        /// <returns>List of account data transfet objects with operation result.</returns>
+        Task<(IEnumerable<AccountDto> accountDtos, AccountResult accountResult)> GetAllUserAccountsAsync(string userId);
 
         /// <summary>
         /// Add user social media account by user identifier.

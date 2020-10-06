@@ -92,13 +92,33 @@ namespace SocialMediaDashboard.Logic.Services
             return (accountDto, accountResult);
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAllUserAccountsAsync(string userId)
+        public async Task<(IEnumerable<AccountDto> accountDtos, AccountResult accountResult)> GetAllUserAccountsAsync(string userId)
         {
+            AccountResult accountResult;
+
             var accounts = await _accountRepository.GetAllWithoutTracking()
                 .Where(account => account.UserId == userId)
                 .ToListAsync();
 
-            return _mapper.Map<List<AccountDto>>(accounts);
+            if (!accounts.Any())
+            {
+                accountResult = new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.NotFound,
+                };
+
+                return (null, accountResult);
+            }
+
+            var accountDtos = _mapper.Map<List<AccountDto>>(accounts);
+            accountResult = new AccountResult
+            {
+                Result = true,
+                Message = AccountResource.Successful,
+            };
+
+            return (accountDtos, accountResult);
         }
 
         public async Task<AccountResult> DeleteAccountByUserIdAsync(string userId, int accountId)

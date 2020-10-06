@@ -93,19 +93,19 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         public async Task<IActionResult> GetAllAccountsAsync()
         {
             var userId = HttpContext.GetUserId();
-            var accounts = await _accountService.GetAllUserAccountsAsync(userId);
+            var (accountDtos, accountResult) = await _accountService.GetAllUserAccountsAsync(userId);
 
-            if (!accounts.Any())
+            if (!accountDtos.Any())
             {
                 return NotFound(new AccountFailedResponse
                 {
-                    Error = AccountResource.NotFound
+                    Error = accountResult.Message
                 });
             }
 
             var accountSuccessfulResponse = new AccountSuccessfulResponse();
-            accountSuccessfulResponse.Accounts.AddRange(accounts);
-            accountSuccessfulResponse.Message = AccountResource.Successful;
+            accountSuccessfulResponse.Accounts.AddRange(accountDtos);
+            accountSuccessfulResponse.Message = accountResult.Message;
 
             return Ok(accountSuccessfulResponse);
         }
