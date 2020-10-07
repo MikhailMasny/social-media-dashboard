@@ -30,6 +30,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -38,38 +39,45 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (request.AccountId == 0 || request.SubscriptionType.CheckSubscriptionType())
+            if (request.AccountId == 0 || request.SubscriptionType.ValidateSubscriptionType())
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.IncorrectData
-                });
-            }
-
-            var accountExist = await _accountService.AccountExistAsync(request.AccountId);
-            if (!accountExist)
-            {
-                return NotFound(new SubscriptionFailedResponse
-                {
-                    Error = Subscription.AccountNotFound
+                    Error = SubscriptionResource.IncorrectData
                 });
             }
 
             var userId = HttpContext.GetUserId();
-            var account = await _accountService.GetAccountAsync(request.AccountId);
-            var result = await _subscriptionService.AddSubscriptionAsync(userId, account.Id, account.Name, account.Type, request.SubscriptionType);
+            var validateResult = await _accountService.ValidateAccountExistAsync(request.AccountId, userId);
+            if (!validateResult.Result)
+            {
+                return NotFound(new SubscriptionFailedResponse
+                {
+                    Error = validateResult.Message
+                });
+            }
 
+            var (accountDto, accountOperationResult) = await _accountService.GetAccountByUserIdAsync(userId, request.AccountId);
+            if (!accountOperationResult.Result)
+            {
+                return BadRequest(new SubscriptionFailedResponse
+                {
+                    Error = accountOperationResult.Message
+                });
+            }
+
+            var result = await _subscriptionService.AddSubscriptionAsync(userId, accountDto.Id, accountDto.Name, accountDto.Type, request.SubscriptionType);
             if (!result)
             {
                 return Conflict(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.SubscriptionAddException
+                    Error = SubscriptionResource.SubscriptionAddException
                 });
             }
 
             return Ok(new SubscriptionSuccessfulResponse
             {
-                Message = Subscription.SubscriptionAdded
+                Message = SubscriptionResource.SubscriptionAdded
             });
         }
 
@@ -86,13 +94,13 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return NotFound(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.NotFound
+                    Error = SubscriptionResource.NotFound
                 });
             }
 
             var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
             subscriptionSuccessfulResponse.Subscriptions.AddRange(subscriptions);
-            subscriptionSuccessfulResponse.Message = Subscription.Successful;
+            subscriptionSuccessfulResponse.Message = SubscriptionResource.Successful;
 
             return Ok(subscriptionSuccessfulResponse);
         }
@@ -110,7 +118,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.IncorrectData
+                    Error = SubscriptionResource.IncorrectData
                 });
             }
 
@@ -119,7 +127,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return NotFound(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.SubscriptionNotFound
+                    Error = SubscriptionResource.SubscriptionNotFound
                 });
             }
 
@@ -129,7 +137,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             {
                 return Conflict(new SubscriptionFailedResponse
                 {
-                    Error = Subscription.SubscriptionDeleteException
+                    Error = SubscriptionResource.SubscriptionDeleteException
                 });
             }
 

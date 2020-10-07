@@ -127,10 +127,10 @@
     <value>You don't have permission to interact with the current account..</value>
   </data>
   <data name="Exception" xml:space="preserve">
-    <value>Unexpected add issues..</value>
+    <value>Unexpected issues..</value>
   </data>
   <data name="IncorrectData" xml:space="preserve">
-    <value>Data for create account is incorrect.</value>
+    <value>Input data is incorrect.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nothing found.</value>

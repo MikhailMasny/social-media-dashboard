@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Extensions;
 using SocialMediaDashboard.Common.Interfaces;
 using SocialMediaDashboard.Common.Models;
 using SocialMediaDashboard.Common.Resources;
@@ -17,40 +16,58 @@ namespace SocialMediaDashboard.Logic.Services
     public class AccountService : IAccountService
     {
         private readonly IRepository<Account> _accountRepository;
+        private readonly IRepository<Subscription> _subscriptionRepository;
         private readonly IMapper _mapper;
 
         public AccountService(IRepository<Account> accountRepository,
-                            IMapper mapper)
+                              IRepository<Subscription> subscriptionRepository,
+                              IMapper mapper)
         {
             _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+            _subscriptionRepository = subscriptionRepository ?? throw new ArgumentNullException(nameof(subscriptionRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        }
-
-        public async Task<bool> AccountExistAsync(int id)
-        {
-            var account = await _accountRepository.GetEntityAsync(m => m.Id == id);
-            if (account == null)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         public async Task<AccountDto> GetAccountAsync(int id)
         {
-            var account = await _accountRepository.GetAllWithoutTracking()
-                .FirstOrDefaultAsync(a => a.Id == id);
+            var account = await _accountRepository.GetEntityAsync(account => account.Id == id);
 
             return _mapper.Map<AccountDto>(account);
         }
 
-        public async Task<bool> AddAccountByUserIdAsync(string userId, string accountName, AccountType accountType)
+        public async Task<AccountResult> ValidateAccountExistAsync(int id, string userId)
         {
-            var canCreateAccount = await CanUserCreateAccountAsync(userId, accountName, accountType);
+            var account = await _accountRepository.GetEntityAsync(account => account.Id == id && account.UserId == userId);
+            if (account == null)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = SubscriptionResource.AccountNotFound,
+                };
+            }
+
+            return new AccountResult
+            {
+                Result = true,
+                Message = string.Empty,
+            };
+        }
+
+        public async Task<(AccountDto accountDto, AccountResult accountResult)> CreateAccountByUserIdAsync(string userId, string accountName, AccountType accountType)
+        {
+            AccountResult accountResult;
+
+            var canCreateAccount = await CanUserCreateOrUpdateAccountAsync(userId, accountName, accountType);
             if (!canCreateAccount)
             {
-                return false;
+                accountResult = new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.Exception,
+                };
+
+                return (null, accountResult);
             }
 
             var account = new Account
@@ -63,7 +80,14 @@ namespace SocialMediaDashboard.Logic.Services
             await _accountRepository.AddAsync(account);
             await _accountRepository.SaveChangesAsync();
 
-            return true;
+            var accountDto = _mapper.Map<AccountDto>(account);
+            accountResult = new AccountResult
+            {
+                Result = true,
+                Message = AccountResource.Added,
+            };
+
+            return (accountDto, accountResult);
         }
 
         public async Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, int accountId)
@@ -121,47 +145,25 @@ namespace SocialMediaDashboard.Logic.Services
             return (accountDtos, accountResult);
         }
 
-        public async Task<AccountResult> DeleteAccountByUserIdAsync(string userId, int accountId)
-        {
-            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, accountId);
-            if (!canUserDeleteAccount)
-            {
-                return new AccountResult
-                {
-                    Result = false,
-                    Message = AccountResource.Denied,
-                };
-            }
-
-            var account = await _accountRepository.GetEntityAsync(account => account.Id == accountId);
-            if (account is null)
-            {
-                return new AccountResult
-                {
-                    Result = false,
-                    Message = AccountResource.NotFound,
-                };
-            }
-
-            _accountRepository.Delete(account);
-            await _accountRepository.SaveChangesAsync();
-
-            return new AccountResult
-            {
-                Result = true,
-                Message = string.Empty,
-            };
-        }
-
         public async Task<AccountResult> UpdateAccountByUserIdAsync(string userId, int accountId, string accountName, AccountType accountType)
         {
-            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, accountId);
-            if (!canUserDeleteAccount)
+            var canUserUpdateAccount = await CanUserInteractWithAccountAsync(userId, accountId);
+            if (!canUserUpdateAccount)
             {
                 return new AccountResult
                 {
                     Result = false,
                     Message = AccountResource.Denied,
+                };
+            }
+
+            var canCreateAccount = await CanUserCreateOrUpdateAccountAsync(userId, accountName, accountType);
+            if (!canCreateAccount)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.Exception,
                 };
             }
 
@@ -187,19 +189,46 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        private async Task<bool> CanUserCreateAccountAsync(string userId, string name, AccountType accountType)
+        public async Task<AccountResult> DeleteAccountByUserIdAsync(string userId, int accountId)
+        {
+            var account = await _accountRepository.GetEntityAsync(account => account.Id == accountId);
+            if (account is null)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.NotFound,
+                };
+            }
+
+            var canUserDeleteAccount = await CanUserInteractWithAccountAsync(userId, accountId);
+            if (!canUserDeleteAccount)
+            {
+                return new AccountResult
+                {
+                    Result = false,
+                    Message = AccountResource.Denied,
+                };
+            }
+
+            _accountRepository.Delete(account);
+            await _accountRepository.SaveChangesAsync();
+
+            return new AccountResult
+            {
+                Result = true,
+                Message = string.Empty,
+            };
+        }
+
+        private async Task<bool> CanUserCreateOrUpdateAccountAsync(string userId, string name, AccountType accountType)
         {
             var selectedAccount = await _accountRepository.GetAllWithoutTracking()
                 .FirstOrDefaultAsync(account => account.UserId == userId
                     && account.Name == name
                     && account.Type == accountType);
 
-            if (selectedAccount != null)
-            {
-                return false;
-            }
-
-            return true;
+            return selectedAccount is null;
         }
 
         private async Task<bool> CanUserInteractWithAccountAsync(string userId, int accountId)
@@ -207,12 +236,7 @@ namespace SocialMediaDashboard.Logic.Services
             var selectedAccount = await _accountRepository.GetAllWithoutTracking()
                 .FirstOrDefaultAsync(account => account.UserId == userId && account.Id == accountId);
 
-            if (selectedAccount is null)
-            {
-                return false;
-            }
-
-            return true;
+            return !(selectedAccount is null);
         }
     }
 }

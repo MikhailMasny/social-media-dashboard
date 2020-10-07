@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.WebAPI.Controllers
 {
-    // TODO: use AppRoles by constants
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, User")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -37,7 +36,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountType())
+            if (string.IsNullOrEmpty(request.Name) || request.AccountType.ValidateAccountType())
             {
                 return BadRequest(new AccountFailedResponse
                 {
@@ -46,34 +45,34 @@ namespace SocialMediaDashboard.WebAPI.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var result = await _accountService.AddAccountByUserIdAsync(userId, request.Name, request.AccountType);
-
-            if (!result)
+            var (accountDto, operationResult) = await _accountService.CreateAccountByUserIdAsync(userId, request.Name, request.AccountType);
+            if (!operationResult.Result)
             {
                 return Conflict(new AccountFailedResponse
                 {
-                    Error = AccountResource.Exception
+                    Error = operationResult.Message
                 });
             }
 
+            var accountSuccessfulResponse = new AccountSuccessfulResponse();
+            accountSuccessfulResponse.Accounts.Add(accountDto);
+            accountSuccessfulResponse.Message = operationResult.Message;
+
             // Must return Created
-            return Ok(new AccountSuccessfulResponse
-            {
-                Message = AccountResource.Added
-            });
+            return Ok(accountSuccessfulResponse);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoutes.Account.Get + "/{id}", Name = nameof(GetAccountAsync))]
+        [HttpGet(ApiRoutes.Account.Get, Name = nameof(GetAccountAsync))]
         public async Task<IActionResult> GetAccountAsync(int id)
         {
             var userId = HttpContext.GetUserId();
             var (accountDto, accountResult) = await _accountService.GetAccountByUserIdAsync(userId, id);
             if (!accountResult.Result)
             {
-                return BadRequest(new AccountFailedResponse
+                return NotFound(new AccountFailedResponse
                 {
                     Error = accountResult.Message,
                 });
@@ -93,19 +92,18 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         public async Task<IActionResult> GetAllAccountsAsync()
         {
             var userId = HttpContext.GetUserId();
-            var (accountDtos, accountResult) = await _accountService.GetAllUserAccountsAsync(userId);
-
-            if (!accountDtos.Any())
+            var (accountDtos, operationResult) = await _accountService.GetAllUserAccountsAsync(userId);
+            if (!operationResult.Result)
             {
                 return NotFound(new AccountFailedResponse
                 {
-                    Error = accountResult.Message
+                    Error = operationResult.Message
                 });
             }
 
             var accountSuccessfulResponse = new AccountSuccessfulResponse();
             accountSuccessfulResponse.Accounts.AddRange(accountDtos);
-            accountSuccessfulResponse.Message = accountResult.Message;
+            accountSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(accountSuccessfulResponse);
         }
@@ -114,16 +112,16 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut(ApiRoutes.Account.Update + "/{id}", Name = nameof(UpdateAccountAsync))]
+        [HttpPut(ApiRoutes.Account.Update, Name = nameof(UpdateAccountAsync))]
         public async Task<IActionResult> UpdateAccountAsync(int id, [FromBody] AccountCreateOrUpdateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            if (string.IsNullOrEmpty(request.Name) || request.AccountType.CheckAccountType())
+            if (string.IsNullOrEmpty(request.Name) || request.AccountType.ValidateAccountType())
             {
                 return BadRequest(new AccountFailedResponse
                 {
-                    Error = AccountResource.IncorrectData
+                    Error = AccountResource.IncorrectData,
                 });
             }
 
@@ -144,7 +142,7 @@ namespace SocialMediaDashboard.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete(ApiRoutes.Account.Delete + "/{id}", Name = nameof(DeleteAccountAsync))]
+        [HttpDelete(ApiRoutes.Account.Delete, Name = nameof(DeleteAccountAsync))]
         public async Task<IActionResult> DeleteAccountAsync(int id)
         {
             var userId = HttpContext.GetUserId();

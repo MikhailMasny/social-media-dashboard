@@ -25,10 +25,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AccountResource.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Subscription.Designer.cs">
+    <Compile Update="Resources\SubscriptionResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Subscription.resx</DependentUpon>
+      <DependentUpon>SubscriptionResource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -41,9 +41,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Subscription.resx">
+    <EmbeddedResource Update="Resources\SubscriptionResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Subscription.Designer.cs</LastGenOutput>
+      <LastGenOutput>SubscriptionResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

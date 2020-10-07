@@ -100,7 +100,7 @@
             /// <summary>
             /// Get endpoint.
             /// </summary>
-            public const string Get = Root + "/" + Path;
+            public const string Get = Root + "/" + Path + "/{id}";
 
             /// <summary>
             /// Get all endpoint.
@@ -110,12 +110,12 @@
             /// <summary>
             /// Update endpoint.
             /// </summary>
-            public const string Update = Root + "/" + Path + "/update";
+            public const string Update = Root + "/" + Path + "/update/{id}";
 
             /// <summary>
             /// Detele endpoint.
             /// </summary>
-            public const string Delete = Root + "/" + Path + "/delete";
+            public const string Delete = Root + "/" + Path + "/delete/{id}";
         }
 
         /// <summary>

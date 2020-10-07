@@ -88,7 +88,7 @@ namespace SocialMediaDashboard.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected add issues...
+        ///   Looks up a localized string similar to Unexpected issues...
         /// </summary>
         public static string Exception {
             get {
@@ -97,7 +97,7 @@ namespace SocialMediaDashboard.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data for create account is incorrect..
+        ///   Looks up a localized string similar to Input data is incorrect..
         /// </summary>
         public static string IncorrectData {
             get {
