@@ -15,7 +15,7 @@ namespace SocialMediaDashboard.Application.Models
         /// <summary>
         /// Type.
         /// </summary>
-        public SubscriptionType Type { get; set; }
+        public SubscriptionKind Type { get; set; }
 
         /// <summary>
         /// Display for user.

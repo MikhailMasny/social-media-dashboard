@@ -9,7 +9,7 @@ using SocialMediaDashboard.Application.Context;
 
 namespace SocialMediaDashboard.Application.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(SocialMediaDashboardContext))]
     [Migration("20200704112913_RenameMediaToAccountTable")]
     partial class RenameMediaToAccountTable
     {

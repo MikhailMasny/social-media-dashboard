@@ -9,7 +9,7 @@ using SocialMediaDashboard.Application.Context;
 
 namespace SocialMediaDashboard.Application.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(SocialMediaDashboardContext))]
     [Migration("20200521173948_AddRefreshTokenTable")]
     partial class AddRefreshTokenTable
     {

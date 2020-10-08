@@ -18,9 +18,9 @@ namespace SocialMediaDashboard.Application.Configurations
             builder.ToTable("Statistics")
                 .HasKey(s => s.Id);
 
-            builder.HasOne(s => s.Subscription)
-                .WithMany(s => s.Statistics)
-                .HasForeignKey(s => s.SubscriptionId);
+            //builder.HasOne(s => s.Subscription)
+            //    .WithMany(s => s.Statistics)
+            //    .HasForeignKey(s => s.SubscriptionId);
         }
     }
 }

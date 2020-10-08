@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Domain.Enums
 {
     /// <summary>
-    /// Account service type.
+    /// Subscription type.
     /// </summary>
-    public enum AccountType
+    public enum SubscriptionKind
     {
         /// <summary>
         /// None.
@@ -11,18 +11,18 @@
         None = 0,
 
         /// <summary>
-        /// Vk.
+        /// Follower.
         /// </summary>
-        Vk = 1,
+        Follower = 1,
 
         /// <summary>
-        /// Instagram.
+        /// Friend.
         /// </summary>
-        Instagram = 2,
+        Friend = 2,
 
         /// <summary>
-        /// YouTube.
+        /// Subscriber.
         /// </summary>
-        YouTube = 3,
+        Subscriber = 3
     }
 }

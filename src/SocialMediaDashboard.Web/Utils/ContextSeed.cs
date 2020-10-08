@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SocialMediaDashboard.Application.Context;
+using SocialMediaDashboard.Domain.Entities;
 using System;
 
 namespace SocialMediaDashboard.Web.Utils
@@ -23,11 +24,11 @@ namespace SocialMediaDashboard.Web.Utils
         {
             try
             {
-                var contextOptions = serviceProvider.GetRequiredService<DbContextOptions<ApplicationContext>>();
-                var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var contextOptions = serviceProvider.GetRequiredService<DbContextOptions<SocialMediaDashboardContext>>();
+                var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                using var applicationContext = new ApplicationContext(contextOptions);
+                using var applicationContext = new SocialMediaDashboardContext(contextOptions);
 
                 ApplicationContextSeed.SeedRolesAsync(applicationContext, roleManager).GetAwaiter().GetResult();
 

@@ -13,7 +13,7 @@ namespace SocialMediaDashboard.Application.Mappings
         /// </summary>
         public AccountProfile()
         {
-            CreateMap<Account, AccountDto>().ReverseMap();
+            //CreateMap<Account, AccountDto>().ReverseMap();
         }
     }
 }

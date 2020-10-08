@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Repository;
+using SocialMediaDashboard.Domain.Entities;
 using System.Reflection;
 
 namespace SocialMediaDashboard.Application.Extensions
@@ -26,23 +27,25 @@ namespace SocialMediaDashboard.Application.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
-            if (environment.IsDevelopment())
-            {
-                services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));
-            }
-            else
-            {
-                services.AddDbContext<ApplicationContext>(options =>
-                {
-                    options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnection"));
-                    options.UseSecondLevelCache();
-                });
-            }
+            //if (environment.IsDevelopment())
+            //{
+            //    services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));
+            //}
+            //else
+            //{
+            //    services.AddDbContext<SocialMediaDashboardContext>(options =>
+            //    {
+            //        options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnection"));
+            //        options.UseSecondLevelCache();
+            //    });
+            //}
+
+            services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));
 
             // UNDONE: Change it to IdentityServer4
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>();
+                .AddEntityFrameworkStores<SocialMediaDashboardContext>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

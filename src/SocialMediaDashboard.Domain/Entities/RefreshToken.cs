@@ -54,6 +54,6 @@ namespace SocialMediaDashboard.Domain.Entities
         /// User.
         /// </summary>
         [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
+        public User User { get; set; }
     }
 }

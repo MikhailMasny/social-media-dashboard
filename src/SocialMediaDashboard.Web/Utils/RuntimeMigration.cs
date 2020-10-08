@@ -24,7 +24,7 @@ namespace SocialMediaDashboard.Web.Utils
 
             try
             {
-                var appContextService = serviceProvider.GetRequiredService<ApplicationContext>();
+                var appContextService = serviceProvider.GetRequiredService<SocialMediaDashboardContext>();
                 appContextService.Database.Migrate();
 
                 Log.Information(logInformationMessage);

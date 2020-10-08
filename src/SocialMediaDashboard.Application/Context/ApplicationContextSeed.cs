@@ -17,7 +17,7 @@ namespace SocialMediaDashboard.Application.Context
         /// <param name="userManager">User manager.</param>
         /// <param name="roleManager">Role manager.</param>
         /// <returns></returns>
-        public static async Task SeedRolesAsync(ApplicationContext applicationContext, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedRolesAsync(SocialMediaDashboardContext applicationContext, RoleManager<IdentityRole> roleManager)
         {
             applicationContext = applicationContext ?? throw new ArgumentNullException(nameof(applicationContext));
             roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));

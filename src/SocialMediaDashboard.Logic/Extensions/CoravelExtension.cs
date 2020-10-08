@@ -24,8 +24,8 @@ namespace SocialMediaDashboard.Infrastructure.Extensions
             var provider = app.ApplicationServices;
             provider.UseScheduler(scheduler =>
             {
-                scheduler.Schedule<StatisticInvocable>()
-                    .EveryMinute();
+                //scheduler.Schedule<StatisticInvocable>()
+                //    .EveryMinute();
             });
 
             return app;

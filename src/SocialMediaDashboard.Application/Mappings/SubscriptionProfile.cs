@@ -13,7 +13,7 @@ namespace SocialMediaDashboard.Application.Mappings
         /// </summary>
         public SubscriptionProfile()
         {
-            CreateMap<Subscription, SubscriptionDto>().ReverseMap();
+            //CreateMap<Subscription, SubscriptionDto>().ReverseMap();
         }
     }
 }

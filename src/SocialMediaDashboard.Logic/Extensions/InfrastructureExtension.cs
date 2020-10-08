@@ -20,14 +20,14 @@ namespace SocialMediaDashboard.Infrastructure.Extensions
         public static IServiceCollection AddLogic(this IServiceCollection services)
         {
             services.AddScheduler();
-            services.AddTransient<StatisticInvocable>();
+            //services.AddTransient<StatisticInvocable>();
 
             services.AddSingleton(new VkApi());
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IConfigService, ConfigService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<ISubscriptionService, SubscriptionService>();
-            services.AddScoped<IStatisticService, StatisticService>();
+            //services.AddScoped<IAccountService, AccountService>();
+            //services.AddScoped<ISubscriptionService, SubscriptionService>();
+            //services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IRequestService, RequestService>();
             services.AddScoped<IVkService, VkService>();
             services.AddScoped<IInstagramService, InstagramService>();

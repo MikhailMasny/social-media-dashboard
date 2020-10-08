@@ -21,13 +21,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
     public class IdentityService : IIdentityService
     {
         private readonly IOptionsSnapshot<JwtSettings> _jwtSettings;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
         public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
-                               UserManager<IdentityUser> userManager,
+                               UserManager<User> userManager,
                                RoleManager<IdentityRole> roleManager,
                                IRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters)
@@ -51,7 +51,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var user = new IdentityUser
+            var user = new User
             {
                 Email = email,
                 UserName = userName
@@ -79,9 +79,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (user == null)
             {
                 return new AuthenticationResult
                 {
@@ -89,7 +89,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var userHasValidPassword = await _userManager.CheckPasswordAsync(identityUser, password);
+            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
             if (!userHasValidPassword)
             {
@@ -99,7 +99,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
 
             if (!emailConfirmationResult.IsSuccessful)
             {
@@ -109,7 +109,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
@@ -184,15 +184,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _refreshTokenRepository.Update(storedRefreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == Identity.Id).Value);
-            return await GenerateAuthenticationResultAsync(identityUser);
+            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == Identity.Id).Value);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
         public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (user == null)
             {
                 return new AuthenticationResult
                 {
@@ -200,7 +200,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var identityResult = await _userManager.ConfirmEmailAsync(identityUser, code);
+            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
 
             if (!identityResult.Succeeded)
             {
@@ -210,7 +210,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
         public async Task<ConfirmationResult> RestorePasswordAsync(string email)
@@ -245,9 +245,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (user == null)
             {
                 return new AuthenticationResult
                 {
@@ -255,7 +255,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var identityResult = await _userManager.ResetPasswordAsync(identityUser, code, newPassword);
+            var identityResult = await _userManager.ResetPasswordAsync(user, code, newPassword);
 
             if (!identityResult.Succeeded)
             {
@@ -265,7 +265,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
         public async Task<UserResult> GetUserByEmailAsync(string email)
@@ -322,9 +322,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
             };
         }
 
-        private async Task<ConfirmationResult> EmailConfirmHandlerAsync(IdentityUser identityUser)
+        private async Task<ConfirmationResult> EmailConfirmHandlerAsync(User user)
         {
-            var isConfirmed = await _userManager.IsEmailConfirmedAsync(identityUser);
+            var isConfirmed = await _userManager.IsEmailConfirmedAsync(user);
 
             if (!isConfirmed)
             {
@@ -366,20 +366,20 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser identityUser)
+        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Secret);
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
-                new Claim("id", identityUser.Id)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("id", user.Id)
             };
 
-            var userRoles = await _userManager.GetRolesAsync(identityUser);
+            var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
@@ -414,7 +414,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 Token = Guid.NewGuid().ToString(),
                 JwtId = token.Id,
-                UserId = identityUser.Id,
+                UserId = user.Id,
                 CreationDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };

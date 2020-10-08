@@ -15,7 +15,7 @@ namespace SocialMediaDashboard.Application.Repository
         private readonly DbSet<T> _dbSet;
         private readonly DbContext _context;
 
-        public Repository(ApplicationContext context)
+        public Repository(SocialMediaDashboardContext context)
         {
             context = context ?? throw new ArgumentNullException(nameof(context));
 
