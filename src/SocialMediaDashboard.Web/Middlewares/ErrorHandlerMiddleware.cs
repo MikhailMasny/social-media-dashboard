@@ -6,17 +6,30 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Middlewares
 {
+    /// <summary>
+    /// Error handler middleware.
+    /// </summary>
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="next">Request delegate.</param>
         public ErrorHandlerMiddleware(RequestDelegate next)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
+        /// <summary>
+        /// Invoke.
+        /// </summary>
+        /// <param name="context">Http context.</param>
         public async Task Invoke(HttpContext context)
         {
+            context = context ?? throw new ArgumentNullException(nameof(context));
+
             try
             {
                 await _next(context);
