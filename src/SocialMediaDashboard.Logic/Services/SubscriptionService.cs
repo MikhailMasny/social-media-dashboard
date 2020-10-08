@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Common.Models;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="ISubscriptionService"/>
     public class SubscriptionService : ISubscriptionService
@@ -24,7 +24,6 @@ namespace SocialMediaDashboard.Logic.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        /// <inheritdoc/>
         public async Task<bool> AddSubscriptionAsync(string userId, int accountId, string account, AccountType accountType, SubscriptionType subscriptionType)
         {
             var canCreateSubscription = await CanUserCreateSubscription(userId, account, accountType, subscriptionType);
@@ -46,7 +45,6 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        /// <inheritdoc/>
         public async Task<IEnumerable<SubscriptionDto>> GetAllUserSubscriptionsAsync(string userId)
         {
             var subscriptions = await _subscriptionRepository.GetAllWithoutTracking()
@@ -59,7 +57,6 @@ namespace SocialMediaDashboard.Logic.Services
             return subscriptionsDto;
         }
 
-        /// <inheritdoc/>
         public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsByTypeAsync(AccountType accountType, SubscriptionType subscriptionType)
         {
             var subscriptions = await _subscriptionRepository.GetAllWithoutTracking()
@@ -72,7 +69,6 @@ namespace SocialMediaDashboard.Logic.Services
             return subscriptionsDto;
         }
 
-        /// <inheritdoc/>
         public async Task<bool> DeleteSubscriptionAsync(int id, string userId)
         {
             var subscription = await _subscriptionRepository.GetAll()
@@ -92,7 +88,6 @@ namespace SocialMediaDashboard.Logic.Services
             return true;
         }
 
-        /// <inheritdoc/>
         public async Task<bool> SubscriptionExistAsync(int id)
         {
             var subscription = await _subscriptionRepository.GetEntityAsync(m => m.Id == id);

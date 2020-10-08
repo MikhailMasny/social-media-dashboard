@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SocialMediaDashboard.WebAPI\SocialMediaDashboard.WebAPI.csproj" />
+    <ProjectReference Include="..\..\src\SocialMediaDashboard.Web\SocialMediaDashboard.Web.csproj" />
   </ItemGroup>
 
 </Project>

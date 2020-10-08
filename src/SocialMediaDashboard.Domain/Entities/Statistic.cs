@@ -1,14 +1,15 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
-using System;
+﻿using System;
 
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// Statistic entity.
     /// </summary>
-    public class Statistic : IHasDbIdentity
+    public class Statistic
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>

@@ -1,13 +1,13 @@
 ﻿using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Options;
-using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Common.Models;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Helpers;
 using System;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IRequestService"/>
     public class RequestService : IRequestService

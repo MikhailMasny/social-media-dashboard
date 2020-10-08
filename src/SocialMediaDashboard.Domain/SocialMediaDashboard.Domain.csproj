@@ -13,7 +13,36 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SocialMediaDashboard.Common\SocialMediaDashboard.Common.csproj" />
+    <Compile Update="Resources\AccountResource.Designer.cs">
+      <DependentUpon>AccountResource.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Identity.Designer.cs">
+      <DependentUpon>Identity.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\SubscriptionResource.Designer.cs">
+      <DependentUpon>SubscriptionResource.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\AccountResource.resx">
+      <LastGenOutput>AccountResource.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Identity.resx">
+      <LastGenOutput>Identity.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SubscriptionResource.resx">
+      <LastGenOutput>SubscriptionResource.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

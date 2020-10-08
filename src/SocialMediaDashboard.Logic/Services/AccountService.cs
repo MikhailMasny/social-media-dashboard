@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Common.Models;
-using SocialMediaDashboard.Common.Resources;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Enums;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IAccountService"/>
     public class AccountService : IAccountService

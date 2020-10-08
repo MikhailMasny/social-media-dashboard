@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Common.Models;
-using SocialMediaDashboard.Common.Resources;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Helpers;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
@@ -39,7 +39,6 @@ namespace SocialMediaDashboard.Logic.Services
             _tokenValidationParameters = tokenValidationParameters ?? throw new ArgumentNullException(nameof(tokenValidationParameters));
         }
 
-        /// <inheritdoc/>
         public async Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
@@ -78,7 +77,6 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        /// <inheritdoc/>
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
@@ -114,7 +112,6 @@ namespace SocialMediaDashboard.Logic.Services
             return await GenerateAuthenticationResultAsync(identityUser);
         }
 
-        /// <inheritdoc/>
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
         {
             var validatedToken = GetPrincipalFromToken(token);
@@ -191,7 +188,6 @@ namespace SocialMediaDashboard.Logic.Services
             return await GenerateAuthenticationResultAsync(identityUser);
         }
 
-        /// <inheritdoc />
         public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
@@ -217,7 +213,6 @@ namespace SocialMediaDashboard.Logic.Services
             return await GenerateAuthenticationResultAsync(identityUser);
         }
 
-        /// <inheritdoc />
         public async Task<ConfirmationResult> RestorePasswordAsync(string email)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
@@ -248,7 +243,6 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        /// <inheritdoc />
         public async Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
@@ -274,7 +268,6 @@ namespace SocialMediaDashboard.Logic.Services
             return await GenerateAuthenticationResultAsync(identityUser);
         }
 
-        /// <inheritdoc/>
         public async Task<UserResult> GetUserByEmailAsync(string email)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
@@ -293,7 +286,6 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        /// <inheritdoc/>
         public async Task<UserResult> GetUserByIdAsync(string id)
         {
             var identityUser = await _userManager.FindByIdAsync(id);
@@ -312,7 +304,6 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        /// <inheritdoc/>
         public async Task<UserResult> GetUserByNameAsync(string username)
         {
             var identityUser = await _userManager.FindByNameAsync(username);

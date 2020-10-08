@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SocialMediaDashboard.Common.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialMediaDashboard.Domain.Entities
@@ -7,9 +6,11 @@ namespace SocialMediaDashboard.Domain.Entities
     /// <summary>
     /// User profile entity.
     /// </summary>
-    public class Profile : IHasDbIdentity, IHasUserIdentity
+    public class Profile
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
@@ -22,7 +23,9 @@ namespace SocialMediaDashboard.Domain.Entities
         /// </summary>
         public string Name { get; set; }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// User identifier.
+        /// </summary>
         public string UserId { get; set; }
 
         // UNDONE: maybe fix it?

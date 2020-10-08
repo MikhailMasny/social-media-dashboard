@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
-using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Domain.Helpers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Model;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IVkService"/>
     public class VkService : IVkService

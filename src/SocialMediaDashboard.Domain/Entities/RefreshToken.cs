@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SocialMediaDashboard.Common.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,9 +7,11 @@ namespace SocialMediaDashboard.Domain.Entities
     /// <summary>
     /// Refresh Token entity.
     /// </summary>
-    public class RefreshToken : IHasDbIdentity, IHasUserIdentity
+    public class RefreshToken
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
@@ -43,7 +44,9 @@ namespace SocialMediaDashboard.Domain.Entities
         /// </summary>
         public bool IsInvalid { get; set; }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// User identifier.
+        /// </summary>
         public string UserId { get; set; }
 
         // UNDONE: maybe fix it?

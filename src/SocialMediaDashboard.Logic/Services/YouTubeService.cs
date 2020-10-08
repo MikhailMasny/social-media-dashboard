@@ -1,10 +1,10 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
+﻿using SocialMediaDashboard.Application.Interfaces;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IYouTubeService"/>
     public class YouTubeService : IYouTubeService

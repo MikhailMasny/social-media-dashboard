@@ -1,9 +1,9 @@
 ﻿using Coravel.Invocable;
-using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Application.Interfaces;
 using System;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Tasks
+namespace SocialMediaDashboard.Infrastructure.Tasks
 {
     /// <summary>
     /// Statistic task for Coravel.

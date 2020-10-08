@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
-using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IAccountService"/>
     public class StatisticService : IStatisticService

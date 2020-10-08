@@ -1,5 +1,4 @@
-﻿using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Interfaces;
+﻿using SocialMediaDashboard.Domain.Enums;
 using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Domain.Entities
@@ -7,9 +6,11 @@ namespace SocialMediaDashboard.Domain.Entities
     /// <summary>
     /// Subscription entity.
     /// </summary>
-    public class Subscription : IHasDbIdentity
+    public class Subscription
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>

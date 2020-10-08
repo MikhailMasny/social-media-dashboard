@@ -1,11 +1,11 @@
-﻿using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.Common.Interfaces;
+﻿using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Domain.Enums;
+using SocialMediaDashboard.Domain.Helpers;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IConfigService"/>
     public class ConfigService : IConfigService
@@ -26,7 +26,6 @@ namespace SocialMediaDashboard.Logic.Services
             _vkSettings = vkSettings ?? throw new ArgumentNullException(nameof(vkSettings));
         }
 
-        /// <inheritdoc/>
         public Task CheckAndUpdateConnection(string dataProvider, DataProviderType dataProviderType)
         {
             if (!string.IsNullOrEmpty(dataProvider) && dataProvider != "string")
@@ -57,14 +56,13 @@ namespace SocialMediaDashboard.Logic.Services
                         }
                         break;
 
-                    // TODO: default:
+                        // TODO: default:
                 }
             }
 
             return Task.CompletedTask;
         }
 
-        /// <inheritdoc/>
         public Task CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType)
         {
             if (!string.IsNullOrEmpty(jwtValue) && jwtValue != "string")
@@ -83,14 +81,13 @@ namespace SocialMediaDashboard.Logic.Services
                         }
                         break;
 
-                    // TODO: default:
+                        // TODO: default:
                 }
             }
 
             return Task.CompletedTask;
         }
 
-        /// <inheritdoc/>
         public Task CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType)
         {
             if (!string.IsNullOrEmpty(sentryValue) && sentryValue != "string")
@@ -122,7 +119,6 @@ namespace SocialMediaDashboard.Logic.Services
             return Task.CompletedTask;
         }
 
-        /// <inheritdoc/>
         public Task CheckAndUpdateSocialNetworks(string tokenValue, SocialNetworkConfigType socialNetworkConfigType)
         {
             if (!string.IsNullOrEmpty(tokenValue) && tokenValue != "string")
