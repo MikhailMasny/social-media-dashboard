@@ -75,7 +75,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 .Include(s => s.Account)
                 .FirstOrDefaultAsync(s => s.Account.UserId == userId && s.Id == id);
 
-
             //var subscription = await _subscriptionRepository
             if (subscription == null)
             {

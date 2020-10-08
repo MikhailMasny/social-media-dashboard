@@ -28,6 +28,7 @@ namespace SocialMediaDashboard.Infrastructure.Options
         }
 
         public T Value => _options.CurrentValue;
+
         public T Get(string name) => _options.Get(name);
 
         public void Update(Action<T> applyChanges)

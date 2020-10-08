@@ -98,7 +98,7 @@ namespace SocialMediaDashboard.Web.Extensions
 
             services.AddCors();
             services.AddHealthChecks();
-            services.AddControllers(options => 
+            services.AddControllers(options =>
                 options.Filters.Add<ValidationFilter>())
                     .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
 

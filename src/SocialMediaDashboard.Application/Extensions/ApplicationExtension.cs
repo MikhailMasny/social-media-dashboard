@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EntityFrameworkCore.Cacheable;
-using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
