@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Domain.Enums
 {
     /// <summary>
-    /// Subscription type.
+    /// Observation type.
     /// </summary>
-    public enum SubscriptionKind
+    public enum ObservationType
     {
         /// <summary>
         /// None.

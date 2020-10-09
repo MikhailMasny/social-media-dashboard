@@ -3,9 +3,9 @@
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Subscription type.
+    /// Observation entity.
     /// </summary>
-    public class Kind
+    public class Observation
     {
         /// <summary>
         /// Identifier.
@@ -23,8 +23,8 @@ namespace SocialMediaDashboard.Domain.Entities
         public string Comment { get; set; }
 
         /// <summary>
-        /// Navigation to AccountSubscriptions.
+        /// Navigation on SubscriptionTypes.
         /// </summary>
-        public ICollection<CounterType> CounterTypes { get; set; }
+        public ICollection<SubscriptionType> SubscriptionTypes { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SocialMediaDashboard.Domain.Entities
+﻿namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// User profile entity.
@@ -28,11 +25,9 @@ namespace SocialMediaDashboard.Domain.Entities
         /// </summary>
         public string UserId { get; set; }
 
-        // UNDONE: maybe fix it?
         /// <summary>
-        /// User.
+        /// Navigation for User.
         /// </summary>
-        [ForeignKey(nameof(UserId))]
         public User User { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace SocialMediaDashboard.Web.Contracts.Requests
         /// <summary>
         /// Subscription type.
         /// </summary>
-        public SubscriptionKind SubscriptionType { get; set; }
+        public ObservationType SubscriptionType { get; set; }
     }
 }

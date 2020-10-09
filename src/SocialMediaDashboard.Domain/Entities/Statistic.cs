@@ -23,13 +23,13 @@ namespace SocialMediaDashboard.Domain.Entities
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// Counter identifier.
+        /// Subscription identifier.
         /// </summary>
-        public int CounterId { get; set; }
+        public int SubscriptionId { get; set; }
 
         /// <summary>
-        /// Navigation property for Counter.
+        /// Navigation for Subscription.
         /// </summary>
-        public Counter Counter { get; set; }
+        public Subscription Subscription { get; set; }
     }
 }

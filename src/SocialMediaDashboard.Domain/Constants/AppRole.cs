@@ -3,7 +3,7 @@
     /// <summary>
     /// Application roles.
     /// </summary>
-    public static class AppRoles
+    public static class AppRole
     {
         /// <summary>
         /// Unknown.

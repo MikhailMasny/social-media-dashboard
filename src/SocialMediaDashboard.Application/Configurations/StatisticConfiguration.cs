@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SocialMediaDashboard.Application.Constants;
 using SocialMediaDashboard.Domain.Entities;
 using System;
 
@@ -15,12 +16,13 @@ namespace SocialMediaDashboard.Application.Configurations
         {
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable("Statistics")
-                .HasKey(s => s.Id);
+            builder.ToTable(Table.Statistics, Schema.Counter)
+                .HasKey(statistic => statistic.Id);
 
-            //builder.HasOne(s => s.Subscription)
-            //    .WithMany(s => s.Statistics)
-            //    .HasForeignKey(s => s.SubscriptionId);
+            builder.HasOne(statistic => statistic.Subscription)
+                .WithMany(subscription => subscription.Statistics)
+                .HasForeignKey(statistic => statistic.SubscriptionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

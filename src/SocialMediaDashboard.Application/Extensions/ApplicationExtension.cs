@@ -27,6 +27,7 @@ namespace SocialMediaDashboard.Application.Extensions
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
+            // TODO: uncomment it
             //if (environment.IsDevelopment())
             //{
             //    services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));

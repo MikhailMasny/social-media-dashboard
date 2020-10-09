@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 
 namespace SocialMediaDashboard.Domain.Entities
 {
@@ -13,6 +11,16 @@ namespace SocialMediaDashboard.Domain.Entities
         /// Identifier.
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// User identifier.
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// Navigation for User.
+        /// </summary>
+        public User User { get; set; }
 
         /// <summary>
         /// JWT Token.
@@ -43,17 +51,5 @@ namespace SocialMediaDashboard.Domain.Entities
         /// Invalid indicator.
         /// </summary>
         public bool IsInvalid { get; set; }
-
-        /// <summary>
-        /// User identifier.
-        /// </summary>
-        public string UserId { get; set; }
-
-        // UNDONE: maybe fix it?
-        /// <summary>
-        /// User.
-        /// </summary>
-        [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace SocialMediaDashboard.Web.Contracts.Requests
         /// <summary>
         /// Account type.
         /// </summary>
-        public AccountKind AccountType { get; set; }
+        public PlatformType AccountType { get; set; }
     }
 }

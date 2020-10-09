@@ -30,7 +30,7 @@ namespace SocialMediaDashboard.Web.Utils
 
                 using var applicationContext = new SocialMediaDashboardContext(contextOptions);
 
-                ApplicationContextSeed.SeedRolesAsync(applicationContext, roleManager).GetAwaiter().GetResult();
+                SocialMediaDashboardContextSeed.SeedRolesAsync(applicationContext, roleManager).GetAwaiter().GetResult();
 
                 Log.Information(logInformationMessage);
             }

@@ -3,9 +3,9 @@
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Counter.
+    /// Subscription entity.
     /// </summary>
-    public class Counter
+    public class Subscription
     {
         /// <summary>
         /// Identifier.
@@ -18,7 +18,7 @@ namespace SocialMediaDashboard.Domain.Entities
         public string UserId { get; set; }
 
         /// <summary>
-        /// Navigation to User.
+        /// Navigation for User.
         /// </summary>
         public User User { get; set; }
 
@@ -28,17 +28,17 @@ namespace SocialMediaDashboard.Domain.Entities
         public string Name { get; set; }
 
         /// <summary>
-        /// AccountSubscription type identifier.
+        /// Subscription type identifier.
         /// </summary>
-        public int CounterTypeId { get; set; }
+        public int SubscriptionTypeId { get; set; }
 
         /// <summary>
-        /// Navigation to AccountSubscription.
+        /// Navigation for SubscriptionType.
         /// </summary>
-        public CounterType CounterType { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
 
         /// <summary>
-        /// Navigation to Statistic.
+        /// Navigation on Statistics.
         /// </summary>
         public ICollection<Statistic> Statistics { get; set; }
     }

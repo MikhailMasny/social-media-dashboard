@@ -2,7 +2,10 @@
 
 namespace SocialMediaDashboard.Domain.Entities
 {
-    public class CounterType
+    /// <summary>
+    /// Subscription type entity.
+    /// </summary>
+    public class SubscriptionType
     {
         /// <summary>
         /// Identifier.
@@ -10,28 +13,28 @@ namespace SocialMediaDashboard.Domain.Entities
         public int Id { get; set; }
 
         /// <summary>
-        /// Account type identifier.
+        /// Platform identifier.
         /// </summary>
         public int PlatformId { get; set; }
 
         /// <summary>
-        /// Navigation to AccountType.
+        /// Navigation for Platform.
         /// </summary>
         public Platform Platform { get; set; }
 
         /// <summary>
-        /// Subscription type identifier.
+        /// Observation identifier.
         /// </summary>
-        public int KindId { get; set; }
+        public int ObservationId { get; set; }
 
         /// <summary>
-        /// Navigation to SubscriptionType.
+        /// Navigation for Observation.
         /// </summary>
-        public Kind Kind { get; set; }
+        public Observation Observation { get; set; }
 
         /// <summary>
-        /// Navigation to Counters.
+        /// Navigation on Subscriptions.
         /// </summary>
-        public ICollection<Counter> Counters { get; set; }
+        public ICollection<Subscription> Subscriptions { get; set; }
     }
 }

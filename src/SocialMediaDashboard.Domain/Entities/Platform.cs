@@ -3,7 +3,7 @@
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// Account type.
+    /// Platform entity.
     /// </summary>
     public class Platform
     {
@@ -23,8 +23,8 @@ namespace SocialMediaDashboard.Domain.Entities
         public string Comment { get; set; }
 
         /// <summary>
-        /// Navigation to AccountSubscriptions.
+        /// Navigation on SubscriptionTypes.
         /// </summary>
-        public ICollection<CounterType> CounterTypes { get; set; }
+        public ICollection<SubscriptionType> SubscriptionTypes { get; set; }
     }
 }

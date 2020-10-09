@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SocialMediaDashboard.Application.Constants;
 using SocialMediaDashboard.Domain.Entities;
 using System;
 
@@ -15,12 +16,20 @@ namespace SocialMediaDashboard.Application.Configurations
         {
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable("Profiles")
-                .HasKey(p => p.Id);
+            builder.ToTable(Table.Profiles, Schema.Account)
+                .HasKey(profile => profile.Id);
 
-            builder.Property(p => p.Name)
+            builder.Property(profile => profile.UserId)
+                .IsRequired();
+
+            builder.Property(profile => profile.Name)
                 .IsRequired()
-                .HasMaxLength(20);
+                .HasMaxLength(SqlConfiguration.SqlMaxLengthMedium);
+
+            builder.HasOne(profile => profile.User)
+                .WithOne(user => user.Profile)
+                .HasForeignKey<Profile>(profile => profile.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

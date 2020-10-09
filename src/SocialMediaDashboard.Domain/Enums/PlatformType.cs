@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Domain.Enums
 {
     /// <summary>
-    /// Account service type.
+    /// Platform type.
     /// </summary>
-    public enum AccountKind
+    public enum PlatformType
     {
         /// <summary>
         /// None.

@@ -20,7 +20,7 @@ namespace SocialMediaDashboard.Application.Models
         /// <summary>
         /// Type.
         /// </summary>
-        public AccountKind Type { get; set; }
+        public PlatformType Type { get; set; }
 
         /// <summary>
         /// User identifier.

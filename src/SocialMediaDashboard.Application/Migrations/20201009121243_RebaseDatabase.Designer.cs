@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMediaDashboard.Application.Context;
 
 namespace SocialMediaDashboard.Application.Migrations
 {
     [DbContext(typeof(SocialMediaDashboardContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201009121243_RebaseDatabase")]
+    partial class RebaseDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +156,57 @@ namespace SocialMediaDashboard.Application.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Observation", b =>
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Counter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CounterTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(127)")
+                        .HasMaxLength(127);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CounterTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Counters","counter");
+                });
+
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.CounterType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("KindId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KindId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("CounterTypes","counter");
+                });
+
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Kind", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,7 +224,7 @@ namespace SocialMediaDashboard.Application.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Observations","counter");
+                    b.ToTable("Kinds","counter");
                 });
 
             modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Platform", b =>
@@ -273,67 +325,17 @@ namespace SocialMediaDashboard.Application.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
+                    b.Property<int>("CounterId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SubscriptionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SubscriptionId");
+                    b.HasIndex("CounterId");
 
                     b.ToTable("Statistics","counter");
-                });
-
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Subscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(127)")
-                        .HasMaxLength(127);
-
-                    b.Property<int>("SubscriptionTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubscriptionTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Subscriptions","counter");
-                });
-
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.SubscriptionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ObservationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlatformId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObservationId");
-
-                    b.HasIndex("PlatformId");
-
-                    b.ToTable("SubscriptionTypes","counter");
                 });
 
             modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.User", b =>
@@ -452,6 +454,36 @@ namespace SocialMediaDashboard.Application.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Counter", b =>
+                {
+                    b.HasOne("SocialMediaDashboard.Domain.Entities.CounterType", "CounterType")
+                        .WithMany("Counters")
+                        .HasForeignKey("CounterTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SocialMediaDashboard.Domain.Entities.User", "User")
+                        .WithMany("Counters")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.CounterType", b =>
+                {
+                    b.HasOne("SocialMediaDashboard.Domain.Entities.Kind", "Kind")
+                        .WithMany("CounterTypes")
+                        .HasForeignKey("KindId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SocialMediaDashboard.Domain.Entities.Platform", "Platform")
+                        .WithMany("CounterTypes")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Profile", b =>
                 {
                     b.HasOne("SocialMediaDashboard.Domain.Entities.User", "User")
@@ -472,40 +504,10 @@ namespace SocialMediaDashboard.Application.Migrations
 
             modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Statistic", b =>
                 {
-                    b.HasOne("SocialMediaDashboard.Domain.Entities.Subscription", "Subscription")
+                    b.HasOne("SocialMediaDashboard.Domain.Entities.Counter", "Counter")
                         .WithMany("Statistics")
-                        .HasForeignKey("SubscriptionId")
+                        .HasForeignKey("CounterId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.Subscription", b =>
-                {
-                    b.HasOne("SocialMediaDashboard.Domain.Entities.SubscriptionType", "SubscriptionType")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("SubscriptionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SocialMediaDashboard.Domain.Entities.User", "User")
-                        .WithMany("Counters")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SocialMediaDashboard.Domain.Entities.SubscriptionType", b =>
-                {
-                    b.HasOne("SocialMediaDashboard.Domain.Entities.Observation", "Observation")
-                        .WithMany("SubscriptionTypes")
-                        .HasForeignKey("ObservationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SocialMediaDashboard.Domain.Entities.Platform", "Platform")
-                        .WithMany("SubscriptionTypes")
-                        .HasForeignKey("PlatformId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

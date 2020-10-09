@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SocialMediaDashboard.Application.Constants;
 using SocialMediaDashboard.Domain.Entities;
 using System;
 
@@ -15,23 +16,24 @@ namespace SocialMediaDashboard.Application.Configurations
         {
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable("RefreshTokens")
-                .HasKey(r => r.Id);
+            builder.ToTable(Table.RefreshTokens, Schema.Account)
+                .HasKey(refreshToken => refreshToken.Id);
 
-            builder.Property(r => r.Token)
+            builder.Property(refreshToken => refreshToken.UserId)
                 .IsRequired();
 
-            builder.Property(r => r.JwtId)
-                .IsRequired();
+            builder.Property(refreshToken => refreshToken.Token)
+                .IsRequired()
+                .HasMaxLength(SqlConfiguration.SqlMaxLengthLong);
 
-            builder.Property(r => r.CreationDate)
-                .IsRequired();
+            builder.Property(refreshToken => refreshToken.JwtId)
+                .IsRequired()
+                .HasMaxLength(SqlConfiguration.SqlMaxLengthLong);
 
-            builder.Property(r => r.ExpiryDate)
-                .IsRequired();
-
-            builder.Property(r => r.UserId)
-                .IsRequired();
+            builder.HasOne(refreshToken => refreshToken.User)
+                .WithMany(user => user.RefreshTokens)
+                .HasForeignKey(refreshToken => refreshToken.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

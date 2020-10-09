@@ -12,13 +12,13 @@ namespace SocialMediaDashboard.Domain.Extensions
         /// </summary>
         /// <param name="accountType">Account type.</param>
         /// <returns>Operation result.</returns>
-        public static bool ValidateAccountType(this AccountKind accountType)
+        public static bool ValidateAccountType(this PlatformType accountType)
         {
             return accountType switch
             {
-                AccountKind.Vk => false,
-                AccountKind.Instagram => false,
-                AccountKind.YouTube => false,
+                PlatformType.Vk => false,
+                PlatformType.Instagram => false,
+                PlatformType.YouTube => false,
                 _ => true
             };
         }
@@ -28,13 +28,13 @@ namespace SocialMediaDashboard.Domain.Extensions
         /// </summary>
         /// <param name="subscriptionType">Subscription type.</param>
         /// <returns>Operation result.</returns>
-        public static bool ValidateSubscriptionType(this SubscriptionKind subscriptionType)
+        public static bool ValidateSubscriptionType(this ObservationType subscriptionType)
         {
             return subscriptionType switch
             {
-                SubscriptionKind.Follower => false,
-                SubscriptionKind.Friend => false,
-                SubscriptionKind.Subscriber => false,
+                ObservationType.Follower => false,
+                ObservationType.Friend => false,
+                ObservationType.Subscriber => false,
                 _ => true
             };
         }

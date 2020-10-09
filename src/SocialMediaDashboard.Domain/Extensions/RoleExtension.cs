@@ -16,7 +16,7 @@ namespace SocialMediaDashboard.Domain.Extensions
         {
             return role switch
             {
-                AppRoles.Admin => true,
+                AppRole.Admin => true,
                 _ => false
             };
         }

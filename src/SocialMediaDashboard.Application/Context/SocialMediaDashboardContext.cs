@@ -19,21 +19,6 @@ namespace SocialMediaDashboard.Application.Context
             : base(options) { }
 
         /// <summary>
-        /// Social media account entities.
-        /// </summary>
-        //public DbSet<Account> Accounts { get; set; }
-
-        /// <summary>
-        /// Subscription entities.
-        /// </summary>
-        //public DbSet<Subscription> Subscriptions { get; set; }
-
-        /// <summary>
-        /// Statistic entities.
-        /// </summary>
-        public DbSet<Statistic> Statistics { get; set; }
-
-        /// <summary>
         /// Profile entities.
         /// </summary>
         public DbSet<Profile> Profiles { get; set; }
@@ -44,26 +29,41 @@ namespace SocialMediaDashboard.Application.Context
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         /// <summary>
-        /// Counters.
+        /// Subscription entities.
         /// </summary>
-        public DbSet<Counter> Counters { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
 
+        /// <summary>
+        /// SubscriptionType entities.
+        /// </summary>
+        public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
+
+        /// <summary>
+        /// Platform entities.
+        /// </summary>
         public DbSet<Platform> Platforms { get; set; }
 
-        public DbSet<Kind> Kinds { get; set; }
+        /// <summary>
+        /// Observation entities.
+        /// </summary>
+        public DbSet<Observation> Observations { get; set; }
 
-        public DbSet<CounterType> CounterTypes { get; set; }
+        /// <summary>
+        /// Statistic entities.
+        /// </summary>
+        public DbSet<Statistic> Statistics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
 
             modelBuilder.ApplyConfiguration(new ProfileConfiguration());
-            //modelBuilder.ApplyConfiguration(new AccountConfiguration());
-            //modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
-            modelBuilder.ApplyConfiguration(new StatisticConfiguration());
             modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
-            modelBuilder.ApplyConfiguration(new CounterConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscriptionTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new PlatformConfiguration());
+            modelBuilder.ApplyConfiguration(new ObservationConfiguration());
+            modelBuilder.ApplyConfiguration(new StatisticConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
