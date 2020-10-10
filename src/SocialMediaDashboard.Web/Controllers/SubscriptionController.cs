@@ -41,7 +41,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             if (string.IsNullOrEmpty(request.AccountName)
                 || request.AccountName == incorrectAccountName
-                || request.SubscriptionTypeId == incorrectSubscriptionTypeId)
+                || request.SubscriptionTypeId == incorrectSubscriptionTypeId) // TODO: add valid SubscriptionTypeId
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
@@ -51,12 +51,11 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var userId = HttpContext.GetUserId();
             var (subscriptionDto, operationResult) = await _subscriptionService.CreateSubscriptionAsync(userId, request.AccountName, request.SubscriptionTypeId);
-
             if (!operationResult.Result)
             {
                 return Conflict(new SubscriptionFailedResponse
                 {
-                    Error = operationResult.Message
+                    Error = operationResult.Message,
                 });
             }
 
@@ -71,12 +70,11 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoutes.Subscription.Get, Name = nameof(GetAccount))]
-        public async Task<IActionResult> GetAccount(int id)
+        [HttpGet(ApiRoutes.Subscription.Get, Name = nameof(GetSubscription))]
+        public async Task<IActionResult> GetSubscription(int id)
         {
             var userId = HttpContext.GetUserId();
             var(subscriptionDto, operationResult) = await _subscriptionService.GetSubscriptionByIdAsync(userId, id);
-
             if (!operationResult.Result)
             {
                 return NotFound(new SubscriptionFailedResponse
@@ -87,6 +85,29 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
             subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
+            subscriptionSuccessfulResponse.Message = operationResult.Message;
+
+            return Ok(subscriptionSuccessfulResponse);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet(ApiRoutes.Subscription.GetAll, Name = nameof(GetAllSubscriptions))]
+        public async Task<IActionResult> GetAllSubscriptions()
+        {
+            var userId = HttpContext.GetUserId();
+            var (subscriptionDtos, operationResult) = await _subscriptionService.GetAllSubscriptionAsync(userId);
+            if (!operationResult.Result)
+            {
+                return NotFound(new SubscriptionFailedResponse
+                {
+                    Error = operationResult.Message,
+                });
+            }
+
+            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
+            subscriptionSuccessfulResponse.Subscriptions.AddRange(subscriptionDtos);
             subscriptionSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(subscriptionSuccessfulResponse);

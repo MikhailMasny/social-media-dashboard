@@ -28,6 +28,13 @@ namespace SocialMediaDashboard.Application.Interfaces
         Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(string userId, int id);
 
         /// <summary>
+        /// Get all subscriptions.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>List of subscription data transfet objects with operation result.</returns>
+        Task<(IEnumerable<SubscriptionDto> subscriptionDto, SubscriptionResult subscriptionResult)> GetAllSubscriptionAsync(string userId);
+
+        /// <summary>
         /// Delete subscription by identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
