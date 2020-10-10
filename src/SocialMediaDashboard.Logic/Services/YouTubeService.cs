@@ -19,11 +19,11 @@ namespace SocialMediaDashboard.Infrastructure.Services
         // TODO: change it to answer + result
         public async Task<int> GetSubscribersByChannelAsync(string channel)
         {
-            var statistic = await _requestService.GetDataByChannelFromYouTubeApiAsync(channel);
+            var statistic = await _requestService.GetDataFromYouTubeApiByChannelAsync(channel);
             var data = statistic.Items;
             if (!data.Any())
             {
-                return 0;
+                return default;
             }
 
             return int.Parse(data.FirstOrDefault().Statistics.SubscriberCount, CultureInfo.InvariantCulture);

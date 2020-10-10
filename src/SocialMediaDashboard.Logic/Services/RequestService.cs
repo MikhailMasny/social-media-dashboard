@@ -3,6 +3,7 @@ using Flurl.Http;
 using Microsoft.Extensions.Options;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Constants;
 using SocialMediaDashboard.Domain.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -13,25 +14,46 @@ namespace SocialMediaDashboard.Infrastructure.Services
     public class RequestService : IRequestService
     {
         private readonly IOptionsSnapshot<SocialNetworksSettings> _socialNetworksSettings;
-        private readonly string _youTubeApi = "https://www.googleapis.com";
 
         public RequestService(IOptionsSnapshot<SocialNetworksSettings> socialNetworksSettings)
         {
             _socialNetworksSettings = socialNetworksSettings ?? throw new ArgumentNullException(nameof(socialNetworksSettings));
         }
 
-        //https://www.googleapis.com/youtube/v3/videos?part=statistics&id=video&key=apiKey
-        //https://www.googleapis.com/youtube/v3/channels?part=statistics&id=channel&key=apiKey
-        //https://www.googleapis.com/youtube/v3/channels?part=statistics&forUsername=username&key=apiKey
-
-        public async Task<YouTubeResult> GetDataByChannelFromYouTubeApiAsync(string channel)
+        public async Task<YouTubeResult> GetDataFromYouTubeApiByChannelAsync(string channel)
         {
-            return await _youTubeApi
-                .AppendPathSegments("youtube", "v3", "channels")
+            return await ApiPlatform.YouTube.Domain
+                .AppendPathSegments(ApiPlatform.YouTube.MainPath, ApiPlatform.YouTube.Version, ApiPlatform.YouTube.ChannelType)
                 .SetQueryParams(new
                 {
-                    part = "statistics",
+                    part = ApiPlatform.YouTube.StatisticPart,
                     id = channel,
+                    key = _socialNetworksSettings.Value.YouTubeAccessToken
+                })
+                .GetJsonAsync<YouTubeResult>();
+        }
+
+        public async Task<YouTubeResult> GetDataFromYouTubeApiByUsernameAsync(string username)
+        {
+            return await ApiPlatform.YouTube.Domain
+                .AppendPathSegments(ApiPlatform.YouTube.MainPath, ApiPlatform.YouTube.Version, ApiPlatform.YouTube.ChannelType)
+                .SetQueryParams(new
+                {
+                    part = ApiPlatform.YouTube.StatisticPart,
+                    forUsername = username,
+                    key = _socialNetworksSettings.Value.YouTubeAccessToken
+                })
+                .GetJsonAsync<YouTubeResult>();
+        }
+
+        public async Task<YouTubeResult> GetDataFromYouTubeApiByVideoAsync(string video)
+        {
+            return await ApiPlatform.YouTube.Domain
+                .AppendPathSegments(ApiPlatform.YouTube.MainPath, ApiPlatform.YouTube.Version, ApiPlatform.YouTube.VideoType)
+                .SetQueryParams(new
+                {
+                    part = ApiPlatform.YouTube.StatisticPart,
+                    id = video,
                     key = _socialNetworksSettings.Value.YouTubeAccessToken
                 })
                 .GetJsonAsync<YouTubeResult>();

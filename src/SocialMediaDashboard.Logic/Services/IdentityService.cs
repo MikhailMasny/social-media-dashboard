@@ -78,7 +78,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             };
         }
 
-        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        public async Task<AuthenticationResult> SignInAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
 

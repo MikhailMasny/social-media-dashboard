@@ -6,7 +6,7 @@ namespace SocialMediaDashboard.Web.Validators
     /// <summary>
     /// User registration request validator.
     /// </summary>
-    public class UserRegistrationRequestValidator : AbstractValidator<UserRegistrationRequest>
+    public class UserRegistrationRequestValidator : AbstractValidator<UserSignUpRequest>
     {
         /// <summary>
         /// Constructor.

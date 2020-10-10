@@ -41,7 +41,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 if (!logInResult.Succeeded)
                 {
                     Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
-                    return 0;
+                    return default;
                 }
             }
 

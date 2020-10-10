@@ -44,15 +44,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task<int> GetByParametersAsync(PlatformType platformType, ObservationType observationType)
         {
-            const int notFoundsubscriptionType = 0;
-
             var subscriptionType = await _subscriptionTypeRepository
                 .GetEntityAsync(subscriptionType =>
                     subscriptionType.PlatformId == (int)platformType
                     && subscriptionType.ObservationId == (int)observationType);
 
             return subscriptionType is null
-                ? notFoundsubscriptionType
+                ? default
                 : subscriptionType.Id;
         }
 

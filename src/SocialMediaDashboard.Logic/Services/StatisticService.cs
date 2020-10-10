@@ -60,35 +60,39 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var statistics = new List<Statistic>();
             var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(platformType, observationType);
-            var subscriptions = await _subscriptionService.GetAccountNamesBySubscriptionTypeIdAsync(subscriptionTypeId);
 
-            if (subscriptions.Any())
+            if (!(subscriptionTypeId == default))
             {
-                foreach (var subscription in subscriptions)
+                var subscriptions = await _subscriptionService.GetAccountNamesBySubscriptionTypeIdAsync(subscriptionTypeId);
+
+                if (subscriptions.Any())
                 {
-                    int count;
+                    foreach (var subscription in subscriptions)
+                    {
+                        int count;
 
-                    try
-                    {
-                        count = await getCounts(subscription.AccountName);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        throw;
+                        try
+                        {
+                            count = await getCounts(subscription.AccountName);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, ex.Message);
+                            throw;
+                        }
+
+                        var statistic = new Statistic
+                        {
+                            Count = count,
+                            Date = DateTime.Now,
+                            SubscriptionId = subscription.Id
+                        };
+                        statistics.Add(statistic);
                     }
 
-                    var statistic = new Statistic
-                    {
-                        Count = count,
-                        Date = DateTime.Now,
-                        SubscriptionId = subscription.Id
-                    };
-                    statistics.Add(statistic);
+                    await _statisticRepository.CreateRangeAsync(statistics);
+                    await _statisticRepository.SaveChangesAsync();
                 }
-
-                await _statisticRepository.CreateRangeAsync(statistics);
-                await _statisticRepository.SaveChangesAsync();
             }
         }
     }

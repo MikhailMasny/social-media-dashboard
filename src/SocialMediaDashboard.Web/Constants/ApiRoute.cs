@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Web.Constants
 {
     /// <summary>
-    /// API route constants.
+    /// Api route constants.
     /// </summary>
-    public static class ApiRoutes
+    public static class ApiRoute
     {
         /// <summary>
         /// Root path.
@@ -21,27 +21,27 @@
             public const string Path = "identity";
 
             /// <summary>
-            /// Login endpoint.
+            /// SignIn endpoint.
             /// </summary>
-            public const string Login = Root + "/" + Path + "/login";
+            public const string SignIn = Root + "/" + Path + "/signin";
 
             /// <summary>
-            /// Registration endpoint.
+            /// SignUp endpoint.
             /// </summary>
-            public const string Registration = Root + "/" + Path + "/registration";
+            public const string SignUp = Root + "/" + Path + "/registration";
 
             /// <summary>
-            /// Confirm endpoint.
+            /// Confirm email endpoint.
             /// </summary>
             public const string Confirm = Root + "/" + Path + "/confirm";
 
             /// <summary>
-            /// Restore endpoint.
+            /// Restore password endpoint.
             /// </summary>
             public const string Restore = Root + "/" + Path + "/restore";
 
             /// <summary>
-            /// Reset endpoint.
+            /// Reset password endpoint.
             /// </summary>
             public const string Reset = Root + "/" + Path + "/reset";
 
@@ -62,7 +62,7 @@
             public const string Path = "config";
 
             /// <summary>
-            /// Connection endpoint.
+            /// Connection settings endpoint.
             /// </summary>
             public const string Connection = Root + "/" + Path + "/connection";
 

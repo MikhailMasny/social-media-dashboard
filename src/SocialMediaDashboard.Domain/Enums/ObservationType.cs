@@ -23,6 +23,11 @@
         /// <summary>
         /// Subscriber.
         /// </summary>
-        Subscriber = 3
+        Subscriber = 3,
+
+        /// <summary>
+        /// View.
+        /// </summary>
+        View = 4,
     }
 }

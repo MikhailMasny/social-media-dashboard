@@ -1,19 +1,14 @@
 ﻿namespace SocialMediaDashboard.Web.Contracts.Requests
 {
     /// <summary>
-    /// Registration request.
+    /// User sign in request.
     /// </summary>
-    public class UserRegistrationRequest
+    public class UserSignInRequest
     {
         /// <summary>
         /// Email.
         /// </summary>
         public string Email { get; set; }
-
-        /// <summary>
-        /// User nickname.
-        /// </summary>
-        public string UserName { get; set; }
 
         /// <summary>
         /// Password.

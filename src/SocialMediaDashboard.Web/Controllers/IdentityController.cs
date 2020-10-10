@@ -27,13 +27,12 @@ namespace SocialMediaDashboard.Web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost(ApiRoutes.Identity.Registration, Name = nameof(RegistrationAsync))]
-        public async Task<IActionResult> RegistrationAsync([FromBody] UserRegistrationRequest request)
+        [HttpPost(ApiRoute.Identity.SignUp, Name = nameof(SignUp))]
+        public async Task<IActionResult> SignUp([FromBody] UserSignUpRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
             var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
-
             if (!confirmationResult.IsSuccessful)
             {
                 return Conflict(new AuthFailedResponse
@@ -50,16 +49,15 @@ namespace SocialMediaDashboard.Web.Controllers
             });
         }
 
-        // TODO: change it to SignIn
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(ApiRoutes.Identity.Login, Name = nameof(LoginAsync))]
-        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest request)
+        [HttpPost(ApiRoute.Identity.SignIn, Name = nameof(SignIn))]
+        public async Task<IActionResult> SignIn([FromBody] UserSignInRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var authenticationResult = await _identityService.LoginAsync(request.Email, request.Password);
+            var authenticationResult = await _identityService.SignInAsync(request.Email, request.Password);
 
             if (!authenticationResult.IsSuccessful)
             {
@@ -80,8 +78,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet(ApiRoutes.Identity.Confirm, Name = nameof(ConfirmEmailAsync))]
-        public async Task<IActionResult> ConfirmEmailAsync([FromQuery] EmailQuery query)
+        [HttpGet(ApiRoute.Identity.Confirm, Name = nameof(ConfirmEmail))]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] EmailQuery query)
         {
             query = query ?? throw new ArgumentNullException(nameof(query));
 
@@ -114,8 +112,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(ApiRoutes.Identity.Restore, Name = nameof(RestorePasswordAsync))]
-        public async Task<IActionResult> RestorePasswordAsync([FromBody] UserRestorePasswordRequest request)
+        [HttpPost(ApiRoute.Identity.Restore, Name = nameof(RestorePassword))]
+        public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -140,8 +138,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(ApiRoutes.Identity.Reset, Name = nameof(ResetPasswordAsync))]
-        public async Task<IActionResult> ResetPasswordAsync([FromBody] UserResetPasswordRequest request)
+        [HttpPost(ApiRoute.Identity.Reset, Name = nameof(ResetPassword))]
+        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -168,8 +166,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost(ApiRoutes.Identity.Refresh, Name = nameof(RefreshTokenAsync))]
-        public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request)
+        [HttpPost(ApiRoute.Identity.Refresh, Name = nameof(RefreshToken))]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 

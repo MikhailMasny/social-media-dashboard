@@ -43,7 +43,7 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="email">Email.</param>
         /// <param name="password">Password.</param>
         /// <returns>Authentication result data transfer object.</returns>
-        Task<AuthenticationResult> LoginAsync(string email, string password);
+        Task<AuthenticationResult> SignInAsync(string email, string password);
 
         /// <summary>
         /// Restore password.
