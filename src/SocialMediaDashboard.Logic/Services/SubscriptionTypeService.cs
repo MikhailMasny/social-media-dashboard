@@ -44,5 +44,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
             return _mapper.Map<SubscriptionTypeDto>(subscriptionType);
         }
+
+        public async Task<bool> SubscriptionTypeExistAsync(int id)
+        {
+            var subscriptionType = await _subscriptionTypeRepository
+                .GetEntityWithoutTrackingAsync(subscriptionType => subscriptionType.Id == id);
+
+            return !(subscriptionType is null);
+        }
     }
 }

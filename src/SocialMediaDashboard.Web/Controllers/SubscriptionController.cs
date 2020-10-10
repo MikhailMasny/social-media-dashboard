@@ -20,10 +20,13 @@ namespace SocialMediaDashboard.Web.Controllers
     public class SubscriptionController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
+        private readonly ISubscriptionTypeService _subscriptionTypeService;
 
-        public SubscriptionController(ISubscriptionService subscriptionService)
+        public SubscriptionController(ISubscriptionService subscriptionService,
+                                      ISubscriptionTypeService subscriptionTypeService)
         {
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
+            _subscriptionTypeService = subscriptionTypeService ?? throw new ArgumentNullException(nameof(subscriptionTypeService));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,9 +42,12 @@ namespace SocialMediaDashboard.Web.Controllers
             const string incorrectAccountName = "string";
             const int incorrectSubscriptionTypeId = 0;
 
+            var subscriptionTypeExist = await _subscriptionTypeService.SubscriptionTypeExistAsync(request.SubscriptionTypeId);
+
             if (string.IsNullOrEmpty(request.AccountName)
                 || request.AccountName == incorrectAccountName
-                || request.SubscriptionTypeId == incorrectSubscriptionTypeId) // TODO: add valid SubscriptionTypeId
+                || request.SubscriptionTypeId == incorrectSubscriptionTypeId
+                || !subscriptionTypeExist)
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
@@ -59,12 +65,12 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
+            var uri = new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoutes.Subscription.Create}/{subscriptionDto.Id}");
             var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
             subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
             subscriptionSuccessfulResponse.Message = operationResult.Message;
 
-            // Must return Created
-            return Ok(subscriptionSuccessfulResponse);
+            return Created(uri, subscriptionSuccessfulResponse);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

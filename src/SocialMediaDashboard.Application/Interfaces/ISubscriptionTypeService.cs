@@ -21,5 +21,12 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="id">Identifier.</param>
         /// <returns>Subscription type data transfer object.</returns>
         Task<SubscriptionTypeDto> GetByIdAsync(int id);
+
+        /// <summary>
+        /// Check subscription type.
+        /// </summary>
+        /// <param name="id">Subscription identifier.</param>
+        /// <returns>Operation result.</returns>
+        Task<bool> SubscriptionTypeExistAsync(int id);
     }
 }
