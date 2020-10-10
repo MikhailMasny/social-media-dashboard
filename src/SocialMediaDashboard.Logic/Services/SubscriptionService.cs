@@ -61,6 +61,34 @@ namespace SocialMediaDashboard.Infrastructure.Services
             return (subscriptionDto, subscriptionResult);
         }
 
+        public async Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(string userId, int id)
+        {
+            SubscriptionResult subscriptionResult;
+
+            var subscription = await _subscriptionRepository
+                .GetEntityAsync(subscription => subscription.Id == id && subscription.UserId == userId);
+
+            if (subscription is null)
+            {
+                subscriptionResult = new SubscriptionResult
+                {
+                    Result = false,
+                    Message = SubscriptionResource.NotFound
+                };
+
+                return (null, subscriptionResult);
+            }
+
+            var subscriptionDto = _mapper.Map<SubscriptionDto>(subscription);
+            subscriptionResult = new SubscriptionResult
+            {
+                Result = true,
+                Message = CommonResource.Successful
+            };
+
+            return (subscriptionDto, subscriptionResult);
+        }
+
         public async Task<SubscriptionResult> DeleteSubscriptionByIdAsync(string userId, int id)
         {
             var subscription = await _subscriptionRepository
@@ -83,14 +111,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 Result = true,
                 Message = SubscriptionResource.Deleted
             };
-        }
-
-        private async Task<bool> CanUserInteractWithSubscriptionAsync(string userId, int id)
-        {
-            var selectedSubscription = await _subscriptionRepository
-                .GetEntityWithoutTrackingAsync(subscription => subscription.UserId == userId && subscription.Id == id);
-
-            return !(selectedSubscription is null);
         }
 
         private async Task<bool> CanUserCreateSubscriptionAsync(string userId, string accountName, int subscriptionTypeId)

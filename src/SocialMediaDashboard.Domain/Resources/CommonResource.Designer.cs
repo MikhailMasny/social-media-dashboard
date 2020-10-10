@@ -22,7 +22,7 @@ namespace SocialMediaDashboard.Domain.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CommonResource {
+    public class CommonResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Domain.Resources.CommonResource", typeof(CommonResource).Assembly);
@@ -51,7 +51,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nothing found..
         /// </summary>
-        internal static string NotFound {
+        public static string NotFound {
             get {
                 return ResourceManager.GetString("NotFound", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Successful operation..
         /// </summary>
-        internal static string Successful {
+        public static string Successful {
             get {
                 return ResourceManager.GetString("Successful", resourceCulture);
             }

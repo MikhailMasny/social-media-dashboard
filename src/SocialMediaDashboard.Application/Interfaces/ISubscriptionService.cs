@@ -20,6 +20,14 @@ namespace SocialMediaDashboard.Application.Interfaces
         Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> CreateSubscriptionAsync(string userId, string accountName, int subscriptionTypeId);
 
         /// <summary>
+        /// Get subscription by identifier.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="id">Identifier.</param>
+        /// <returns>Subscription data transfet object with operation result.</returns>
+        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(string userId, int id);
+
+        /// <summary>
         /// Delete subscription by identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
@@ -30,7 +38,13 @@ namespace SocialMediaDashboard.Application.Interfaces
 
 
 
-
+        //    /// <summary>
+        //    /// Get account by user identifier.
+        //    /// </summary>
+        //    /// <param name="userId">User identifier.</param>
+        //    /// <param name="accountId">Account identifier.</param>
+        //    /// <returns>Account data transfet objects with operation result.</returns>
+        //    Task<(AccountDto accountDto, AccountResult accountResult)> GetAccountByUserIdAsync(string userId, int accountId);
 
 
         ///// <summary>

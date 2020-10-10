@@ -68,7 +68,32 @@ namespace SocialMediaDashboard.Web.Controllers
             return Ok(subscriptionSuccessfulResponse);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet(ApiRoutes.Subscription.Get, Name = nameof(GetAccount))]
+        public async Task<IActionResult> GetAccount(int id)
+        {
+            var userId = HttpContext.GetUserId();
+            var(subscriptionDto, operationResult) = await _subscriptionService.GetSubscriptionByIdAsync(userId, id);
+
+            if (!operationResult.Result)
+            {
+                return NotFound(new SubscriptionFailedResponse
+                {
+                    Error = operationResult.Message,
+                });
+            }
+
+            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
+            subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
+            subscriptionSuccessfulResponse.Message = operationResult.Message;
+
+            return Ok(subscriptionSuccessfulResponse);
+        }
+
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete(ApiRoutes.Subscription.Delete, Name = nameof(DeleteSubscription))]
         public async Task<IActionResult> DeleteSubscription(int id)
@@ -90,6 +115,29 @@ namespace SocialMediaDashboard.Web.Controllers
 
 
 
+
+        //    [ProducesResponseType(StatusCodes.Status200OK)]
+        //    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //    [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //    [HttpGet(ApiRoutes.Account.Get, Name = nameof(GetAccountAsync))]
+        //    public async Task<IActionResult> GetAccountAsync(int id)
+        //    {
+        //        var userId = HttpContext.GetUserId();
+        //        var (accountDto, accountResult) = await _accountService.GetAccountByUserIdAsync(userId, id);
+        //        if (!accountResult.Result)
+        //        {
+        //            return NotFound(new AccountFailedResponse
+        //            {
+        //                Error = accountResult.Message,
+        //            });
+        //        }
+
+        //        var accountSuccessfulResponse = new AccountSuccessfulResponse();
+        //        accountSuccessfulResponse.Accounts.Add(accountDto);
+        //        accountSuccessfulResponse.Message = AccountResource.Successful;
+
+        //        return Ok(accountSuccessfulResponse);
+        //    }
 
 
 
