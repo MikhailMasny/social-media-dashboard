@@ -11,23 +11,13 @@
         None = 0,
 
         /// <summary>
-        /// MS SQL Server.
+        /// Microsoft SQL Server.
         /// </summary>
-        MSSQL = 1,
-
-        /// <summary>
-        /// Docker.
-        /// </summary>
-        Docker = 2,
-
-        /// <summary>
-        /// SQLite.
-        /// </summary>
-        SQLite = 3,
+        MsSqlServer = 1,
 
         /// <summary>
         /// PostgreSQL.
         /// </summary>
-        PostgreSQL = 4
+        PostgreSql = 2
     }
 }

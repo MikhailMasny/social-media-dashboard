@@ -106,15 +106,6 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to id.
-        /// </summary>
-        public static string Id {
-            get {
-                return ResourceManager.GetString("Id", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Email or password is incorrect..
         /// </summary>
         public static string IncorrectData {
@@ -129,6 +120,15 @@ namespace SocialMediaDashboard.Domain.Resources {
         public static string PasswordAccepted {
             get {
                 return ResourceManager.GetString("PasswordAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occurred while resetting the password...
+        /// </summary>
+        public static string PasswordException {
+            get {
+                return ResourceManager.GetString("PasswordException", resourceCulture);
             }
         }
         

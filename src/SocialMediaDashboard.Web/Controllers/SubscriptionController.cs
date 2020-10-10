@@ -36,13 +36,8 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            const string incorrectAccountName = "string";
             var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
-
-            if (string.IsNullOrEmpty(request.AccountName)
-                || request.AccountName == incorrectAccountName
-                || request.SubscriptionTypeId == default
-                || !subscriptionTypeExist)
+            if (!subscriptionTypeExist)
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {
@@ -123,13 +118,8 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            const string incorrectAccountName = "string";
             var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
-
-            if (string.IsNullOrEmpty(request.AccountName)
-                || request.AccountName == incorrectAccountName
-                || request.SubscriptionTypeId == default
-                || !subscriptionTypeExist)
+            if (!subscriptionTypeExist)
             {
                 return BadRequest(new SubscriptionFailedResponse
                 {

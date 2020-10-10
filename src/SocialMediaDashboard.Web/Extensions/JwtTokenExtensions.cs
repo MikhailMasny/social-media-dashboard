@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Linq;
 
@@ -18,12 +19,10 @@ namespace SocialMediaDashboard.Web.Extensions
         {
             httpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
 
-            if (httpContext.User == null)
-            {
-                return string.Empty;
-            }
-
-            return httpContext.User.Claims.SingleOrDefault(claim => claim.Type == "id").Value;
+            return httpContext.User is null
+                ? string.Empty
+                : httpContext.User.Claims
+                    .SingleOrDefault(claim => claim.Type == CommonResource.Id).Value;
         }
 
         /// <summary>
@@ -35,12 +34,10 @@ namespace SocialMediaDashboard.Web.Extensions
         {
             httpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
 
-            if (httpContext.User == null)
-            {
-                return string.Empty;
-            }
-
-            return httpContext.User.Claims.SingleOrDefault(claim => claim.Type.Contains("role", StringComparison.InvariantCulture)).Value;
+            return httpContext.User is null
+                ? string.Empty
+                : httpContext.User.Claims
+                    .SingleOrDefault(claim => claim.Type.Contains(CommonResource.Role, StringComparison.InvariantCulture)).Value;
         }
     }
 }

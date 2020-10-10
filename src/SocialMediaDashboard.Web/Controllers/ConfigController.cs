@@ -23,6 +23,7 @@ namespace SocialMediaDashboard.Web.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoute.Config.Connection, Name = nameof(UpdateConnections))]
@@ -30,15 +31,14 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            await _configService.CheckAndUpdateConnection(request.MSSQLConnection, DataProviderType.MSSQL);
-            await _configService.CheckAndUpdateConnection(request.DockerConnection, DataProviderType.Docker);
-            await _configService.CheckAndUpdateConnection(request.SQLiteConnection, DataProviderType.SQLite);
-            await _configService.CheckAndUpdateConnection(request.PostgreSQLConnection, DataProviderType.PostgreSQL);
+            await _configService.CheckAndUpdateConnection(request.MsSqlServerConnection, DataProviderType.MsSqlServer);
+            await _configService.CheckAndUpdateConnection(request.PostgreSqlConnection, DataProviderType.PostgreSql);
 
             return NoContent();
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoute.Config.Token, Name = nameof(UpdateToken))]
@@ -53,6 +53,7 @@ namespace SocialMediaDashboard.Web.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut(ApiRoute.Config.Sentry, Name = nameof(UpdateSentry))]

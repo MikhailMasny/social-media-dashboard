@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Contracts.Requests;
+using System.Globalization;
 
 namespace SocialMediaDashboard.Web.Validators
 {
@@ -13,21 +15,24 @@ namespace SocialMediaDashboard.Web.Validators
         /// </summary>
         public UserRegistrationRequestValidator()
         {
-            RuleFor(x => x.Email)
+            const int usernameMinimumLength = 5;
+            const int usernameMaximumLength = 50;
+
+            RuleFor(userRegistrationRequest => userRegistrationRequest.Email)
                 .NotEmpty()
-                .WithMessage("Email is required.")
+                .WithMessage(ValidatorResource.EmailRequired)
                 .EmailAddress()
-                .WithMessage("Invalid email format.");
+                .WithMessage(ValidatorResource.EmailInvalid);
 
-            RuleFor(x => x.UserName)
+            RuleFor(userRegistrationRequest => userRegistrationRequest.UserName)
                 .NotEmpty()
-                .WithMessage("UserName is required.")
-                .Length(1, 50)
-                .WithMessage("UserName should be from 1 to 50.");
+                .WithMessage(ValidatorResource.UsernameRequired)
+                .Length(usernameMinimumLength, usernameMaximumLength)
+                .WithMessage(string.Format(CultureInfo.InvariantCulture, ValidatorResource.UsernameShort, usernameMinimumLength, usernameMaximumLength));
 
-            RuleFor(x => x.Password)
+            RuleFor(userRegistrationRequest => userRegistrationRequest.Password)
                 .NotEmpty()
-                .WithMessage("Password is required.");
+                .WithMessage(ValidatorResource.PasswordRequired);
         }
     }
 }

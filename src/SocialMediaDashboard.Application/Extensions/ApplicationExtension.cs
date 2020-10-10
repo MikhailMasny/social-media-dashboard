@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Repository;
+using SocialMediaDashboard.Domain.Constants;
 using SocialMediaDashboard.Domain.Entities;
 using System.Reflection;
 
@@ -29,18 +30,18 @@ namespace SocialMediaDashboard.Application.Extensions
             // TODO: uncomment it
             //if (environment.IsDevelopment())
             //{
-            //    services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));
+            //    services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString(ConnectionString.MsSqlServer)));
             //}
             //else
             //{
             //    services.AddDbContext<SocialMediaDashboardContext>(options =>
             //    {
-            //        options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnection"));
+            //        options.UseNpgsql(configuration.GetConnectionString(ConnectionString.PostgreSql));
             //        options.UseSecondLevelCache();
             //    });
             //}
 
-            services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQLConnection")));
+            services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString(ConnectionString.MsSqlServer)));
 
             // UNDONE: Change it to IdentityServer4
             services.AddDefaultIdentity<User>()

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Contracts.Requests;
 
 namespace SocialMediaDashboard.Web.Validators
@@ -13,13 +14,13 @@ namespace SocialMediaDashboard.Web.Validators
         /// </summary>
         public RefreshTokenRequestValidator()
         {
-            RuleFor(x => x.Token)
+            RuleFor(refreshTokenRequest => refreshTokenRequest.Token)
                 .NotEmpty()
-                .WithMessage("Token is required.");
+                .WithMessage(ValidatorResource.TokenRequired);
 
-            RuleFor(x => x.RefreshToken)
+            RuleFor(refreshTokenRequest => refreshTokenRequest.RefreshToken)
                 .NotEmpty()
-                .WithMessage("RefreshToken is required.");
+                .WithMessage(ValidatorResource.RefreshTokenRequired);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Contracts.Requests;
 
 namespace SocialMediaDashboard.Web.Validators
@@ -13,11 +14,11 @@ namespace SocialMediaDashboard.Web.Validators
         /// </summary>
         public UserRestorePasswordRequestValidator()
         {
-            RuleFor(x => x.Email)
+            RuleFor(userRestorePasswordRequest => userRestorePasswordRequest.Email)
                 .NotEmpty()
-                .WithMessage("Email is required.")
+                .WithMessage(ValidatorResource.EmailRequired)
                 .EmailAddress()
-                .WithMessage("Invalid email format.");
+                .WithMessage(ValidatorResource.EmailInvalid);
         }
     }
 }

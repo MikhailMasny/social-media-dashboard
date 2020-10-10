@@ -83,7 +83,7 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             query = query ?? throw new ArgumentNullException(nameof(query));
 
-            if (query.Email == null || query.Code == null)
+            if (query.Email is null || query.Code is null)
             {
                 return BadRequest(new AuthFailedResponse
                 {

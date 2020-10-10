@@ -82,7 +82,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            if (user is null)
             {
                 return new AuthenticationResult
                 {
@@ -117,7 +117,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var validatedToken = GetPrincipalFromToken(token);
 
-            if (validatedToken == null)
+            if (validatedToken is null)
             {
                 return new AuthenticationResult
                 {
@@ -141,7 +141,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
             var storedRefreshToken = await _refreshTokenRepository.GetEntityAsync(x => x.Token == refreshToken);
 
-            if (storedRefreshToken == null)
+            if (storedRefreshToken is null)
             {
                 return new AuthenticationResult
                 {
@@ -185,7 +185,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _refreshTokenRepository.Update(storedRefreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == IdentityResource.Id).Value);
+            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == CommonResource.Id).Value);
             return await GenerateAuthenticationResultAsync(user);
         }
 
@@ -193,7 +193,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            if (user is null)
             {
                 return new AuthenticationResult
                 {
@@ -218,7 +218,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (identityUser is null)
             {
                 return new ConfirmationResult
                 {
@@ -248,11 +248,11 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            if (user is null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
@@ -262,7 +262,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "An unexpected error occurred while resetting the password.." }
+                    Errors = new[] { IdentityResource.PasswordException }
                 };
             }
 
@@ -273,7 +273,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (identityUser is null)
             {
                 return null;
             }
@@ -291,7 +291,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var identityUser = await _userManager.FindByIdAsync(id);
 
-            if (identityUser == null)
+            if (identityUser is null)
             {
                 return null;
             }
@@ -309,7 +309,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var identityUser = await _userManager.FindByNameAsync(username);
 
-            if (identityUser == null)
+            if (identityUser is null)
             {
                 return null;
             }
@@ -377,7 +377,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("id", user.Id)
+                new Claim(CommonResource.Id, user.Id)
             };
 
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -386,7 +386,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
 
                 var role = await _roleManager.FindByNameAsync(userRole);
-                if (role == null)
+                if (role is null)
                 {
                     continue;
                 }

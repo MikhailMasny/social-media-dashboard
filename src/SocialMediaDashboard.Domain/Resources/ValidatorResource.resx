@@ -117,58 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailAlreadyExist" xml:space="preserve">
-    <value>The email you specified is already in the system.</value>
+  <data name="ConnectionMsSqlServerInvalid" xml:space="preserve">
+    <value>Invalid MS SQL Server connection string format.</value>
   </data>
-  <data name="EmailAndPasswordAccepted" xml:space="preserve">
-    <value>Email and password successfully accepted.</value>
+  <data name="ConnectionPostgreSqlInvalid" xml:space="preserve">
+    <value>Invalid PostgreSQL connection string format, </value>
   </data>
-  <data name="EmailConfirm" xml:space="preserve">
-    <value>For successful login confirm your email.</value>
+  <data name="EmailInvalid" xml:space="preserve">
+    <value>Invalid email format.</value>
   </data>
-  <data name="EmailConfirmed" xml:space="preserve">
-    <value>Your mail has been successfully confirmed.</value>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>Email is required.</value>
   </data>
-  <data name="EmailNotVerified" xml:space="preserve">
-    <value>You have not verified your email.</value>
+  <data name="JwtSecretInvalid" xml:space="preserve">
+    <value>Invalid secret format, use: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.</value>
   </data>
-  <data name="IncorrectData" xml:space="preserve">
-    <value>Email or password is incorrect.</value>
+  <data name="JwtTokenLifetimeInvalid" xml:space="preserve">
+    <value>Invalid token lifetime format, use: hh:mm:ss.</value>
   </data>
-  <data name="PasswordAccepted" xml:space="preserve">
-    <value>New password successfully accepted.</value>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Password is required.</value>
   </data>
-  <data name="PasswordException" xml:space="preserve">
-    <value>An unexpected error occurred while resetting the password..</value>
+  <data name="RefreshTokenRequired" xml:space="preserve">
+    <value>Refresh token is required.</value>
   </data>
-  <data name="PasswordResetting" xml:space="preserve">
-    <value>To continue resetting the password, follow the link sent to the mail..</value>
+  <data name="SentryDsnInvalid" xml:space="preserve">
+    <value>Invalid Dsn value.</value>
   </data>
-  <data name="RefreshTokenExpired" xml:space="preserve">
-    <value>This refresh token has expired</value>
+  <data name="SentryMinimumBreadcrumbLevelInvalid" xml:space="preserve">
+    <value>Invalid minimum breadcrumb level.</value>
   </data>
-  <data name="RefreshTokenInvalid" xml:space="preserve">
-    <value>This refresh token has been invalidated.</value>
+  <data name="SentryMinimumEventLevelInvalid" xml:space="preserve">
+    <value>Invalid minimum event level.</value>
   </data>
-  <data name="RefreshTokenNotExist" xml:space="preserve">
-    <value>This refresh token does not exist.</value>
+  <data name="SocialNetworkInstagramAccountPasswordInvalid" xml:space="preserve">
+    <value>Invalid password of Instagram account.</value>
   </data>
-  <data name="RefreshTokenNotMatch" xml:space="preserve">
-    <value>This refresh token does not match this JWT.</value>
+  <data name="SocialNetworkInstagramAccountUsernameInvalid" xml:space="preserve">
+    <value>Invalid username of Instagram account.</value>
   </data>
-  <data name="RefreshTokenUsed" xml:space="preserve">
-    <value>This refresh token has been used.</value>
+  <data name="SocialNetworkVkAccessTokenInvalid" xml:space="preserve">
+    <value>Invalid Vk access token.</value>
   </data>
-  <data name="TokenException" xml:space="preserve">
-    <value>Unexpected token issues..</value>
+  <data name="SocialNetworkYouTubeAccessTokenInvalid" xml:space="preserve">
+    <value>Invalid YouTube access token.</value>
   </data>
-  <data name="TokenInvalid" xml:space="preserve">
-    <value>Invalid token.</value>
+  <data name="SubscriptionAccountNameInvalid" xml:space="preserve">
+    <value>Invalid account name.</value>
   </data>
-  <data name="TokenNotExpired" xml:space="preserve">
-    <value>This token hasn't expired yet.</value>
+  <data name="SubscriptionTypeIdInvalid" xml:space="preserve">
+    <value>Invalid subscription type identifier.</value>
   </data>
-  <data name="UserNotExist" xml:space="preserve">
-    <value>User does not exist.</value>
+  <data name="TokenRequired" xml:space="preserve">
+    <value>Token is required.</value>
+  </data>
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="UsernameShort" xml:space="preserve">
+    <value>Username should be from {0} to {1}.</value>
+  </data>
+  <data name="VerifyCodeRequired" xml:space="preserve">
+    <value>Verify code is required.</value>
   </data>
 </root>

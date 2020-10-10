@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SocialMediaDashboard.Domain.Constants;
 using SocialMediaDashboard.Domain.Helpers;
 using SocialMediaDashboard.Web.Filters;
 using System;
@@ -102,8 +103,8 @@ namespace SocialMediaDashboard.Web.Extensions
                 options.Filters.Add<ValidationFilter>())
                     .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
 
-            services.ConfigureWritable<ConnectionSettings>(configuration.GetSection("ConnectionStrings"));
-            services.ConfigureWritable<SentrySettings>(configuration.GetSection("Sentry"));
+            services.ConfigureWritable<ConnectionSettings>(configuration.GetSection(ConnectionString.AppSettings));
+            services.ConfigureWritable<SentrySettings>(configuration.GetSection(nameof(SentrySettings)));
             services.ConfigureWritable<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
             services.ConfigureWritable<SocialNetworksSettings>(configuration.GetSection(nameof(SocialNetworksSettings)));
 

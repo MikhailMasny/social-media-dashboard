@@ -28,36 +28,21 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public Task CheckAndUpdateConnection(string dataProvider, DataProviderType dataProviderType)
         {
-            if (!string.IsNullOrEmpty(dataProvider) && dataProvider != "string")
+            switch (dataProviderType)
             {
-                switch (dataProviderType)
-                {
-                    case DataProviderType.MSSQL:
-                        {
-                            _connectionSettings.Update(x => x.MSSQLConnection = dataProvider);
-                        }
-                        break;
+                case DataProviderType.MsSqlServer:
+                    {
+                        _connectionSettings.Update(x => x.MsSqlServerConnection = dataProvider);
+                    }
+                    break;
 
-                    case DataProviderType.Docker:
-                        {
-                            _connectionSettings.Update(x => x.DockerConnection = dataProvider);
-                        }
-                        break;
+                case DataProviderType.PostgreSql:
+                    {
+                        _connectionSettings.Update(x => x.PostgreSqlConnection = dataProvider);
+                    }
+                    break;
 
-                    case DataProviderType.SQLite:
-                        {
-                            _connectionSettings.Update(x => x.SQLiteConnection = dataProvider);
-                        }
-                        break;
-
-                    case DataProviderType.PostgreSQL:
-                        {
-                            _connectionSettings.Update(x => x.PostgreSQLConnection = dataProvider);
-                        }
-                        break;
-
-                        // TODO: default:
-                }
+                    // TODO: default:
             }
 
             return Task.CompletedTask;
@@ -65,24 +50,21 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public Task CheckAndUpdateToken(string jwtValue, JwtConfigType jwtConfigType)
         {
-            if (!string.IsNullOrEmpty(jwtValue) && jwtValue != "string")
+            switch (jwtConfigType)
             {
-                switch (jwtConfigType)
-                {
-                    case JwtConfigType.Secret:
-                        {
-                            _jwtSettings.Update(x => x.Secret = jwtValue);
-                        }
-                        break;
+                case JwtConfigType.Secret:
+                    {
+                        _jwtSettings.Update(x => x.Secret = jwtValue);
+                    }
+                    break;
 
-                    case JwtConfigType.TokenLifetime:
-                        {
-                            _jwtSettings.Update(x => x.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
-                        }
-                        break;
+                case JwtConfigType.TokenLifetime:
+                    {
+                        _jwtSettings.Update(x => x.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
+                    }
+                    break;
 
-                        // TODO: default:
-                }
+                    // TODO: default:
             }
 
             return Task.CompletedTask;
@@ -90,30 +72,27 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public Task CheckAndUpdateSentry(string sentryValue, SentryConfigType sentryConfigType)
         {
-            if (!string.IsNullOrEmpty(sentryValue) && sentryValue != "string")
+            switch (sentryConfigType)
             {
-                switch (sentryConfigType)
-                {
-                    case SentryConfigType.Dns:
-                        {
-                            _sentrySettings.Update(x => x.Dsn = sentryValue);
-                        }
-                        break;
+                case SentryConfigType.Dns:
+                    {
+                        _sentrySettings.Update(x => x.Dsn = sentryValue);
+                    }
+                    break;
 
-                    case SentryConfigType.MinimumBreadcrumbLevel:
-                        {
-                            _sentrySettings.Update(x => x.MinimumBreadcrumbLevel = sentryValue);
-                        }
-                        break;
+                case SentryConfigType.MinimumBreadcrumbLevel:
+                    {
+                        _sentrySettings.Update(x => x.MinimumBreadcrumbLevel = sentryValue);
+                    }
+                    break;
 
-                    case SentryConfigType.MinimumEventLevel:
-                        {
-                            _sentrySettings.Update(x => x.MinimumEventLevel = sentryValue);
-                        }
-                        break;
+                case SentryConfigType.MinimumEventLevel:
+                    {
+                        _sentrySettings.Update(x => x.MinimumEventLevel = sentryValue);
+                    }
+                    break;
 
-                        // TODO: default:
-                }
+                    // TODO: default:
             }
 
             return Task.CompletedTask;
@@ -121,36 +100,33 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public Task CheckAndUpdateSocialNetworks(string tokenValue, SocialNetworkConfigType socialNetworkConfigType)
         {
-            if (!string.IsNullOrEmpty(tokenValue) && tokenValue != "string")
+            switch (socialNetworkConfigType)
             {
-                switch (socialNetworkConfigType)
-                {
-                    case SocialNetworkConfigType.VkAccessToken:
-                        {
-                            _vkSettings.Update(x => x.VkAccessToken = tokenValue);
-                        }
-                        break;
+                case SocialNetworkConfigType.VkAccessToken:
+                    {
+                        _vkSettings.Update(x => x.VkAccessToken = tokenValue);
+                    }
+                    break;
 
-                    case SocialNetworkConfigType.InstagramUsername:
-                        {
-                            _vkSettings.Update(x => x.InstagramAccount.Username = tokenValue);
-                        }
-                        break;
+                case SocialNetworkConfigType.InstagramUsername:
+                    {
+                        _vkSettings.Update(x => x.InstagramAccount.Username = tokenValue);
+                    }
+                    break;
 
-                    case SocialNetworkConfigType.InstagramPassword:
-                        {
-                            _vkSettings.Update(x => x.InstagramAccount.Password = tokenValue);
-                        }
-                        break;
+                case SocialNetworkConfigType.InstagramPassword:
+                    {
+                        _vkSettings.Update(x => x.InstagramAccount.Password = tokenValue);
+                    }
+                    break;
 
-                    case SocialNetworkConfigType.YouTubeAccessToken:
-                        {
-                            _vkSettings.Update(x => x.YouTubeAccessToken = tokenValue);
-                        }
-                        break;
+                case SocialNetworkConfigType.YouTubeAccessToken:
+                    {
+                        _vkSettings.Update(x => x.YouTubeAccessToken = tokenValue);
+                    }
+                    break;
 
-                        // TODO: default:
-                }
+                    // TODO: default:
             }
 
             return Task.CompletedTask;

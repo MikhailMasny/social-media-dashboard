@@ -1,28 +1,18 @@
 ﻿namespace SocialMediaDashboard.Web.Contracts.Requests
 {
     /// <summary>
-    /// ConnectionStrings request.
+    /// Connection strings settings request.
     /// </summary>
     public class ConnectionSettingsRequest
     {
         /// <summary>
-        /// MS SQL Server.
+        /// Microsoft SQL Server.
         /// </summary>
-        public string MSSQLConnection { get; set; }
-
-        /// <summary>
-        /// Docker.
-        /// </summary>
-        public string DockerConnection { get; set; }
-
-        /// <summary>
-        /// SQLite.
-        /// </summary>
-        public string SQLiteConnection { get; set; }
+        public string MsSqlServerConnection { get; set; }
 
         /// <summary>
         /// PostgreSQL.
         /// </summary>
-        public string PostgreSQLConnection { get; set; }
+        public string PostgreSqlConnection { get; set; }
     }
 }
