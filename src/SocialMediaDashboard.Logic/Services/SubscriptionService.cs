@@ -15,12 +15,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
     public class SubscriptionService : ISubscriptionService
     {
         private readonly IRepository<Subscription> _subscriptionRepository;
+        private readonly IRepository<Statistic> _statisticRepository;
         private readonly IMapper _mapper;
 
         public SubscriptionService(IRepository<Subscription> subscriptionRepository,
+                                   IRepository<Statistic> statisticRepository,
                                    IMapper mapper)
         {
             _subscriptionRepository = subscriptionRepository ?? throw new ArgumentNullException(nameof(subscriptionRepository));
+            _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -150,6 +153,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
             subscription.AccountName = accountName;
             subscription.SubscriptionTypeId = subscriptionTypeId;
             _subscriptionRepository.Update(subscription);
+
+            var statistics = await _statisticRepository
+                .GetAllWithoutTracking()
+                .Where(statistic => statistic.SubscriptionId == subscription.Id)
+                .ToListAsync();
+
+            _statisticRepository.DeleteRange(statistics);
             await _subscriptionRepository.SaveChangesAsync();
 
             var subscriptionDto = _mapper.Map<SubscriptionDto>(subscription);

@@ -8,18 +8,18 @@ namespace SocialMediaDashboard.Application.Interfaces
     public interface IStatisticService
     {
         /// <summary>
-        /// Add followers data from Vk accounts.
+        /// Get followers data from Vk accounts.
         /// </summary>
-        Task AddFollowersFromVkAsync();
+        Task GetFollowersFromVkAsync();
 
         /// <summary>
         /// Add followers data from Instagram accounts.
         /// </summary>
-        Task AddFollowersFromInstagramAsync();
+        Task GetFollowersFromInstagramAsync();
 
         /// <summary>
         /// Add subscribers data from YouTube channel.
         /// </summary>
-        Task AddSubscribersFromYouTubeAsync();
+        Task GetSubscribersFromYouTubeAsync();
     }
 }

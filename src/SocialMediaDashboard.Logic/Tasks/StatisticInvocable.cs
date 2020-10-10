@@ -20,9 +20,9 @@ namespace SocialMediaDashboard.Infrastructure.Tasks
         /// <inheritdoc/>
         public async Task Invoke()
         {
-            await _statisticService.AddFollowersFromVkAsync();
-            await _statisticService.AddFollowersFromInstagramAsync();
-            await _statisticService.AddSubscribersFromYouTubeAsync();
+            await _statisticService.GetFollowersFromVkAsync();
+            await _statisticService.GetFollowersFromInstagramAsync();
+            await _statisticService.GetSubscribersFromYouTubeAsync();
         }
     }
 }

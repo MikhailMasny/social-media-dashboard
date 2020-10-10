@@ -12,6 +12,6 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// </summary>
         /// <param name="userName">User name.</param>
         /// <returns>Count of followers.</returns>
-        Task<int?> GetFollowersByUserNameAsync(string userName);
+        Task<int> GetFollowersByUserNameAsync(string userName);
     }
 }

@@ -22,7 +22,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _api = api ?? throw new ArgumentNullException(nameof(api));
         }
 
-        public async Task<int?> GetFollowersByUserNameAsync(string userName)
+        public async Task<int> GetFollowersByUserNameAsync(string userName)
         {
             await _api.AuthorizeAsync(new ApiAuthParams
             {
@@ -33,7 +33,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             var user = response.FirstOrDefault();
 
             // TODO: fix it without null
-            return user.Counters.Followers;
+            return user.Counters.Followers.Value;
         }
     }
 }

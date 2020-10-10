@@ -12,6 +12,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
     /// <inheritdoc cref="IStatisticService"/>
     public class StatisticService : IStatisticService
     {
+        private delegate Task<int> GetCounts(string name);
         private readonly ILogger<StatisticService> _logger;
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly ISubscriptionTypeService _subscriptionTypeService;
@@ -37,81 +38,28 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _youTubeService = youTubeService ?? throw new ArgumentNullException(nameof(youTubeService));
         }
 
-        public async Task AddFollowersFromVkAsync()
+        public async Task GetFollowersFromVkAsync()
         {
-            var statistics = new List<Statistic>();
-            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(PlatformType.Vk, ObservationType.Follower);
-            var subscriptions = await _subscriptionService.GetAccountNamesBySubscriptionTypeIdAsync(subscriptionTypeId);
-
-            if (subscriptions.Any())
-            {
-                foreach (var subscription in subscriptions)
-                {
-                    int? count;
-
-                    try
-                    {
-                        count = await _vkService.GetFollowersByUserNameAsync(subscription.AccountName);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        throw;
-                    }
-
-                    statistics.Add(new Statistic
-                    {
-                        Count = count.Value,
-                        Date = DateTime.Now,
-                        SubscriptionId = subscription.Id
-                    });
-                }
-
-                await _statisticRepository.CreateRangeAsync(statistics);
-                await _statisticRepository.SaveChangesAsync();
-            }
+            var getCounts = new GetCounts(_vkService.GetFollowersByUserNameAsync);
+            await SaveStatisticsAsync(PlatformType.Vk, ObservationType.Follower, getCounts);
         }
 
-        public async Task AddFollowersFromInstagramAsync()
+        public async Task GetFollowersFromInstagramAsync()
         {
-            var statistics = new List<Statistic>();
-            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(PlatformType.Instagram, ObservationType.Follower);
-            var subscriptions = await _subscriptionService.GetAccountNamesBySubscriptionTypeIdAsync(subscriptionTypeId);
-
-            if (subscriptions.Any())
-            {
-                foreach (var subscription in subscriptions)
-                {
-                    int? count;
-
-                    try
-                    {
-                        count = await _instagramService.GetFollowersByUserNameAsync(subscription.AccountName);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        throw;
-                    }
-
-                    var statistic = new Statistic
-                    {
-                        Count = count.Value,
-                        Date = DateTime.Now,
-                        SubscriptionId = subscription.Id
-                    };
-                    statistics.Add(statistic);
-                }
-
-                await _statisticRepository.CreateRangeAsync(statistics);
-                await _statisticRepository.SaveChangesAsync();
-            }
+            var getCounts = new GetCounts(_instagramService.GetFollowersByUserNameAsync);
+            await SaveStatisticsAsync(PlatformType.Instagram, ObservationType.Follower, getCounts);
         }
 
-        public async Task AddSubscribersFromYouTubeAsync()
+        public async Task GetSubscribersFromYouTubeAsync()
+        {
+            var getCounts = new GetCounts(_youTubeService.GetSubscribersByChannelAsync);
+            await SaveStatisticsAsync(PlatformType.YouTube, ObservationType.Subscriber, getCounts);
+        }
+
+        private async Task SaveStatisticsAsync(PlatformType platformType, ObservationType observationType, GetCounts getCounts)
         {
             var statistics = new List<Statistic>();
-            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(PlatformType.YouTube, ObservationType.Subscriber);
+            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(platformType, observationType);
             var subscriptions = await _subscriptionService.GetAccountNamesBySubscriptionTypeIdAsync(subscriptionTypeId);
 
             if (subscriptions.Any())
@@ -122,7 +70,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
                     try
                     {
-                        count = await _youTubeService.GetSubscribersByChannelAsync(subscription.AccountName);
+                        count = await getCounts(subscription.AccountName);
                     }
                     catch (Exception ex)
                     {

@@ -5,8 +5,6 @@ using System;
 
 namespace SocialMediaDashboard.Infrastructure.Extensions
 {
-    // TODO: transfer to worker service
-
     /// <summary>
     /// Coravel extension.
     /// </summary>
@@ -25,7 +23,7 @@ namespace SocialMediaDashboard.Infrastructure.Extensions
             provider.UseScheduler(scheduler =>
             {
                 scheduler.Schedule<StatisticInvocable>()
-                    .EveryMinute();
+                    .EveryThirtyMinutes();
             });
 
             return app;
