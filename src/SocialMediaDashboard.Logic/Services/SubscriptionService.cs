@@ -61,7 +61,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             return (subscriptionDto, subscriptionResult);
         }
 
-        public async Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(string userId, int id)
+        public async Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(int id, string userId)
         {
             SubscriptionResult subscriptionResult;
 
@@ -119,7 +119,51 @@ namespace SocialMediaDashboard.Infrastructure.Services
             return (subscriptionDtos, subscriptionResult);
         }
 
-        public async Task<SubscriptionResult> DeleteSubscriptionByIdAsync(string userId, int id)
+        public async Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> UpdateSubscriptionAsync(int id, string userId, string accountName, int subscriptionTypeId)
+        {
+            SubscriptionResult subscriptionResult;
+
+            var subscription = await _subscriptionRepository
+                .GetEntityAsync(subscription => subscription.Id == id && subscription.UserId == userId);
+
+            if (subscription is null)
+            {
+                subscriptionResult = new SubscriptionResult
+                {
+                    Result = false,
+                    Message = SubscriptionResource.NotFound,
+                };
+
+                return (null, subscriptionResult);
+            }
+
+            if (subscription.Name == accountName && subscription.SubscriptionTypeId == subscriptionTypeId)
+            {
+                subscriptionResult = new SubscriptionResult
+                {
+                    Result = false,
+                    Message = SubscriptionResource.SameData,
+                };
+
+                return (null, subscriptionResult);
+            }
+
+            subscription.Name = accountName;
+            subscription.SubscriptionTypeId = subscriptionTypeId;
+            _subscriptionRepository.Update(subscription);
+            await _subscriptionRepository.SaveChangesAsync();
+
+            var subscriptionDto = _mapper.Map<SubscriptionDto>(subscription);
+            subscriptionResult = new SubscriptionResult
+            {
+                Result = true,
+                Message = SubscriptionResource.Updated,
+            };
+
+            return (subscriptionDto, subscriptionResult);
+        }
+
+        public async Task<SubscriptionResult> DeleteSubscriptionByIdAsync(int id, string userId)
         {
             var subscription = await _subscriptionRepository
                 .GetEntityAsync(subscription => subscription.Id == id && subscription.UserId == userId);

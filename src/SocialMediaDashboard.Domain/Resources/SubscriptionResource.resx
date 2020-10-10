@@ -132,4 +132,10 @@
   <data name="NotFound" xml:space="preserve">
     <value>Specified subscription not found.</value>
   </data>
+  <data name="SameData" xml:space="preserve">
+    <value>These details are the same for this subscription.</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Subscription successfully updated.</value>
+  </data>
 </root>

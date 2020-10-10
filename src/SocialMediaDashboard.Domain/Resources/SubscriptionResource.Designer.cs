@@ -104,5 +104,23 @@ namespace SocialMediaDashboard.Domain.Resources {
                 return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These details are the same for this subscription..
+        /// </summary>
+        public static string SameData {
+            get {
+                return ResourceManager.GetString("SameData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscription successfully updated..
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
+            }
+        }
     }
 }

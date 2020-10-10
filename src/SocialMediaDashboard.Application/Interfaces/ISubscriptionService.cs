@@ -22,10 +22,10 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <summary>
         /// Get subscription by identifier.
         /// </summary>
-        /// <param name="userId">User identifier.</param>
         /// <param name="id">Identifier.</param>
+        /// <param name="userId">User identifier.</param>
         /// <returns>Subscription data transfet object with operation result.</returns>
-        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(string userId, int id);
+        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetSubscriptionByIdAsync(int id, string userId);
 
         /// <summary>
         /// Get all subscriptions.
@@ -35,12 +35,22 @@ namespace SocialMediaDashboard.Application.Interfaces
         Task<(IEnumerable<SubscriptionDto> subscriptionDto, SubscriptionResult subscriptionResult)> GetAllSubscriptionAsync(string userId);
 
         /// <summary>
+        /// Update subscription.
+        /// </summary>
+        /// <param name="id">Identifier.</param>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="accountName">Account name.</param>
+        /// <param name="subscriptionTypeId">Subscription type identifier.</param>
+        /// <returns>Subscription data transfet object with operation result.</returns>
+        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> UpdateSubscriptionAsync(int id, string userId, string accountName, int subscriptionTypeId);
+
+        /// <summary>
         /// Delete subscription by identifier.
         /// </summary>
-        /// <param name="userId">User identifier.</param>
         /// <param name="id">Identifier.</param>
+        /// <param name="userId">User identifier.</param>
         /// <returns>Operation result.</returns>
-        Task<SubscriptionResult> DeleteSubscriptionByIdAsync(string userId, int id);
+        Task<SubscriptionResult> DeleteSubscriptionByIdAsync(int id, string userId);
 
 
 

@@ -33,9 +33,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost(ApiRoutes.Subscription.Create, Name = nameof(CreateSubscription))]
-        public async Task<IActionResult> CreateSubscription([FromBody] SubscriptionCreateRequest request)
+        public async Task<IActionResult> CreateSubscription([FromBody] SubscriptionCreateOrUpdateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -80,7 +79,7 @@ namespace SocialMediaDashboard.Web.Controllers
         public async Task<IActionResult> GetSubscription(int id)
         {
             var userId = HttpContext.GetUserId();
-            var(subscriptionDto, operationResult) = await _subscriptionService.GetSubscriptionByIdAsync(userId, id);
+            var(subscriptionDto, operationResult) = await _subscriptionService.GetSubscriptionByIdAsync(id, userId);
             if (!operationResult.Result)
             {
                 return NotFound(new SubscriptionFailedResponse
@@ -119,6 +118,48 @@ namespace SocialMediaDashboard.Web.Controllers
             return Ok(subscriptionSuccessfulResponse);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPut(ApiRoutes.Subscription.Update, Name = nameof(UpdateSubscription))]
+        public async Task<IActionResult> UpdateSubscription(int id, [FromBody] SubscriptionCreateOrUpdateRequest request)
+        {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
+            const string incorrectAccountName = "string";
+            const int incorrectSubscriptionTypeId = 0;
+
+            var subscriptionTypeExist = await _subscriptionTypeService.SubscriptionTypeExistAsync(request.SubscriptionTypeId);
+
+            if (string.IsNullOrEmpty(request.AccountName)
+                || request.AccountName == incorrectAccountName
+                || request.SubscriptionTypeId == incorrectSubscriptionTypeId
+                || !subscriptionTypeExist)
+            {
+                return BadRequest(new SubscriptionFailedResponse
+                {
+                    Error = SubscriptionResource.IncorrectData
+                });
+            }
+
+            var userId = HttpContext.GetUserId();
+            var (subscriptionDto, operationResult) = await _subscriptionService.UpdateSubscriptionAsync(id, userId, request.AccountName, request.SubscriptionTypeId);
+            if (!operationResult.Result)
+            {
+                return Conflict(new SubscriptionFailedResponse
+                {
+                    Error = operationResult.Message,
+                });
+            }
+
+            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
+            subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
+            subscriptionSuccessfulResponse.Message = operationResult.Message;
+
+            return Ok(subscriptionSuccessfulResponse);
+        }
+
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -127,7 +168,7 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             var userId = HttpContext.GetUserId();
 
-            var operationResult = await _subscriptionService.DeleteSubscriptionByIdAsync(userId, id);
+            var operationResult = await _subscriptionService.DeleteSubscriptionByIdAsync(id, userId);
             if (!operationResult.Result)
             {
                 return NotFound(new SubscriptionFailedResponse
@@ -141,6 +182,37 @@ namespace SocialMediaDashboard.Web.Controllers
 
 
 
+
+
+        //    [ProducesResponseType(StatusCodes.Status200OK)]
+        //    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //    [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //    [HttpPut(ApiRoutes.Account.Update, Name = nameof(UpdateAccountAsync))]
+        //    public async Task<IActionResult> UpdateAccountAsync(int id, [FromBody] AccountCreateOrUpdateRequest request)
+        //    {
+        //        request = request ?? throw new ArgumentNullException(nameof(request));
+
+        //        if (string.IsNullOrEmpty(request.Name) || request.AccountType.ValidateAccountType())
+        //        {
+        //            return BadRequest(new AccountFailedResponse
+        //            {
+        //                Error = AccountResource.IncorrectData,
+        //            });
+        //        }
+
+        //        var userId = HttpContext.GetUserId();
+        //        var operationResult = await _accountService.UpdateAccountByUserIdAsync(userId, id, request.Name, request.AccountType);
+        //        if (!operationResult.Result)
+        //        {
+        //            return BadRequest(new AccountFailedResponse
+        //            {
+        //                Error = operationResult.Message,
+        //            });
+        //        }
+
+        //        return NoContent();
+        //    }
 
 
         //    [ProducesResponseType(StatusCodes.Status200OK)]
