@@ -39,7 +39,7 @@ namespace SocialMediaDashboard.Web.Controllers
             const string incorrectAccountName = "string";
             const int incorrectSubscriptionTypeId = 0;
 
-            var subscriptionTypeExist = await _subscriptionTypeService.SubscriptionTypeExistAsync(request.SubscriptionTypeId);
+            var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
 
             if (string.IsNullOrEmpty(request.AccountName)
                 || request.AccountName == incorrectAccountName
@@ -53,7 +53,7 @@ namespace SocialMediaDashboard.Web.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var (subscriptionDto, operationResult) = await _subscriptionService.CreateSubscriptionAsync(userId, request.AccountName, request.SubscriptionTypeId);
+            var (subscriptionDto, operationResult) = await _subscriptionService.CreateAsync(userId, request.AccountName, request.SubscriptionTypeId);
             if (!operationResult.Result)
             {
                 return Conflict(new SubscriptionFailedResponse
@@ -77,7 +77,7 @@ namespace SocialMediaDashboard.Web.Controllers
         public async Task<IActionResult> GetSubscription(int id)
         {
             var userId = HttpContext.GetUserId();
-            var (subscriptionDto, operationResult) = await _subscriptionService.GetSubscriptionByIdAsync(id, userId);
+            var (subscriptionDto, operationResult) = await _subscriptionService.GetByIdAsync(id, userId);
             if (!operationResult.Result)
             {
                 return NotFound(new SubscriptionFailedResponse
@@ -100,7 +100,7 @@ namespace SocialMediaDashboard.Web.Controllers
         public async Task<IActionResult> GetAllSubscriptions()
         {
             var userId = HttpContext.GetUserId();
-            var (subscriptionDtos, operationResult) = await _subscriptionService.GetAllSubscriptionAsync(userId);
+            var (subscriptionDtos, operationResult) = await _subscriptionService.GetAllAsync(userId);
             if (!operationResult.Result)
             {
                 return NotFound(new SubscriptionFailedResponse
@@ -128,7 +128,7 @@ namespace SocialMediaDashboard.Web.Controllers
             const string incorrectAccountName = "string";
             const int incorrectSubscriptionTypeId = 0;
 
-            var subscriptionTypeExist = await _subscriptionTypeService.SubscriptionTypeExistAsync(request.SubscriptionTypeId);
+            var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
 
             if (string.IsNullOrEmpty(request.AccountName)
                 || request.AccountName == incorrectAccountName
@@ -142,7 +142,7 @@ namespace SocialMediaDashboard.Web.Controllers
             }
 
             var userId = HttpContext.GetUserId();
-            var (subscriptionDto, operationResult) = await _subscriptionService.UpdateSubscriptionAsync(id, userId, request.AccountName, request.SubscriptionTypeId);
+            var (subscriptionDto, operationResult) = await _subscriptionService.UpdateAsync(id, userId, request.AccountName, request.SubscriptionTypeId);
             if (!operationResult.Result)
             {
                 return Conflict(new SubscriptionFailedResponse
@@ -166,7 +166,7 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             var userId = HttpContext.GetUserId();
 
-            var operationResult = await _subscriptionService.DeleteSubscriptionByIdAsync(id, userId);
+            var operationResult = await _subscriptionService.DeleteByIdAsync(id, userId);
             if (!operationResult.Result)
             {
                 return NotFound(new SubscriptionFailedResponse

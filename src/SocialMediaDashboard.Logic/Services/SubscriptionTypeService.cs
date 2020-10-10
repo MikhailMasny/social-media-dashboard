@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,16 +37,26 @@ namespace SocialMediaDashboard.Infrastructure.Services
             var subscriptionType = await _subscriptionTypeRepository
                 .GetEntityWithoutTrackingAsync(subscriptionType => subscriptionType.Id == id);
 
-            if (subscriptionType is null)
-            {
-                // TODO: message
-                return null;
-            }
-
-            return _mapper.Map<SubscriptionTypeDto>(subscriptionType);
+            return subscriptionType is null
+                ? new SubscriptionTypeDto()
+                : _mapper.Map<SubscriptionTypeDto>(subscriptionType);
         }
 
-        public async Task<bool> SubscriptionTypeExistAsync(int id)
+        public async Task<int> GetByParametersAsync(PlatformType platformType, ObservationType observationType)
+        {
+            const int notFoundsubscriptionType = 0;
+
+            var subscriptionType = await _subscriptionTypeRepository
+                .GetEntityAsync(subscriptionType =>
+                    subscriptionType.PlatformId == (int)platformType
+                    && subscriptionType.ObservationId == (int)observationType);
+
+            return subscriptionType is null
+                ? notFoundsubscriptionType
+                : subscriptionType.Id;
+        }
+
+        public async Task<bool> IsExistAsync(int id)
         {
             var subscriptionType = await _subscriptionTypeRepository
                 .GetEntityWithoutTrackingAsync(subscriptionType => subscriptionType.Id == id);

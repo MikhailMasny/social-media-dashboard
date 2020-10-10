@@ -1,4 +1,5 @@
 ﻿using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,6 +28,14 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// </summary>
         /// <param name="id">Subscription identifier.</param>
         /// <returns>Operation result.</returns>
-        Task<bool> SubscriptionTypeExistAsync(int id);
+        Task<bool> IsExistAsync(int id);
+
+        /// <summary>
+        /// Get subscription type identifier by parameters.
+        /// </summary>
+        /// <param name="platformType">Platform type.</param>
+        /// <param name="observationType">Observation type.</param>
+        /// <returns>Subscription type identifier.</returns>
+        Task<int> GetByParametersAsync(PlatformType platformType, ObservationType observationType);
     }
 }

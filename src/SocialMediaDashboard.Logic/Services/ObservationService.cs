@@ -36,13 +36,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
             var observation = await _observationRepository
                 .GetEntityWithoutTrackingAsync(observation => observation.Id == id);
 
-            if (observation is null)
-            {
-                // TODO: message
-                return null;
-            }
-
-            return _mapper.Map<ObservationDto>(observation);
+            return observation is null
+                ? new ObservationDto()
+                : _mapper.Map<ObservationDto>(observation);
         }
     }
 }
