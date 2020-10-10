@@ -46,10 +46,11 @@ namespace SocialMediaDashboard.Web.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"{Identity.EmailConfirm} Code: {confirmationResult.Code}"
+                Message = $"{IdentityResource.EmailConfirm} Code: {confirmationResult.Code}"
             });
         }
 
+        // TODO: change it to SignIn
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,7 +73,7 @@ namespace SocialMediaDashboard.Web.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = Identity.EmailAndPasswordAccepted
+                Message = IdentityResource.EmailAndPasswordAccepted
             });
         }
 
@@ -88,7 +89,7 @@ namespace SocialMediaDashboard.Web.Controllers
             {
                 return BadRequest(new AuthFailedResponse
                 {
-                    Errors = new[] { Identity.IncorrectData }
+                    Errors = new[] { IdentityResource.IncorrectData }
                 });
             }
 
@@ -106,7 +107,7 @@ namespace SocialMediaDashboard.Web.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = Identity.EmailConfirmed
+                Message = IdentityResource.EmailConfirmed
             });
         }
 
@@ -132,7 +133,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"{Identity.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+                Message = $"{IdentityResource.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
@@ -159,7 +160,7 @@ namespace SocialMediaDashboard.Web.Controllers
             return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
-                Message = Identity.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
+                Message = IdentityResource.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
             });
         }
 
@@ -188,7 +189,7 @@ namespace SocialMediaDashboard.Web.Controllers
             {
                 Token = authenticationResult.Token,
                 RefreshToken = authenticationResult.RefreshToken,
-                Message = Identity.EmailConfirm
+                Message = IdentityResource.EmailConfirm
             });
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Coravel;
 using Microsoft.AspNetCore.Builder;
-using SocialMediaDashboard.Infrastructure.Tasks;
 using System;
 
 namespace SocialMediaDashboard.Infrastructure.Extensions

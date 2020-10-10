@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
-using SocialMediaDashboard.Domain.Enums;
 using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Collections.Generic;
@@ -44,7 +43,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             var subscription = new Subscription
             {
                 UserId = userId,
-                Name = accountName, // TODO: change to AccountName
+                AccountName = accountName,
                 SubscriptionTypeId = subscriptionTypeId
             };
 
@@ -137,7 +136,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 return (null, subscriptionResult);
             }
 
-            if (subscription.Name == accountName && subscription.SubscriptionTypeId == subscriptionTypeId)
+            if (subscription.AccountName == accountName && subscription.SubscriptionTypeId == subscriptionTypeId)
             {
                 subscriptionResult = new SubscriptionResult
                 {
@@ -148,7 +147,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 return (null, subscriptionResult);
             }
 
-            subscription.Name = accountName;
+            subscription.AccountName = accountName;
             subscription.SubscriptionTypeId = subscriptionTypeId;
             _subscriptionRepository.Update(subscription);
             await _subscriptionRepository.SaveChangesAsync();
@@ -191,101 +190,10 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var selectedSubscription = await _subscriptionRepository
                 .GetEntityWithoutTrackingAsync(subscriptionType => subscriptionType.UserId == userId
-                    && subscriptionType.Name == accountName
+                    && subscriptionType.AccountName == accountName
                     && subscriptionType.SubscriptionTypeId == subscriptionTypeId);
 
             return selectedSubscription is null;
         }
-        //public async Task<bool> AddSubscriptionAsync(string userId, int accountId, string account, AccountKind accountType, SubscriptionKind subscriptionType)
-        //{
-        //    var canCreateSubscription = await CanUserCreateSubscription(userId, account, accountType, subscriptionType);
-        //    if (!canCreateSubscription)
-        //    {
-        //        return false;
-        //    }
-
-        //    var subscription = new Subscription
-        //    {
-        //        Type = subscriptionType,
-        //        IsDisplayed = true,
-        //        AccountId = accountId
-        //    };
-
-        //    await _subscriptionRepository.AddAsync(subscription);
-        //    await _subscriptionRepository.SaveChangesAsync();
-
-        //    return true;
-        //}
-
-        //public async Task<IEnumerable<SubscriptionDto>> GetAllUserSubscriptionsAsync(string userId)
-        //{
-        //    var subscriptions = await _subscriptionRepository.GetAllWithoutTracking()
-        //        .Include(s => s.Account)
-        //        .Where(s => s.Account.UserId == userId)
-        //        .ToListAsync();
-
-        //    var subscriptionsDto = _mapper.Map<List<SubscriptionDto>>(subscriptions);
-
-        //    return subscriptionsDto;
-        //}
-
-        //public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsByTypeAsync(AccountKind accountType, SubscriptionKind subscriptionType)
-        //{
-        //    var subscriptions = await _subscriptionRepository.GetAllWithoutTracking()
-        //        .Include(s => s.Account)
-        //        .Where(s => s.Type == subscriptionType && s.Account.Type == accountType)
-        //        .ToListAsync();
-
-        //    var subscriptionsDto = _mapper.Map<List<SubscriptionDto>>(subscriptions);
-
-        //    return subscriptionsDto;
-        //}
-
-        //public async Task<bool> DeleteSubscriptionAsync(int id, string userId)
-        //{
-        //    var subscription = await _subscriptionRepository.GetAll()
-        //        .Include(s => s.Account)
-        //        .FirstOrDefaultAsync(s => s.Account.UserId == userId && s.Id == id);
-
-        //    //var subscription = await _subscriptionRepository
-        //    if (subscription == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    _subscriptionRepository.Delete(subscription);
-        //    await _subscriptionRepository.SaveChangesAsync();
-
-        //    return true;
-        //}
-
-        //public async Task<bool> SubscriptionExistAsync(int id)
-        //{
-        //    var subscription = await _subscriptionRepository.GetEntityAsync(m => m.Id == id);
-        //    if (subscription == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
-        //private async Task<bool> CanUserCreateSubscription(string userId, string account, AccountKind accountType, SubscriptionKind subscriptionType)
-        //{
-        //    var selectedSubscriptions = await _subscriptionRepository.GetAllWithoutTracking()
-        //        .Include(s => s.Account)
-        //        .Where(s => s.Account.UserId == userId && s.Account.Name == account && s.Account.Type == accountType)
-        //        .ToListAsync();
-
-        //    foreach (var subscription in selectedSubscriptions)
-        //    {
-        //        if (subscription.Type == subscriptionType)
-        //        {
-        //            return false;
-        //        }
-        //    }
-
-        //    return true;
-        //}
     }
 }

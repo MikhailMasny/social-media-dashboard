@@ -22,7 +22,7 @@ namespace SocialMediaDashboard.Application.Configurations
             builder.Property(subscription => subscription.UserId)
                 .IsRequired();
 
-            builder.Property(subscription => subscription.Name)
+            builder.Property(subscription => subscription.AccountName)
                 .IsRequired()
                 .HasMaxLength(SqlConfiguration.SqlMaxLengthMedium);
 

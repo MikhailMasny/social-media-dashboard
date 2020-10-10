@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SocialMediaDashboard.Application.Interfaces
+﻿namespace SocialMediaDashboard.Application.Interfaces
 {
     ///// <summary>
     ///// Interface for implement statistic service.

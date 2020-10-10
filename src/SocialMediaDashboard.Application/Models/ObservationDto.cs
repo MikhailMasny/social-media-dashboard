@@ -19,6 +19,5 @@
         /// Comment.
         /// </summary>
         public string Comment { get; set; }
-
     }
 }

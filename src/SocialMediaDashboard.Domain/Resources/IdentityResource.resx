@@ -171,7 +171,4 @@
   <data name="UserNotExist" xml:space="preserve">
     <value>User does not exist.</value>
   </data>
-  <data name="UserRole" xml:space="preserve">
-    <value>User</value>
-  </data>
 </root>

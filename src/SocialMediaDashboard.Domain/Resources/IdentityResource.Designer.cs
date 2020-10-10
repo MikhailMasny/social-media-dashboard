@@ -22,14 +22,14 @@ namespace SocialMediaDashboard.Domain.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Identity {
+    public class IdentityResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Identity() {
+        internal IdentityResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Domain.Resources.Identity", typeof(Identity).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Domain.Resources.IdentityResource", typeof(IdentityResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -219,15 +219,6 @@ namespace SocialMediaDashboard.Domain.Resources {
         public static string UserNotExist {
             get {
                 return ResourceManager.GetString("UserNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User.
-        /// </summary>
-        public static string UserRole {
-            get {
-                return ResourceManager.GetString("UserRole", resourceCulture);
             }
         }
     }

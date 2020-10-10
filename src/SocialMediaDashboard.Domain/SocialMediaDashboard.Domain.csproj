@@ -13,18 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\AccountResource.Designer.cs">
-      <DependentUpon>AccountResource.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Resources\CommonResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CommonResource.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Identity.Designer.cs">
-      <DependentUpon>Identity.resx</DependentUpon>
+    <Compile Update="Resources\IdentityResource.Designer.cs">
+      <DependentUpon>IdentityResource.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -36,16 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\AccountResource.resx">
-      <LastGenOutput>AccountResource.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\CommonResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommonResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Identity.resx">
-      <LastGenOutput>Identity.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Resources\IdentityResource.resx">
+      <LastGenOutput>IdentityResource.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\SubscriptionResource.resx">

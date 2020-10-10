@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Constants;
 using SocialMediaDashboard.Domain.Entities;
 using SocialMediaDashboard.Domain.Helpers;
 using SocialMediaDashboard.Domain.Resources;
@@ -47,7 +48,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.EmailAlreadyExist }
+                    Errors = new[] { IdentityResource.EmailAlreadyExist }
                 };
             }
 
@@ -67,7 +68,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            await _userManager.AddToRoleAsync(user, Identity.UserRole);
+            await _userManager.AddToRoleAsync(user, AppRole.User);
 
             return new ConfirmationResult
             {
@@ -85,7 +86,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.UserNotExist }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
@@ -95,7 +96,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.IncorrectData }
+                    Errors = new[] { IdentityResource.IncorrectData }
                 };
             }
 
@@ -120,7 +121,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.TokenInvalid }
+                    Errors = new[] { IdentityResource.TokenInvalid }
                 };
             }
 
@@ -132,7 +133,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.TokenNotExpired }
+                    Errors = new[] { IdentityResource.TokenNotExpired }
                 };
             }
 
@@ -144,7 +145,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.RefreshTokenNotExist }
+                    Errors = new[] { IdentityResource.RefreshTokenNotExist }
                 };
             }
 
@@ -152,7 +153,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.RefreshTokenExpired }
+                    Errors = new[] { IdentityResource.RefreshTokenExpired }
                 };
             }
 
@@ -160,7 +161,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.RefreshTokenInvalid }
+                    Errors = new[] { IdentityResource.RefreshTokenInvalid }
                 };
             }
 
@@ -168,7 +169,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.RefreshTokenUsed }
+                    Errors = new[] { IdentityResource.RefreshTokenUsed }
                 };
             }
 
@@ -176,7 +177,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.RefreshTokenNotMatch }
+                    Errors = new[] { IdentityResource.RefreshTokenNotMatch }
                 };
             }
 
@@ -184,7 +185,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _refreshTokenRepository.Update(storedRefreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == Identity.Id).Value);
+            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == IdentityResource.Id).Value);
             return await GenerateAuthenticationResultAsync(user);
         }
 
@@ -196,7 +197,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.UserNotExist }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
@@ -206,7 +207,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.TokenException }
+                    Errors = new[] { IdentityResource.TokenException }
                 };
             }
 
@@ -221,7 +222,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.UserNotExist }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
@@ -330,7 +331,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.EmailNotVerified }
+                    Errors = new[] { IdentityResource.EmailNotVerified }
                 };
             }
 

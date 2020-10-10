@@ -18,7 +18,7 @@
         /// <summary>
         /// Account name.
         /// </summary>
-        public string Name { get; set; }
+        public string AccountName { get; set; }
 
         /// <summary>
         /// Subscription type identifier.
