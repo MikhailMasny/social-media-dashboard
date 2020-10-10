@@ -19,6 +19,13 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <returns>Subscription data transfet object with operation result.</returns>
         Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> CreateSubscriptionAsync(string userId, string accountName, int subscriptionTypeId);
 
+        /// <summary>
+        /// Delete subscription by identifier.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="id">Identifier.</param>
+        /// <returns>Operation result.</returns>
+        Task<SubscriptionResult> DeleteSubscriptionByIdAsync(string userId, int id);
 
 
 

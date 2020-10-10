@@ -83,14 +83,14 @@
         }
 
         /// <summary>
-        /// Account path.
+        /// Subscription path.
         /// </summary>
-        public static class Account
+        public static class Subscription
         {
             /// <summary>
             /// Config path.
             /// </summary>
-            public const string Path = "account";
+            public const string Path = "subscription";
 
             /// <summary>
             /// Create endpoint.
@@ -113,35 +113,9 @@
             public const string Update = Root + "/" + Path + "/update/{id}";
 
             /// <summary>
-            /// Detele endpoint.
-            /// </summary>
-            public const string Delete = Root + "/" + Path + "/delete/{id}";
-        }
-
-        /// <summary>
-        /// Subscription path.
-        /// </summary>
-        public static class Subscription
-        {
-            /// <summary>
-            /// Config path.
-            /// </summary>
-            public const string Path = "subscription";
-
-            /// <summary>
-            /// GetAll endpoint.
-            /// </summary>
-            public const string GetAll = Root + "/" + Path + "/all";
-
-            /// <summary>
-            /// Create endpoint.
-            /// </summary>
-            public const string Create = Root + "/" + Path;
-
-            /// <summary>
             /// Delete endpoint.
             /// </summary>
-            public const string Delete = Root + "/" + Path;
+            public const string Delete = Root + "/" + Path + "/delete/{id}";
         }
     }
 }

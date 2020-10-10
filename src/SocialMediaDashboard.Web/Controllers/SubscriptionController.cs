@@ -31,8 +31,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost(ApiRoutes.Subscription.Create, Name = nameof(CreateSubscriptionAsync))]
-        public async Task<IActionResult> CreateSubscriptionAsync([FromBody] SubscriptionCreateRequest request)
+        [HttpPost(ApiRoutes.Subscription.Create, Name = nameof(CreateSubscription))]
+        public async Task<IActionResult> CreateSubscription([FromBody] SubscriptionCreateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -67,6 +67,51 @@ namespace SocialMediaDashboard.Web.Controllers
             // Must return Created
             return Ok(subscriptionSuccessfulResponse);
         }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete(ApiRoutes.Subscription.Delete, Name = nameof(DeleteSubscription))]
+        public async Task<IActionResult> DeleteSubscription(int id)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var operationResult = await _subscriptionService.DeleteSubscriptionByIdAsync(userId, id);
+            if (!operationResult.Result)
+            {
+                return NotFound(new SubscriptionFailedResponse
+                {
+                    Error = operationResult.Message,
+                });
+            }
+
+            return NoContent();
+        }
+
+
+
+
+
+
+
+        //    [ProducesResponseType(StatusCodes.Status200OK)]
+        //    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //    [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //    [HttpDelete(ApiRoutes.Account.Delete, Name = nameof(DeleteAccountAsync))]
+        //    public async Task<IActionResult> DeleteAccountAsync(int id)
+        //    {
+        //        var userId = HttpContext.GetUserId();
+        //        var operationResult = await _accountService.DeleteAccountByUserIdAsync(userId, id);
+        //        if (!operationResult.Result)
+        //        {
+        //            return BadRequest(new AccountFailedResponse
+        //            {
+        //                Error = operationResult.Message,
+        //            });
+        //        }
+
+        //        return NoContent();
+        //    }
 
 
 
