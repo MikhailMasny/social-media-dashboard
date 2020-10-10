@@ -14,7 +14,7 @@ namespace SocialMediaDashboard.Web.Contracts.Responses
         public string Message { get; set; }
 
         /// <summary>
-        /// Subscriptions.
+        /// Subscription data transfer objects.
         /// </summary>
         public List<SubscriptionDto> Subscriptions { get; } = new List<SubscriptionDto>();
     }

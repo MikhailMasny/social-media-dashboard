@@ -32,16 +32,23 @@ namespace SocialMediaDashboard.Application.Interfaces
         Task<T> GetEntityAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
-        /// Add new entity async.
+        /// Get entity async by predicate and without tracking.
         /// </summary>
-        /// <param name="entity">Entity object</param>
-        Task AddAsync(T entity);
+        /// <param name="predicate">LINQ predicate.</param>
+        /// <returns>T entity.</returns>
+        Task<T> GetEntityWithoutTrackingAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
-        /// Add new entities async.
+        /// Create new entity async.
+        /// </summary>
+        /// <param name="entity">Entity object</param>
+        Task CreateAsync(T entity);
+
+        /// <summary>
+        /// Create new entities async.
         /// </summary>
         /// <param name="entities">Entity collection.</param>
-        Task AddRangeAsync(IEnumerable<T> entities);
+        Task CreateRangeAsync(IEnumerable<T> entities);
 
         /// <summary>
         /// Update entity

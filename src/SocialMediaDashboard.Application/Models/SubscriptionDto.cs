@@ -1,6 +1,4 @@
-﻿using SocialMediaDashboard.Domain.Enums;
-
-namespace SocialMediaDashboard.Application.Models
+﻿namespace SocialMediaDashboard.Application.Models
 {
     /// <summary>
     /// Statistic data transfet object.
@@ -13,18 +11,18 @@ namespace SocialMediaDashboard.Application.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Type.
+        /// User identifier.
         /// </summary>
-        public ObservationType Type { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
-        /// Display for user.
+        /// Account name.
         /// </summary>
-        public bool IsDisplayed { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Account identifier.
+        /// Subscription type identifier.
         /// </summary>
-        public int AccountId { get; set; }
+        public int SubscriptionTypeId { get; set; }
     }
 }

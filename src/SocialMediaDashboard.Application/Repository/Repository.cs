@@ -24,13 +24,13 @@ namespace SocialMediaDashboard.Application.Repository
         }
 
         /// <inheritdoc/>
-        public async Task AddAsync(T entity)
+        public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
         }
 
         /// <inheritdoc/>
-        public async Task AddRangeAsync(IEnumerable<T> entities)
+        public async Task CreateRangeAsync(IEnumerable<T> entities)
         {
             await _dbSet.AddRangeAsync(entities);
         }
@@ -57,6 +57,11 @@ namespace SocialMediaDashboard.Application.Repository
         public IQueryable<T> GetAll()
         {
             return _dbSet;
+        }
+
+        public async Task<T> GetEntityWithoutTrackingAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
         /// <inheritdoc/>

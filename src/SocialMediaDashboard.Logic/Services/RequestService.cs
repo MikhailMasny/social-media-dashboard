@@ -20,6 +20,10 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _socialNetworksSettings = socialNetworksSettings ?? throw new ArgumentNullException(nameof(socialNetworksSettings));
         }
 
+        //https://www.googleapis.com/youtube/v3/videos?part=statistics&id=video&key=apiKey
+        //https://www.googleapis.com/youtube/v3/channels?part=statistics&id=channel&key=apiKey
+        //https://www.googleapis.com/youtube/v3/channels?part=statistics&forUsername=username&key=apiKey
+
         public async Task<YouTubeResult> GetDataByChannelFromYouTubeApiAsync(string channel)
         {
             return await _youTubeApi

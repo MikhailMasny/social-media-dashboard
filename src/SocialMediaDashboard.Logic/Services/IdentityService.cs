@@ -419,7 +419,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
-            await _refreshTokenRepository.AddAsync(refreshToken);
+            await _refreshTokenRepository.CreateAsync(refreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
             return new AuthenticationResult

@@ -4,16 +4,16 @@ using SocialMediaDashboard.Domain.Entities;
 namespace SocialMediaDashboard.Application.Mappings
 {
     /// <summary>
-    /// AutoMapper profile for Subscription.
+    /// AutoMapper profile for SubscriptionType.
     /// </summary>
-    public class SubscriptionProfile : AutoMapper.Profile
+    public class SubscriptionTypeProfile : AutoMapper.Profile
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SubscriptionProfile()
+        public SubscriptionTypeProfile()
         {
-            CreateMap<Subscription, SubscriptionDto>().ReverseMap();
+            CreateMap<SubscriptionType, SubscriptionTypeDto>().ReverseMap();
         }
     }
 }

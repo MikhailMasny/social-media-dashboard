@@ -18,6 +18,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\CommonResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommonResource.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Identity.Designer.cs">
       <DependentUpon>Identity.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -34,6 +39,10 @@
     <EmbeddedResource Update="Resources\AccountResource.resx">
       <LastGenOutput>AccountResource.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CommonResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Identity.resx">
       <LastGenOutput>Identity.Designer.cs</LastGenOutput>

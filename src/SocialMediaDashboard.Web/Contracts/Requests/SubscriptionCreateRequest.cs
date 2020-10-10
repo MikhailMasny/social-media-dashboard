@@ -8,13 +8,13 @@ namespace SocialMediaDashboard.Web.Contracts.Requests
     public class SubscriptionCreateRequest
     {
         /// <summary>
-        /// Account identifier.
+        /// Account name.
         /// </summary>
-        public int AccountId { get; set; }
+        public string AccountName { get; set; }
 
         /// <summary>
-        /// Subscription type.
+        /// Subscription type identifier.
         /// </summary>
-        public ObservationType SubscriptionType { get; set; }
+        public int SubscriptionTypeId { get; set; }
     }
 }
