@@ -15,16 +15,14 @@ namespace SocialMediaDashboard.Web.Validators
         public JwtSettingsRequestValidator()
         {
             RuleFor(jwtSettingsRequest => jwtSettingsRequest.Secret)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.JwtSecretInvalid);
+                .NotNull().WithMessage(ValidatorResource.JwtSecretInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.JwtSecretInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.JwtSecretInvalid);
 
             RuleFor(jwtSettingsRequest => jwtSettingsRequest.TokenLifetime)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.JwtTokenLifetimeInvalid);
+                .NotNull().WithMessage(ValidatorResource.JwtTokenLifetimeInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.JwtTokenLifetimeInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.JwtTokenLifetimeInvalid);
 
         }
     }

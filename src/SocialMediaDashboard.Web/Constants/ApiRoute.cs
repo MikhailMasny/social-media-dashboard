@@ -28,7 +28,7 @@
             /// <summary>
             /// SignUp endpoint.
             /// </summary>
-            public const string SignUp = Root + "/" + Path + "/registration";
+            public const string SignUp = Root + "/" + Path + "/signup";
 
             /// <summary>
             /// Confirm email endpoint.
@@ -80,6 +80,27 @@
             /// Social networks settings endpoint.
             /// </summary>
             public const string SocialNetworks = Root + "/" + Path + "/social-networks";
+        }
+
+        /// <summary>
+        /// Profile path.
+        /// </summary>
+        public static class Profile
+        {
+            /// <summary>
+            /// Profile path.
+            /// </summary>
+            public const string Path = "profile";
+
+            /// <summary>
+            /// Get endpoint.
+            /// </summary>
+            public const string Get = Root + "/" + Path;
+
+            /// <summary>
+            /// Update endpoint.
+            /// </summary>
+            public const string Update = Root + "/" + Path + "/update";
         }
 
         /// <summary>

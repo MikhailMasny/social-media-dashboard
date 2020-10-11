@@ -15,16 +15,14 @@ namespace SocialMediaDashboard.Web.Validators
         public ConnectionSettingsRequestValidator()
         {
             RuleFor(connectionSettingsRequest => connectionSettingsRequest.MsSqlServerConnection)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.ConnectionMsSqlServerInvalid);
+                .NotNull().WithMessage(ValidatorResource.ConnectionMsSqlServerInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.ConnectionMsSqlServerInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.ConnectionMsSqlServerInvalid);
 
             RuleFor(connectionSettingsRequest => connectionSettingsRequest.PostgreSqlConnection)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.ConnectionPostgreSqlInvalid);
+                .NotNull().WithMessage(ValidatorResource.ConnectionPostgreSqlInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.ConnectionPostgreSqlInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.ConnectionPostgreSqlInvalid);
         }
     }
 }

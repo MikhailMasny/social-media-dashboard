@@ -23,6 +23,7 @@ namespace SocialMediaDashboard.Infrastructure.Extensions
             services.AddTransient<StatisticInvocable>();
             services.AddSingleton(new VkApi());
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IConfigService, ConfigService>();
             services.AddScoped<IObservationService, ObservationService>();
             services.AddScoped<IPlatformService, PlatformService>();

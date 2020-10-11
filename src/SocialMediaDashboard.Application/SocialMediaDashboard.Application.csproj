@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201011143904_AddFieldsInProfileTable.cs" />
+    <Compile Remove="Migrations\20201011143904_AddFieldsInProfileTable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="EntityFrameworkCore.Cacheable" Version="2.0.1" />

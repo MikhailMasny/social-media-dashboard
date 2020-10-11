@@ -84,7 +84,7 @@ namespace SocialMediaDashboard.Web.Extensions
                     Contact = new OpenApiContact()
                     {
                         Name = SwaggerParameters.Contact.Name,
-                        Url = new Uri("https://social-media-dashboard-api.herokuapp.com/") // UNDONE: add it after deploy
+                        //Url = new Uri("https://social-media-dashboard-api.herokuapp.com/") // UNDONE: add it after deploy
                     }
                 });
 
@@ -148,7 +148,8 @@ namespace SocialMediaDashboard.Web.Extensions
             services.AddHealthChecks();
             services.AddControllers(options =>
                 options.Filters.Add<ValidationFilter>())
-                    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
+                    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddNewtonsoftJson();
 
             return services;
         }

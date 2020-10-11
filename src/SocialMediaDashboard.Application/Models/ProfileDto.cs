@@ -1,27 +1,17 @@
 ﻿using SocialMediaDashboard.Domain.Enums;
 using System;
 
-namespace SocialMediaDashboard.Domain.Entities
+namespace SocialMediaDashboard.Application.Models
 {
     /// <summary>
-    /// Profile entity.
+    /// Profile data transfet object.
     /// </summary>
-    public class Profile
+    public class ProfileDto
     {
-        /// <summary>
-        /// Identifier.
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// User identifier.
         /// </summary>
         public string UserId { get; set; }
-
-        /// <summary>
-        /// Navigation for User.
-        /// </summary>
-        public User User { get; set; }
 
         /// <summary>
         /// Name.

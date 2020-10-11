@@ -40,7 +40,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var observationSuccessfulResponse = new SuccessfulResponse<ObservationDto>();
             observationSuccessfulResponse.Items.Add(observationDto);
-            observationSuccessfulResponse.Message = CommonResource.Successful;
+            observationSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(observationSuccessfulResponse);
         }
@@ -62,7 +62,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var observationSuccessfulResponse = new SuccessfulResponse<ObservationDto>();
             observationSuccessfulResponse.Items.AddRange(observationDtos);
-            observationSuccessfulResponse.Message = CommonResource.Successful;
+            observationSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(observationSuccessfulResponse);
         }

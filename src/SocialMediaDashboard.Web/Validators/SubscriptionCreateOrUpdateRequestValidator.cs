@@ -15,14 +15,12 @@ namespace SocialMediaDashboard.Web.Validators
         public SubscriptionCreateOrUpdateRequestValidator()
         {
             RuleFor(subscriptionCreateOrUpdateRequest => subscriptionCreateOrUpdateRequest.AccountName)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SubscriptionAccountNameInvalid);
+                .NotNull().WithMessage(ValidatorResource.SubscriptionAccountNameRequired)
+                .NotEmpty().WithMessage(ValidatorResource.SubscriptionAccountNameRequired)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SubscriptionAccountNameInvalid);
 
             RuleFor(subscriptionCreateOrUpdateRequest => subscriptionCreateOrUpdateRequest.SubscriptionTypeId)
-                .NotEqual(default(int))
-                .WithMessage(ValidatorResource.SubscriptionTypeIdInvalid);
+                .NotEqual(default(int)).WithMessage(ValidatorResource.SubscriptionTypeIdInvalid);
         }
     }
 }

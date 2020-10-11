@@ -139,7 +139,26 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 return (new SubscriptionDto(), operationResult);
             }
 
-            if (subscription.AccountName == accountName && subscription.SubscriptionTypeId == subscriptionTypeId)
+            static bool CompareAndUpdate(Subscription subscription, string accountName, int subscriptionTypeId)
+            {
+                bool update = false;
+
+                if (subscription.AccountName != accountName)
+                {
+                    subscription.AccountName = accountName;
+                    update = true;
+                }
+
+                if (subscription.SubscriptionTypeId != subscriptionTypeId)
+                {
+                    subscription.SubscriptionTypeId = subscriptionTypeId;
+                    update = true;
+                }
+
+                return update;
+            }
+
+            if (!CompareAndUpdate(subscription, accountName, subscriptionTypeId))
             {
                 operationResult = new OperationResult
                 {
@@ -150,8 +169,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 return (new SubscriptionDto(), operationResult);
             }
 
-            subscription.AccountName = accountName;
-            subscription.SubscriptionTypeId = subscriptionTypeId;
             _subscriptionRepository.Update(subscription);
 
             var statistics = await _statisticRepository

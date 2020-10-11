@@ -1,28 +1,14 @@
-﻿using SocialMediaDashboard.Domain.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using SocialMediaDashboard.Domain.Enums;
 using System;
 
-namespace SocialMediaDashboard.Domain.Entities
+namespace SocialMediaDashboard.Web.Contracts.Requests
 {
     /// <summary>
-    /// Profile entity.
+    /// Profile update request.
     /// </summary>
-    public class Profile
+    public class ProfileUpdateRequest
     {
-        /// <summary>
-        /// Identifier.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// User identifier.
-        /// </summary>
-        public string UserId { get; set; }
-
-        /// <summary>
-        /// Navigation for User.
-        /// </summary>
-        public User User { get; set; }
-
         /// <summary>
         /// Name.
         /// </summary>
@@ -46,6 +32,6 @@ namespace SocialMediaDashboard.Domain.Entities
         /// <summary>
         /// Avatar.
         /// </summary>
-        public byte[] Avatar { get; set; }
+        public IFormFile Avatar { get; set; }
     }
 }

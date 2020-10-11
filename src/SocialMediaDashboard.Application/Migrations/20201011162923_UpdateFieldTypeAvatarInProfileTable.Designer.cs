@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMediaDashboard.Application.Context;
 
 namespace SocialMediaDashboard.Application.Migrations
 {
     [DbContext(typeof(SocialMediaDashboardContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201011162923_UpdateFieldTypeAvatarInProfileTable")]
+    partial class UpdateFieldTypeAvatarInProfileTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,9 +205,6 @@ namespace SocialMediaDashboard.Application.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte[]>("Avatar")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime>("BirthDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
@@ -223,6 +222,9 @@ namespace SocialMediaDashboard.Application.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(127)")
                         .HasMaxLength(127);
+
+                    b.Property<byte[]>("UserAvatar")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

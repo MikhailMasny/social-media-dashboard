@@ -33,6 +33,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PlatformResource.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ProfileResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProfileResource.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\SubscriptionResource.Designer.cs">
       <DependentUpon>SubscriptionResource.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -66,6 +71,10 @@
     <EmbeddedResource Update="Resources\PlatformResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PlatformResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ProfileResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProfileResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\SubscriptionResource.resx">
       <LastGenOutput>SubscriptionResource.Designer.cs</LastGenOutput>

@@ -79,20 +79,20 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid email format..
+        ///   Looks up a localized string similar to The file size is larger than the allowed one (size should not exceed 20 Kb)..
         /// </summary>
-        public static string EmailInvalid {
+        public static string FileMaximumLength {
             get {
-                return ResourceManager.GetString("EmailInvalid", resourceCulture);
+                return ResourceManager.GetString("FileMaximumLength", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email is required..
+        ///   Looks up a localized string similar to The file type is not allowed..
         /// </summary>
-        public static string EmailRequired {
+        public static string FileTypeNotAllowed {
             get {
-                return ResourceManager.GetString("EmailRequired", resourceCulture);
+                return ResourceManager.GetString("FileTypeNotAllowed", resourceCulture);
             }
         }
         
@@ -115,20 +115,20 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password is required..
+        ///   Looks up a localized string similar to Invalid date birth value, there should be more or equal 1970-01-01..
         /// </summary>
-        public static string PasswordRequired {
+        public static string ProfileBirthDateInvalid {
             get {
-                return ResourceManager.GetString("PasswordRequired", resourceCulture);
+                return ResourceManager.GetString("ProfileBirthDateInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refresh token is required..
+        ///   Looks up a localized string similar to Invalid gender format..
         /// </summary>
-        public static string RefreshTokenRequired {
+        public static string ProfileGenderInvalid {
             get {
-                return ResourceManager.GetString("RefreshTokenRequired", resourceCulture);
+                return ResourceManager.GetString("ProfileGenderInvalid", resourceCulture);
             }
         }
         
@@ -205,6 +205,15 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account name is required..
+        /// </summary>
+        public static string SubscriptionAccountNameRequired {
+            get {
+                return ResourceManager.GetString("SubscriptionAccountNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid subscription type identifier..
         /// </summary>
         public static string SubscriptionTypeIdInvalid {
@@ -214,38 +223,74 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid email format..
+        /// </summary>
+        public static string UserEmailInvalid {
+            get {
+                return ResourceManager.GetString("UserEmailInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email is required..
+        /// </summary>
+        public static string UserEmailRequired {
+            get {
+                return ResourceManager.GetString("UserEmailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name is required..
+        /// </summary>
+        public static string UserNameRequired {
+            get {
+                return ResourceManager.GetString("UserNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name should be from {0} to {1}..
+        /// </summary>
+        public static string UserNameShort {
+            get {
+                return ResourceManager.GetString("UserNameShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required..
+        /// </summary>
+        public static string UserPasswordRequired {
+            get {
+                return ResourceManager.GetString("UserPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh token is required..
+        /// </summary>
+        public static string UserRefreshTokenRequired {
+            get {
+                return ResourceManager.GetString("UserRefreshTokenRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Token is required..
         /// </summary>
-        public static string TokenRequired {
+        public static string UserTokenRequired {
             get {
-                return ResourceManager.GetString("TokenRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username is required..
-        /// </summary>
-        public static string UsernameRequired {
-            get {
-                return ResourceManager.GetString("UsernameRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username should be from {0} to {1}..
-        /// </summary>
-        public static string UsernameShort {
-            get {
-                return ResourceManager.GetString("UsernameShort", resourceCulture);
+                return ResourceManager.GetString("UserTokenRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Verify code is required..
         /// </summary>
-        public static string VerifyCodeRequired {
+        public static string UserVerifyCodeRequired {
             get {
-                return ResourceManager.GetString("VerifyCodeRequired", resourceCulture);
+                return ResourceManager.GetString("UserVerifyCodeRequired", resourceCulture);
             }
         }
     }

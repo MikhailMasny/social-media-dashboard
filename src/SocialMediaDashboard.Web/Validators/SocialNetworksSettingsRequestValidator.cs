@@ -15,28 +15,24 @@ namespace SocialMediaDashboard.Web.Validators
         public SocialNetworksSettingsRequestValidator()
         {
             RuleFor(socialNetworksSettingsRequest => socialNetworksSettingsRequest.VkAccessToken)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SocialNetworkVkAccessTokenInvalid);
+                .NotNull().WithMessage(ValidatorResource.SocialNetworkVkAccessTokenInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SocialNetworkVkAccessTokenInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SocialNetworkVkAccessTokenInvalid);
 
             RuleFor(socialNetworksSettingsRequest => socialNetworksSettingsRequest.InstagramAccount.Username)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SocialNetworkInstagramAccountUsernameInvalid);
+                .NotNull().WithMessage(ValidatorResource.SocialNetworkInstagramAccountUsernameInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SocialNetworkInstagramAccountUsernameInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SocialNetworkInstagramAccountUsernameInvalid);
 
             RuleFor(socialNetworksSettingsRequest => socialNetworksSettingsRequest.InstagramAccount.Password)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SocialNetworkInstagramAccountPasswordInvalid);
+                .NotNull().WithMessage(ValidatorResource.SocialNetworkInstagramAccountPasswordInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SocialNetworkInstagramAccountPasswordInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SocialNetworkInstagramAccountPasswordInvalid);
 
             RuleFor(socialNetworksSettingsRequest => socialNetworksSettingsRequest.YouTubeAccessToken)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SocialNetworkYouTubeAccessTokenInvalid);
+                .NotNull().WithMessage(ValidatorResource.SocialNetworkYouTubeAccessTokenInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SocialNetworkYouTubeAccessTokenInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SocialNetworkYouTubeAccessTokenInvalid);
         }
     }
 }

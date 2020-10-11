@@ -32,7 +32,7 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var confirmationResult = await _identityService.RegistrationAsync(request.Email, request.UserName, request.Password);
+            var confirmationResult = await _identityService.SignUpAsync(request.Email, request.Password, request.Name);
             if (!confirmationResult.IsSuccessful)
             {
                 return Conflict(new AuthFailedResponse

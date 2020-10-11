@@ -41,7 +41,7 @@ namespace SocialMediaDashboard.Web.Controllers
             
             var subscriptionTypeSuccessfulResponse = new SuccessfulResponse<SubscriptionTypeDto>();
             subscriptionTypeSuccessfulResponse.Items.Add(subscriptionTypeDto);
-            subscriptionTypeSuccessfulResponse.Message = CommonResource.Successful;
+            subscriptionTypeSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(subscriptionTypeSuccessfulResponse);
         }
@@ -63,7 +63,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var subscriptionTypeSuccessfulResponse = new SuccessfulResponse<SubscriptionTypeDto>();
             subscriptionTypeSuccessfulResponse.Items.AddRange(subscriptionTypeDtos);
-            subscriptionTypeSuccessfulResponse.Message = CommonResource.Successful;
+            subscriptionTypeSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(subscriptionTypeSuccessfulResponse);
         }

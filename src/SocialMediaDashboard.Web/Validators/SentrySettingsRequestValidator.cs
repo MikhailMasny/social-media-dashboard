@@ -15,22 +15,19 @@ namespace SocialMediaDashboard.Web.Validators
         public SentrySettingsRequestValidator()
         {
             RuleFor(sentrySettingsRequest => sentrySettingsRequest.Dsn)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SentryDsnInvalid);
+                .NotNull().WithMessage(ValidatorResource.SentryDsnInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SentryDsnInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SentryDsnInvalid);
 
             RuleFor(sentrySettingsRequest => sentrySettingsRequest.MinimumBreadcrumbLevel)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SentryMinimumBreadcrumbLevelInvalid);
+                .NotNull().WithMessage(ValidatorResource.SentryMinimumBreadcrumbLevelInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SentryMinimumBreadcrumbLevelInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SentryMinimumBreadcrumbLevelInvalid);
 
             RuleFor(sentrySettingsRequest => sentrySettingsRequest.MinimumEventLevel)
-                .NotNull()
-                .NotEmpty()
-                .NotEqual(CommonResource.String)
-                .WithMessage(ValidatorResource.SentryMinimumEventLevelInvalid);
+                .NotNull().WithMessage(ValidatorResource.SentryMinimumEventLevelInvalid)
+                .NotEmpty().WithMessage(ValidatorResource.SentryMinimumEventLevelInvalid)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.SentryMinimumEventLevelInvalid);
         }
     }
 }

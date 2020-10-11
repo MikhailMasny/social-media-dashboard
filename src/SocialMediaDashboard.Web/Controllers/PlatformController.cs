@@ -41,7 +41,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var platformSuccessfulResponse = new SuccessfulResponse<PlatformDto>();
             platformSuccessfulResponse.Items.Add(platformDto);
-            platformSuccessfulResponse.Message = CommonResource.Successful;
+            platformSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(platformSuccessfulResponse);
         }
@@ -63,7 +63,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var platformSuccessfulResponse = new SuccessfulResponse<PlatformDto>();
             platformSuccessfulResponse.Items.AddRange(platformDtos);
-            platformSuccessfulResponse.Message = CommonResource.Successful;
+            platformSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(platformSuccessfulResponse);
         }

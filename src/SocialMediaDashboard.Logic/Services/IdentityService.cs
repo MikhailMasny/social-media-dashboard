@@ -25,22 +25,25 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
+        private readonly IProfileService _profileService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
         public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
                                UserManager<User> userManager,
                                RoleManager<IdentityRole> roleManager,
                                IRepository<RefreshToken> refreshTokenRepository,
-                               TokenValidationParameters tokenValidationParameters)
+                               TokenValidationParameters tokenValidationParameters,
+                               IProfileService profileService)
         {
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
             _tokenValidationParameters = tokenValidationParameters ?? throw new ArgumentNullException(nameof(tokenValidationParameters));
+            _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
         }
 
-        public async Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password)
+        public async Task<ConfirmationResult> SignUpAsync(string email, string password, string name)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
@@ -51,6 +54,10 @@ namespace SocialMediaDashboard.Infrastructure.Services
                     Errors = new[] { IdentityResource.EmailAlreadyExist }
                 };
             }
+
+            var userName = Guid.NewGuid()
+                .ToString()
+                .Replace("-", "", StringComparison.InvariantCulture);
 
             var user = new User
             {
@@ -68,6 +75,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
+            await _profileService.CreateAsync(user.Id, name);
             await _userManager.AddToRoleAsync(user, AppRole.User);
 
             return new ConfirmationResult
@@ -107,6 +115,140 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 return new AuthenticationResult
                 {
                     Errors = emailConfirmationResult.Errors
+                };
+            }
+
+            return await GenerateAuthenticationResultAsync(user);
+        }
+
+        public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.UserNotExist }
+                };
+            }
+
+            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (!identityResult.Succeeded)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.TokenException }
+                };
+            }
+
+            return await GenerateAuthenticationResultAsync(user);
+        }
+
+        public async Task<UserResult> GetUserByEmailAsync(string email)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
+
+            if (identityUser is null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
+            };
+        }
+
+        public async Task<UserResult> GetUserByIdAsync(string id)
+        {
+            var identityUser = await _userManager.FindByIdAsync(id);
+
+            if (identityUser is null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
+            };
+        }
+
+        public async Task<UserResult> GetUserByNameAsync(string username)
+        {
+            var identityUser = await _userManager.FindByNameAsync(username);
+
+            if (identityUser is null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
+            };
+        }
+
+        public async Task<ConfirmationResult> RestorePasswordAsync(string email)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
+
+            if (identityUser is null)
+            {
+                return new ConfirmationResult
+                {
+                    Errors = new[] { IdentityResource.UserNotExist }
+                };
+            }
+
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
+
+            if (!emailConfirmationResult.IsSuccessful)
+            {
+                return new ConfirmationResult
+                {
+                    Errors = emailConfirmationResult.Errors
+                };
+            }
+
+            return new ConfirmationResult
+            {
+                IsSuccessful = true,
+                Email = identityUser.Email,
+                Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser)
+            };
+        }
+
+        public async Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.UserNotExist }
+                };
+            }
+
+            var identityResult = await _userManager.ResetPasswordAsync(user, code, newPassword);
+
+            if (!identityResult.Succeeded)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.PasswordException }
                 };
             }
 
@@ -187,140 +329,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
             var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == CommonResource.Id).Value);
             return await GenerateAuthenticationResultAsync(user);
-        }
-
-        public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
-            }
-
-            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
-
-            if (!identityResult.Succeeded)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.TokenException }
-                };
-            }
-
-            return await GenerateAuthenticationResultAsync(user);
-        }
-
-        public async Task<ConfirmationResult> RestorePasswordAsync(string email)
-        {
-            var identityUser = await _userManager.FindByEmailAsync(email);
-
-            if (identityUser is null)
-            {
-                return new ConfirmationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
-            }
-
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
-
-            if (!emailConfirmationResult.IsSuccessful)
-            {
-                return new ConfirmationResult
-                {
-                    Errors = emailConfirmationResult.Errors
-                };
-            }
-
-            return new ConfirmationResult
-            {
-                IsSuccessful = true,
-                Email = identityUser.Email,
-                Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser)
-            };
-        }
-
-        public async Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
-            }
-
-            var identityResult = await _userManager.ResetPasswordAsync(user, code, newPassword);
-
-            if (!identityResult.Succeeded)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.PasswordException }
-                };
-            }
-
-            return await GenerateAuthenticationResultAsync(user);
-        }
-
-        public async Task<UserResult> GetUserByEmailAsync(string email)
-        {
-            var identityUser = await _userManager.FindByEmailAsync(email);
-
-            if (identityUser is null)
-            {
-                return null;
-            }
-
-            return new UserResult
-            {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
-        }
-
-        public async Task<UserResult> GetUserByIdAsync(string id)
-        {
-            var identityUser = await _userManager.FindByIdAsync(id);
-
-            if (identityUser is null)
-            {
-                return null;
-            }
-
-            return new UserResult
-            {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
-        }
-
-        public async Task<UserResult> GetUserByNameAsync(string username)
-        {
-            var identityUser = await _userManager.FindByNameAsync(username);
-
-            if (identityUser is null)
-            {
-                return null;
-            }
-
-            return new UserResult
-            {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
         }
 
         private async Task<ConfirmationResult> EmailConfirmHandlerAsync(User user)

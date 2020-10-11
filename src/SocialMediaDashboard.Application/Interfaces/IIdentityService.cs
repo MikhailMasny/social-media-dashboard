@@ -9,6 +9,23 @@ namespace SocialMediaDashboard.Application.Interfaces
     public interface IIdentityService
     {
         /// <summary>
+        /// Sign up (create new user).
+        /// </summary>
+        /// <param name="email">Email.</param>
+        /// <param name="password">Password.</param>
+        /// <param name="name">Name.</param>
+        /// <returns>Confirmation result data transfer object.</returns>
+        Task<ConfirmationResult> SignUpAsync(string email, string password, string name);
+
+        /// <summary>
+        /// Sign in.
+        /// </summary>
+        /// <param name="email">Email.</param>
+        /// <param name="password">Password.</param>
+        /// <returns>Authentication result data transfer object.</returns>
+        Task<AuthenticationResult> SignInAsync(string email, string password);
+
+        /// <summary>
         /// Confirm email.
         /// </summary>
         /// <param name="email">Email.</param>
@@ -36,15 +53,6 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="username">Username.</param>
         /// <returns>User data transfet object.</returns>
         Task<UserResult> GetUserByNameAsync(string username);
-
-        /// <summary>
-        /// Sign in.
-        /// </summary>
-        /// <param name="email">Email.</param>
-        /// <param name="password">Password.</param>
-        /// <returns>Authentication result data transfer object.</returns>
-        Task<AuthenticationResult> SignInAsync(string email, string password);
-
         /// <summary>
         /// Restore password.
         /// </summary>
@@ -60,15 +68,6 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="code">Verify code.</param>
         /// <returns>Authentication result data transfer object.</returns>
         Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code);
-
-        /// <summary>
-        /// Sign up (create new user).
-        /// </summary>
-        /// <param name="email">Email.</param>
-        /// <param name="userName">User nickname.</param>
-        /// <param name="password">Password.</param>
-        /// <returns>Confirmation result data transfer object.</returns>
-        Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password);
 
         /// <summary>
         /// Refresh user token.

@@ -15,12 +15,14 @@ namespace SocialMediaDashboard.Web.Validators
         public RefreshTokenRequestValidator()
         {
             RuleFor(refreshTokenRequest => refreshTokenRequest.Token)
-                .NotEmpty()
-                .WithMessage(ValidatorResource.TokenRequired);
+                .NotNull().WithMessage(ValidatorResource.UserTokenRequired)
+                .NotEmpty().WithMessage(ValidatorResource.UserTokenRequired)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserTokenRequired);
 
             RuleFor(refreshTokenRequest => refreshTokenRequest.RefreshToken)
-                .NotEmpty()
-                .WithMessage(ValidatorResource.RefreshTokenRequired);
+                .NotNull().WithMessage(ValidatorResource.UserRefreshTokenRequired)
+                .NotEmpty().WithMessage(ValidatorResource.UserRefreshTokenRequired)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserRefreshTokenRequired);
         }
     }
 }

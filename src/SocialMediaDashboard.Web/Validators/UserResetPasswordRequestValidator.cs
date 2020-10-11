@@ -15,18 +15,20 @@ namespace SocialMediaDashboard.Web.Validators
         public UserResetPasswordRequestValidator()
         {
             RuleFor(userResetPasswordRequest => userResetPasswordRequest.Email)
-                .NotEmpty()
-                .WithMessage(ValidatorResource.EmailRequired)
-                .EmailAddress()
-                .WithMessage(ValidatorResource.EmailInvalid);
+                .NotNull().WithMessage(ValidatorResource.UserEmailRequired)
+                .NotEmpty().WithMessage(ValidatorResource.UserEmailRequired)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserEmailRequired)
+                .EmailAddress().WithMessage(ValidatorResource.UserEmailInvalid);
 
             RuleFor(userResetPasswordRequest => userResetPasswordRequest.NewPassword)
-                .NotEmpty()
-                .WithMessage(ValidatorResource.PasswordRequired);
+                .NotNull().WithMessage(ValidatorResource.UserPasswordRequired)
+                .NotEmpty().WithMessage(ValidatorResource.UserPasswordRequired)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserPasswordRequired);
 
             RuleFor(userResetPasswordRequest => userResetPasswordRequest.Code)
-                .NotEmpty()
-                .WithMessage(ValidatorResource.VerifyCodeRequired);
+                .NotNull().WithMessage(ValidatorResource.UserVerifyCodeRequired)
+                .NotEmpty().WithMessage(ValidatorResource.UserVerifyCodeRequired)
+                .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserVerifyCodeRequired);
         }
     }
 }
