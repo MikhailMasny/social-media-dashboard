@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Web.Contracts.Responses
 {
     /// <summary>
-    /// Subscription failed response.
+    /// Failed response.
     /// </summary>
-    public class SubscriptionFailedResponse
+    public class FailedResponse
     {
         /// <summary>
         /// Error.

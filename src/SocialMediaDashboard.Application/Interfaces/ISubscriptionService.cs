@@ -1,5 +1,4 @@
 ﻿using SocialMediaDashboard.Application.Models;
-using SocialMediaDashboard.Domain.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="accountName">Account name.</param>
         /// <param name="subscriptionTypeId">Subscription type identifier.</param>
         /// <returns>Subscription data transfet object with operation result.</returns>
-        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> CreateAsync(string userId, string accountName, int subscriptionTypeId);
+        Task<(SubscriptionDto subscriptionDto, OperationResult operationResult)> CreateAsync(string userId, string accountName, int subscriptionTypeId);
 
         /// <summary>
         /// Get subscription by identifier.
@@ -25,14 +24,14 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="id">Identifier.</param>
         /// <param name="userId">User identifier.</param>
         /// <returns>Subscription data transfet object with operation result.</returns>
-        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> GetByIdAsync(int id, string userId);
+        Task<(SubscriptionDto subscriptionDto, OperationResult operationResult)> GetByIdAsync(int id, string userId);
 
         /// <summary>
         /// Get all subscriptions.
         /// </summary>
         /// <param name="userId">User identifier.</param>
         /// <returns>List of subscription data transfet objects with operation result.</returns>
-        Task<(IEnumerable<SubscriptionDto> subscriptionDto, SubscriptionResult subscriptionResult)> GetAllAsync(string userId);
+        Task<(IEnumerable<SubscriptionDto> subscriptionDto, OperationResult operationResult)> GetAllAsync(string userId);
 
         /// <summary>
         /// Update subscription.
@@ -42,7 +41,7 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="accountName">Account name.</param>
         /// <param name="subscriptionTypeId">Subscription type identifier.</param>
         /// <returns>Subscription data transfet object with operation result.</returns>
-        Task<(SubscriptionDto subscriptionDto, SubscriptionResult subscriptionResult)> UpdateAsync(int id, string userId, string accountName, int subscriptionTypeId);
+        Task<(SubscriptionDto subscriptionDto, OperationResult operationResult)> UpdateAsync(int id, string userId, string accountName, int subscriptionTypeId);
 
         /// <summary>
         /// Delete subscription by identifier.
@@ -50,7 +49,7 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="id">Identifier.</param>
         /// <param name="userId">User identifier.</param>
         /// <returns>Operation result.</returns>
-        Task<SubscriptionResult> DeleteByIdAsync(int id, string userId);
+        Task<OperationResult> DeleteByIdAsync(int id, string userId);
 
         /// <summary>
         /// Get account names by subscription type identifier.

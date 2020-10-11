@@ -1,9 +1,9 @@
 ﻿namespace SocialMediaDashboard.Application.Models
 {
     /// <summary>
-    /// Subscription operation result.
+    /// Operation result.
     /// </summary>
-    public class SubscriptionResult
+    public class OperationResult
     {
         /// <summary>
         /// Operation result.

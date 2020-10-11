@@ -24,6 +24,8 @@ namespace SocialMediaDashboard.Infrastructure.Extensions
             services.AddSingleton(new VkApi());
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IConfigService, ConfigService>();
+            services.AddScoped<IObservationService, ObservationService>();
+            services.AddScoped<IPlatformService, PlatformService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<ISubscriptionTypeService, SubscriptionTypeService>();
             services.AddScoped<IStatisticService, StatisticService>();

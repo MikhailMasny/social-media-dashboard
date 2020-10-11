@@ -88,7 +88,7 @@
         public static class Subscription
         {
             /// <summary>
-            /// Config path.
+            /// Subscription path.
             /// </summary>
             public const string Path = "subscription";
 
@@ -116,6 +116,69 @@
             /// Delete endpoint.
             /// </summary>
             public const string Delete = Root + "/" + Path + "/delete/{id}";
+        }
+
+        /// <summary>
+        /// Observation path.
+        /// </summary>
+        public static class Observation
+        {
+            /// <summary>
+            /// Observation path.
+            /// </summary>
+            public const string Path = "observation";
+
+            /// <summary>
+            /// Get endpoint.
+            /// </summary>
+            public const string Get = Root + "/" + Path + "/{id}";
+
+            /// <summary>
+            /// Get all endpoint.
+            /// </summary>
+            public const string GetAll = Root + "/" + Path + "/all";
+        }
+
+        /// <summary>
+        /// Platform path.
+        /// </summary>
+        public static class Platform
+        {
+            /// <summary>
+            /// Observation path.
+            /// </summary>
+            public const string Path = "platform";
+
+            /// <summary>
+            /// Get endpoint.
+            /// </summary>
+            public const string Get = Root + "/" + Path + "/{id}";
+
+            /// <summary>
+            /// Get all endpoint.
+            /// </summary>
+            public const string GetAll = Root + "/" + Path + "/all";
+        }
+
+        /// <summary>
+        /// Subscription type path.
+        /// </summary>
+        public static class SubscriptionType
+        {
+            /// <summary>
+            /// Observation path.
+            /// </summary>
+            public const string Path = "subscription-type";
+
+            /// <summary>
+            /// Get endpoint.
+            /// </summary>
+            public const string Get = Root + "/" + Path + "/{id}";
+
+            /// <summary>
+            /// Get all endpoint.
+            /// </summary>
+            public const string GetAll = Root + "/" + Path + "/all";
         }
     }
 }

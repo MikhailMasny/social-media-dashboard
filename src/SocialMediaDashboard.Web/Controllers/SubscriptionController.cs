@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Requests;
@@ -39,7 +40,7 @@ namespace SocialMediaDashboard.Web.Controllers
             var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
             if (!subscriptionTypeExist)
             {
-                return BadRequest(new SubscriptionFailedResponse
+                return BadRequest(new FailedResponse
                 {
                     Error = SubscriptionResource.IncorrectData
                 });
@@ -49,15 +50,15 @@ namespace SocialMediaDashboard.Web.Controllers
             var (subscriptionDto, operationResult) = await _subscriptionService.CreateAsync(userId, request.AccountName, request.SubscriptionTypeId);
             if (!operationResult.Result)
             {
-                return Conflict(new SubscriptionFailedResponse
+                return Conflict(new FailedResponse
                 {
                     Error = operationResult.Message,
                 });
             }
 
             var uri = new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoute.Subscription.Create}/{subscriptionDto.Id}");
-            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
-            subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
+            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
+            subscriptionSuccessfulResponse.Items.Add(subscriptionDto);
             subscriptionSuccessfulResponse.Message = operationResult.Message;
 
             return Created(uri, subscriptionSuccessfulResponse);
@@ -73,14 +74,14 @@ namespace SocialMediaDashboard.Web.Controllers
             var (subscriptionDto, operationResult) = await _subscriptionService.GetByIdAsync(id, userId);
             if (!operationResult.Result)
             {
-                return NotFound(new SubscriptionFailedResponse
+                return NotFound(new FailedResponse
                 {
                     Error = operationResult.Message,
                 });
             }
 
-            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
-            subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
+            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
+            subscriptionSuccessfulResponse.Items.Add(subscriptionDto);
             subscriptionSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(subscriptionSuccessfulResponse);
@@ -96,14 +97,14 @@ namespace SocialMediaDashboard.Web.Controllers
             var (subscriptionDtos, operationResult) = await _subscriptionService.GetAllAsync(userId);
             if (!operationResult.Result)
             {
-                return NotFound(new SubscriptionFailedResponse
+                return NotFound(new FailedResponse
                 {
                     Error = operationResult.Message,
                 });
             }
 
-            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
-            subscriptionSuccessfulResponse.Subscriptions.AddRange(subscriptionDtos);
+            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
+            subscriptionSuccessfulResponse.Items.AddRange(subscriptionDtos);
             subscriptionSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(subscriptionSuccessfulResponse);
@@ -121,7 +122,7 @@ namespace SocialMediaDashboard.Web.Controllers
             var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
             if (!subscriptionTypeExist)
             {
-                return BadRequest(new SubscriptionFailedResponse
+                return BadRequest(new FailedResponse
                 {
                     Error = SubscriptionResource.IncorrectData
                 });
@@ -131,14 +132,14 @@ namespace SocialMediaDashboard.Web.Controllers
             var (subscriptionDto, operationResult) = await _subscriptionService.UpdateAsync(id, userId, request.AccountName, request.SubscriptionTypeId);
             if (!operationResult.Result)
             {
-                return Conflict(new SubscriptionFailedResponse
+                return Conflict(new FailedResponse
                 {
                     Error = operationResult.Message,
                 });
             }
 
-            var subscriptionSuccessfulResponse = new SubscriptionSuccessfulResponse();
-            subscriptionSuccessfulResponse.Subscriptions.Add(subscriptionDto);
+            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
+            subscriptionSuccessfulResponse.Items.Add(subscriptionDto);
             subscriptionSuccessfulResponse.Message = operationResult.Message;
 
             return Ok(subscriptionSuccessfulResponse);
@@ -155,7 +156,7 @@ namespace SocialMediaDashboard.Web.Controllers
             var operationResult = await _subscriptionService.DeleteByIdAsync(id, userId);
             if (!operationResult.Result)
             {
-                return NotFound(new SubscriptionFailedResponse
+                return NotFound(new FailedResponse
                 {
                     Error = operationResult.Message,
                 });

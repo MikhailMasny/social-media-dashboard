@@ -22,24 +22,24 @@ namespace SocialMediaDashboard.Domain.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SubscriptionResource {
+    internal class ObservationResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SubscriptionResource() {
+        internal ObservationResource() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Domain.Resources.SubscriptionResource", typeof(SubscriptionResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SocialMediaDashboard.Domain.Resources.ObservationResource", typeof(ObservationResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,74 +61,20 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subscription successfully added to user..
+        ///   Looks up a localized string similar to Observations not found..
         /// </summary>
-        public static string Added {
-            get {
-                return ResourceManager.GetString("Added", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This subscription is already tied to the user..
-        /// </summary>
-        public static string AlreadyExist {
-            get {
-                return ResourceManager.GetString("AlreadyExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Subscription successfully deleted from user..
-        /// </summary>
-        public static string Deleted {
-            get {
-                return ResourceManager.GetString("Deleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Data for create subscription is incorrect..
-        /// </summary>
-        public static string IncorrectData {
-            get {
-                return ResourceManager.GetString("IncorrectData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Subscriptions not found..
-        /// </summary>
-        public static string NotFound {
+        internal static string NotFound {
             get {
                 return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specified subscription not found..
+        ///   Looks up a localized string similar to Specified observation not found..
         /// </summary>
-        public static string NotFoundSpecified {
+        internal static string NotFoundSpecified {
             get {
                 return ResourceManager.GetString("NotFoundSpecified", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to These details are the same for this subscription..
-        /// </summary>
-        public static string SameData {
-            get {
-                return ResourceManager.GetString("SameData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Subscription successfully updated..
-        /// </summary>
-        public static string Updated {
-            get {
-                return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
     }

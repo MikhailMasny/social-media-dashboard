@@ -32,17 +32,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case DataProviderType.MsSqlServer:
                     {
-                        _connectionSettings.Update(x => x.MsSqlServerConnection = dataProvider);
+                        _connectionSettings.Update(connectionSettings => connectionSettings.MsSqlServerConnection = dataProvider);
                     }
                     break;
 
                 case DataProviderType.PostgreSql:
                     {
-                        _connectionSettings.Update(x => x.PostgreSqlConnection = dataProvider);
+                        _connectionSettings.Update(connectionSettings => connectionSettings.PostgreSqlConnection = dataProvider);
                     }
                     break;
-
-                    // TODO: default:
             }
 
             return Task.CompletedTask;
@@ -54,17 +52,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case JwtConfigType.Secret:
                     {
-                        _jwtSettings.Update(x => x.Secret = jwtValue);
+                        _jwtSettings.Update(jwtSettings => jwtSettings.Secret = jwtValue);
                     }
                     break;
 
                 case JwtConfigType.TokenLifetime:
                     {
-                        _jwtSettings.Update(x => x.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
+                        _jwtSettings.Update(jwtSettings => jwtSettings.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
                     }
                     break;
-
-                    // TODO: default:
             }
 
             return Task.CompletedTask;
@@ -76,23 +72,21 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case SentryConfigType.Dns:
                     {
-                        _sentrySettings.Update(x => x.Dsn = sentryValue);
+                        _sentrySettings.Update(sentrySettings => sentrySettings.Dsn = sentryValue);
                     }
                     break;
 
                 case SentryConfigType.MinimumBreadcrumbLevel:
                     {
-                        _sentrySettings.Update(x => x.MinimumBreadcrumbLevel = sentryValue);
+                        _sentrySettings.Update(sentrySettings => sentrySettings.MinimumBreadcrumbLevel = sentryValue);
                     }
                     break;
 
                 case SentryConfigType.MinimumEventLevel:
                     {
-                        _sentrySettings.Update(x => x.MinimumEventLevel = sentryValue);
+                        _sentrySettings.Update(sentrySettings => sentrySettings.MinimumEventLevel = sentryValue);
                     }
                     break;
-
-                    // TODO: default:
             }
 
             return Task.CompletedTask;
@@ -104,29 +98,27 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case SocialNetworkConfigType.VkAccessToken:
                     {
-                        _vkSettings.Update(x => x.VkAccessToken = tokenValue);
+                        _vkSettings.Update(socialNetworksSettings => socialNetworksSettings.VkAccessToken = tokenValue);
                     }
                     break;
 
                 case SocialNetworkConfigType.InstagramUsername:
                     {
-                        _vkSettings.Update(x => x.InstagramAccount.Username = tokenValue);
+                        _vkSettings.Update(socialNetworksSettings => socialNetworksSettings.InstagramAccount.Username = tokenValue);
                     }
                     break;
 
                 case SocialNetworkConfigType.InstagramPassword:
                     {
-                        _vkSettings.Update(x => x.InstagramAccount.Password = tokenValue);
+                        _vkSettings.Update(socialNetworksSettings => socialNetworksSettings.InstagramAccount.Password = tokenValue);
                     }
                     break;
 
                 case SocialNetworkConfigType.YouTubeAccessToken:
                     {
-                        _vkSettings.Update(x => x.YouTubeAccessToken = tokenValue);
+                        _vkSettings.Update(socialNetworksSettings => socialNetworksSettings.YouTubeAccessToken = tokenValue);
                     }
                     break;
-
-                    // TODO: default:
             }
 
             return Task.CompletedTask;
