@@ -31,9 +31,9 @@ namespace SocialMediaDashboard.Web.Validators
                 .NotNull().WithMessage(ValidatorResource.UserNameRequired)
                 .NotEmpty().WithMessage(ValidatorResource.UserNameRequired)
                 .Length(ValidatorConstant.UserNameMinimumLength, ValidatorConstant.UserNameMaximumLength)
-                .WithMessage(string.Format(CultureInfo.InvariantCulture, 
-                    ValidatorResource.UserNameShort, 
-                    ValidatorConstant.UserNameMinimumLength, 
+                .WithMessage(string.Format(CultureInfo.InvariantCulture,
+                    ValidatorResource.UserNameShort,
+                    ValidatorConstant.UserNameMinimumLength,
                     ValidatorConstant.UserNameMaximumLength));
         }
     }

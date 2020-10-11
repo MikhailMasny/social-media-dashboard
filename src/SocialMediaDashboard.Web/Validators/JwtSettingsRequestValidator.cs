@@ -23,7 +23,6 @@ namespace SocialMediaDashboard.Web.Validators
                 .NotNull().WithMessage(ValidatorResource.JwtTokenLifetimeInvalid)
                 .NotEmpty().WithMessage(ValidatorResource.JwtTokenLifetimeInvalid)
                 .NotEqual(CommonResource.String).WithMessage(ValidatorResource.JwtTokenLifetimeInvalid);
-
         }
     }
 }

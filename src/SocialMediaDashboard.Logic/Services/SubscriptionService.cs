@@ -215,7 +215,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task<IEnumerable<SubscriptionDto>> GetAccountNamesBySubscriptionTypeIdAsync(int subscriptionTypeId)
         {
-
             var subscriptions = await _subscriptionRepository
                 .GetAllWithoutTracking()
                 .Where(subscription => subscription.SubscriptionTypeId == subscriptionTypeId)

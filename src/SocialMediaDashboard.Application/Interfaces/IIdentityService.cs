@@ -53,6 +53,7 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="username">Username.</param>
         /// <returns>User data transfet object.</returns>
         Task<UserResult> GetUserByNameAsync(string username);
+
         /// <summary>
         /// Restore password.
         /// </summary>

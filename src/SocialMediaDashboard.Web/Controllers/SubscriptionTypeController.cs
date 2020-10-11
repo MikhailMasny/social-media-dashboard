@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
-using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -38,7 +36,7 @@ namespace SocialMediaDashboard.Web.Controllers
                     Error = operationResult.Message,
                 });
             }
-            
+
             var subscriptionTypeSuccessfulResponse = new SuccessfulResponse<SubscriptionTypeDto>();
             subscriptionTypeSuccessfulResponse.Items.Add(subscriptionTypeDto);
             subscriptionTypeSuccessfulResponse.Message = operationResult.Message;

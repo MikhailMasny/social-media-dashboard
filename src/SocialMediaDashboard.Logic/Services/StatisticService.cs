@@ -13,6 +13,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
     public class StatisticService : IStatisticService
     {
         private delegate Task<int> GetCounts(string name);
+
         private readonly ILogger<StatisticService> _logger;
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly ISubscriptionTypeService _subscriptionTypeService;

@@ -20,7 +20,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         {
             var statistic = await _requestService.GetDataFromYouTubeApiByChannelAsync(channel);
             var data = statistic.Items;
-            
+
             return !data.Any()
                 ? default
                 : int.Parse(data.FirstOrDefault().Statistics.SubscriberCount, CultureInfo.InvariantCulture);

@@ -1,7 +1,6 @@
 ﻿using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
-using SocialMediaDashboard.Domain.Enums;
 using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Threading.Tasks;

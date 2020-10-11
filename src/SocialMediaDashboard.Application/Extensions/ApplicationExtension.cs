@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Repository;
