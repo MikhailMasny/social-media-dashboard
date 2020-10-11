@@ -4,8 +4,10 @@ using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
 using SocialMediaDashboard.Domain.Enums;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Infrastructure.Services
@@ -23,23 +25,61 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<SubscriptionTypeDto>> GetAllAsync()
+        public async Task<(IEnumerable<SubscriptionTypeDto> subscriptionTypeDtos, OperationResult operationResult)> GetAllAsync()
         {
+            OperationResult operationResult;
+
             var subscriptionTypes = await _subscriptionTypeRepository
                 .GetAllWithoutTracking()
                 .ToListAsync();
 
-            return _mapper.Map<List<SubscriptionTypeDto>>(subscriptionTypes);
+            if (!subscriptionTypes.Any())
+            {
+                operationResult = new OperationResult
+                {
+                    Result = false,
+                    Message = SubscriptionTypeResource.NotFound,
+                };
+
+                return (new List<SubscriptionTypeDto>(), operationResult);
+            }
+
+            var subscriptionTypeDtos = _mapper.Map<List<SubscriptionTypeDto>>(subscriptionTypes);
+            operationResult = new OperationResult
+            {
+                Result = true,
+                Message = CommonResource.Successful,
+            };
+
+            return (subscriptionTypeDtos, operationResult);
         }
 
-        public async Task<SubscriptionTypeDto> GetByIdAsync(int id)
+        public async Task<(SubscriptionTypeDto subscriptionTypeDto, OperationResult operationResult)> GetByIdAsync(int id)
         {
+            OperationResult operationResult;
+
             var subscriptionType = await _subscriptionTypeRepository
                 .GetEntityWithoutTrackingAsync(subscriptionType => subscriptionType.Id == id);
 
-            return subscriptionType is null
-                ? new SubscriptionTypeDto()
-                : _mapper.Map<SubscriptionTypeDto>(subscriptionType);
+            if (subscriptionType is null)
+            {
+                operationResult = new OperationResult
+                {
+                    Result = false,
+                    Message = SubscriptionTypeResource.NotFoundSpecified,
+                };
+
+                return (new SubscriptionTypeDto(), operationResult);
+            }
+
+            var subscriptionTypeDto = _mapper.Map<SubscriptionTypeDto>(subscriptionType);
+            operationResult = new OperationResult
+            {
+                Result = true,
+                Message = CommonResource.Successful,
+            };
+
+            return (subscriptionTypeDto, operationResult);
         }
 
         public async Task<int> GetByParametersAsync(PlatformType platformType, ObservationType observationType)

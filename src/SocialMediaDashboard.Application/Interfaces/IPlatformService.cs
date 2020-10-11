@@ -12,14 +12,14 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <summary>
         /// Get all platform data transfer objects.
         /// </summary>
-        /// <returns>List of platform data transfer objects.</returns>
-        Task<IEnumerable<PlatformDto>> GetAllAsync();
+        /// <returns>List of platform data transfer objects with operation result.</returns>
+        Task<(IEnumerable<PlatformDto> platformDtos, OperationResult operationResult)> GetAllAsync();
 
         /// <summary>
         /// Get platform data transfer object by identifier.
         /// </summary>
         /// <param name="id">Identifier.</param>
-        /// <returns>Platform data transfer object.</returns>
-        Task<PlatformDto> GetByIdAsync(int id);
+        /// <returns>Platform data transfer object with operation result.</returns>
+        Task<(PlatformDto platformDto, OperationResult operationResult)> GetByIdAsync(int id);
     }
 }

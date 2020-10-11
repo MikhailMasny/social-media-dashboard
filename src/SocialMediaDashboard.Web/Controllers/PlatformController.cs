@@ -30,12 +30,12 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Platform.Get, Name = nameof(GetPlatform))]
         public async Task<IActionResult> GetPlatform(int id)
         {
-            var platformDto = await _platformService.GetByIdAsync(id);
-            if (platformDto is null)
+            var (platformDto, operationResult) = await _platformService.GetByIdAsync(id);
+            if (!operationResult.Result)
             {
                 return NotFound(new FailedResponse
                 {
-                    Error = PlatformResource.NotFoundSpecified,
+                    Error = operationResult.Message,
                 });
             }
 
@@ -52,12 +52,12 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Platform.GetAll, Name = nameof(GetAllPlatforms))]
         public async Task<IActionResult> GetAllPlatforms()
         {
-            var platformDtos = await _platformService.GetAllAsync();
-            if (!platformDtos.Any())
+            var (platformDtos, operationResult) = await _platformService.GetAllAsync();
+            if (!operationResult.Result)
             {
                 return NotFound(new FailedResponse
                 {
-                    Error = PlatformResource.NotFound,
+                    Error = operationResult.Message,
                 });
             }
 

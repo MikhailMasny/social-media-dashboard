@@ -30,15 +30,15 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.SubscriptionType.Get, Name = nameof(GetSubscriptionType))]
         public async Task<IActionResult> GetSubscriptionType(int id)
         {
-            var subscriptionTypeDto = await _subscriptionTypeService.GetByIdAsync(id);
-            if (subscriptionTypeDto is null)
+            var (subscriptionTypeDto, operationResult) = await _subscriptionTypeService.GetByIdAsync(id);
+            if (!operationResult.Result)
             {
                 return NotFound(new FailedResponse
                 {
-                    Error = SubscriptionTypeResource.NotFoundSpecified,
+                    Error = operationResult.Message,
                 });
             }
-
+            
             var subscriptionTypeSuccessfulResponse = new SuccessfulResponse<SubscriptionTypeDto>();
             subscriptionTypeSuccessfulResponse.Items.Add(subscriptionTypeDto);
             subscriptionTypeSuccessfulResponse.Message = CommonResource.Successful;
@@ -52,12 +52,12 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.SubscriptionType.GetAll, Name = nameof(GetAllSubscriptionTypes))]
         public async Task<IActionResult> GetAllSubscriptionTypes()
         {
-            var subscriptionTypeDtos = await _subscriptionTypeService.GetAllAsync();
-            if (!subscriptionTypeDtos.Any())
+            var (subscriptionTypeDtos, operationResult) = await _subscriptionTypeService.GetAllAsync();
+            if (!operationResult.Result)
             {
                 return NotFound(new FailedResponse
                 {
-                    Error = SubscriptionTypeResource.NotFound,
+                    Error = operationResult.Message,
                 });
             }
 

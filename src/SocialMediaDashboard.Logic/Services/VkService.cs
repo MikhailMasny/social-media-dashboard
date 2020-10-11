@@ -32,8 +32,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             var response = await _api.Users.GetAsync(new string[] { userName }, VkNet.Enums.Filters.ProfileFields.Counters);
             var user = response.FirstOrDefault();
 
-            // TODO: fix it without null
-            return user.Counters.Followers.Value;
+            return user.Counters.Followers ?? default;
         }
     }
 }

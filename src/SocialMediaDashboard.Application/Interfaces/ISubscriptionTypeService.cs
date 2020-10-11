@@ -13,15 +13,15 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <summary>
         /// Get all subscription type data transfer objects.
         /// </summary>
-        /// <returns>List of subscription type data transfer objects.</returns>
-        Task<IEnumerable<SubscriptionTypeDto>> GetAllAsync();
+        /// <returns>List of subscription type data transfer objects with operation result.</returns>
+        Task<(IEnumerable<SubscriptionTypeDto> subscriptionTypeDtos, OperationResult operationResult)> GetAllAsync();
 
         /// <summary>
         /// Get subscription type data transfer object by identifier.
         /// </summary>
         /// <param name="id">Identifier.</param>
-        /// <returns>Subscription type data transfer object.</returns>
-        Task<SubscriptionTypeDto> GetByIdAsync(int id);
+        /// <returns>Subscription type data transfer object with operation result.</returns>
+        Task<(SubscriptionTypeDto subscriptionTypeDto, OperationResult operationResult)> GetByIdAsync(int id);
 
         /// <summary>
         /// Check subscription type.

@@ -25,25 +25,17 @@ namespace SocialMediaDashboard.Application.Extensions
         /// <param name="configuration">Configuration.</param>
         /// <param name="environment">Host environment.</param>
         /// <returns>Service collection.</returns>
-        public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+        public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
         {
-            // TODO: uncomment it
-            //if (environment.IsDevelopment())
-            //{
-            //    services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString(ConnectionString.MsSqlServer)));
-            //}
-            //else
-            //{
-            //    services.AddDbContext<SocialMediaDashboardContext>(options =>
-            //    {
-            //        options.UseNpgsql(configuration.GetConnectionString(ConnectionString.PostgreSql));
-            //        options.UseSecondLevelCache();
-            //    });
-            //}
-
             services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString(ConnectionString.MsSqlServer)));
 
-            // UNDONE: Change it to IdentityServer4
+            // TODO: for production
+            //services.AddDbContext<SocialMediaDashboardContext>(options =>
+            //{
+            //    options.UseNpgsql(configuration.GetConnectionString(ConnectionString.PostgreSql));
+            //    options.UseSecondLevelCache();
+            //});
+
             services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SocialMediaDashboardContext>();

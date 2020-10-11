@@ -19,7 +19,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _socialNetworksSettings = socialNetworksSettings ?? throw new ArgumentNullException(nameof(socialNetworksSettings));
         }
 
-        // TODO: fix it to int with string (answer)
         public async Task<int> GetFollowersByUserNameAsync(string userName)
         {
             var userSession = new UserSessionData
@@ -35,12 +34,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
             if (!instaApi.IsUserAuthenticated)
             {
-                // TODO: delete it
-                Console.WriteLine($"Logging in as {userSession.UserName}");
                 var logInResult = await instaApi.LoginAsync();
                 if (!logInResult.Succeeded)
                 {
-                    Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
                     return default;
                 }
             }

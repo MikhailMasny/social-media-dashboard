@@ -16,17 +16,14 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _requestService = requestService ?? throw new ArgumentNullException(nameof(requestService));
         }
 
-        // TODO: change it to answer + result
         public async Task<int> GetSubscribersByChannelAsync(string channel)
         {
             var statistic = await _requestService.GetDataFromYouTubeApiByChannelAsync(channel);
             var data = statistic.Items;
-            if (!data.Any())
-            {
-                return default;
-            }
-
-            return int.Parse(data.FirstOrDefault().Statistics.SubscriberCount, CultureInfo.InvariantCulture);
+            
+            return !data.Any()
+                ? default
+                : int.Parse(data.FirstOrDefault().Statistics.SubscriberCount, CultureInfo.InvariantCulture);
         }
     }
 }

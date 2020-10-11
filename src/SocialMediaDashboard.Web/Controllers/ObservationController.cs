@@ -8,7 +8,6 @@ using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -30,12 +29,12 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Observation.Get, Name = nameof(GetAllObservation))]
         public async Task<IActionResult> GetAllObservation(int id)
         {
-            var observationDto = await _observationService.GetByIdAsync(id);
-            if (observationDto is null)
+            var (observationDto, operationResult) = await _observationService.GetByIdAsync(id);
+            if (!operationResult.Result)
             {
                 return NotFound(new FailedResponse
                 {
-                    Error = PlatformResource.NotFoundSpecified,
+                    Error = operationResult.Message,
                 });
             }
 
@@ -52,12 +51,12 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Observation.GetAll, Name = nameof(GetAllObservations))]
         public async Task<IActionResult> GetAllObservations()
         {
-            var observationDtos = await _observationService.GetAllAsync();
-            if (!observationDtos.Any())
+            var (observationDtos, operationResult) = await _observationService.GetAllAsync();
+            if (!operationResult.Result)
             {
                 return NotFound(new FailedResponse
                 {
-                    Error = PlatformResource.NotFound,
+                    Error = operationResult.Message,
                 });
             }
 
