@@ -51,8 +51,13 @@ namespace SocialMediaDashboard.Web.Extensions
                 IssuerSigningKey = new SymmetricSecurityKey(jwtSecretKey),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                RequireExpirationTime = false,
-                ValidateLifetime = true
+
+                // Another possible settings
+                //ValidIssuer = JwtParametrs.Issuer,
+                //ValidAudience = JwtParametrs.Audience,
+                //ClockSkew = TimeSpan.Zero,
+                //RequireExpirationTime = false,
+                //ValidateLifetime = true
             };
             services.AddSingleton(tokenValidationParametrs);
 
