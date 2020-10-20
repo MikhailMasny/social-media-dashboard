@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +6,6 @@ using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Repository;
 using SocialMediaDashboard.Domain.Constants;
-using SocialMediaDashboard.Domain.Entities;
 using System.Reflection;
 
 namespace SocialMediaDashboard.Application.Extensions
@@ -34,10 +32,6 @@ namespace SocialMediaDashboard.Application.Extensions
             //    options.UseNpgsql(configuration.GetConnectionString(ConnectionString.PostgreSql));
             //    options.UseSecondLevelCache();
             //});
-
-            services.AddDefaultIdentity<User>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<SocialMediaDashboardContext>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

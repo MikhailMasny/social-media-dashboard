@@ -171,6 +171,9 @@
   <data name="SubscriptionTypeIdInvalid" xml:space="preserve">
     <value>Invalid subscription type identifier.</value>
   </data>
+  <data name="UserConfirmPasswordRequired" xml:space="preserve">
+    <value>Confirm password is required.</value>
+  </data>
   <data name="UserEmailInvalid" xml:space="preserve">
     <value>Invalid email format.</value>
   </data>

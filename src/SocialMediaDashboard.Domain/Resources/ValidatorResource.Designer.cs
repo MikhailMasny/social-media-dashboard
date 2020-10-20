@@ -223,6 +223,15 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm password is required..
+        /// </summary>
+        public static string UserConfirmPasswordRequired {
+            get {
+                return ResourceManager.GetString("UserConfirmPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email format..
         /// </summary>
         public static string UserEmailInvalid {

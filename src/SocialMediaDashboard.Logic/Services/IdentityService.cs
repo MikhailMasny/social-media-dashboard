@@ -202,9 +202,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task<ConfirmationResult> RestorePasswordAsync(string email)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser is null)
+            if (user is null)
             {
                 return new ConfirmationResult
                 {
@@ -212,7 +212,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
 
             if (!emailConfirmationResult.IsSuccessful)
             {
@@ -222,11 +222,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
+            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
             return new ConfirmationResult
             {
                 IsSuccessful = true,
-                Email = identityUser.Email,
-                Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser)
+                Email = user.Email,
+                Code = passwordResetToken
             };
         }
 

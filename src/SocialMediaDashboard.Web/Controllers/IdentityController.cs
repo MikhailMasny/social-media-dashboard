@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
@@ -9,6 +10,7 @@ using SocialMediaDashboard.Web.Contracts.Queries;
 using SocialMediaDashboard.Web.Contracts.Requests;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -18,10 +20,13 @@ namespace SocialMediaDashboard.Web.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
+        private readonly IEmailService _emailService;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identityService,
+                                  IEmailService emailService)
         {
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
+            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
         [AllowAnonymous]
@@ -41,11 +46,19 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            // UNDONE: send mail with token here
+            // TODO: bug?!
+            var encodedToken = Uri.EscapeDataString(confirmationResult.Code);
+
+            var callbackUrl = Url.Action(
+                "ConfirmEmail", "Identity",
+                new { request.Email, token = encodedToken },
+                protocol: HttpContext.Request.Scheme);
+
+            await _emailService.SendMessageAsync(request.Email, IdentityResource.EmailConfirm, callbackUrl); // TODO: Razor Service
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"{IdentityResource.EmailConfirm} Code: {confirmationResult.Code}"
+                Message = IdentityResource.EmailConfirm
             });
         }
 
@@ -127,23 +140,49 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            // UNDONE: send mail with token here
+            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationResult.Code);
+            var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+
+            // TODO: bug?!
+            var callbackUrl = Url.Action(
+                "ResetPassword", "Identity",
+                new { email = request.Email, token = codeEncoded },
+                protocol: HttpContext.Request.Scheme);
+
+            var text = $"{callbackUrl}\n\n{confirmationResult.Code}";
+
+            await _emailService.SendMessageAsync(request.Email, IdentityResource.PasswordResetting, text); // TODO: Razor Service
 
             return Ok(new AuthSuccessfulResponse
             {
-                Message = $"{IdentityResource.PasswordResetting} Code: {confirmationResult.Code}" // UNDONE: RazorViewEngine + SendGrid
+                Message = IdentityResource.PasswordResetting
             });
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status302Found)]
+        [HttpGet(ApiRoute.Identity.Reset, Name = nameof(ResetPassword))]
+        public IActionResult ResetPassword()
+        {
+            var queryString = HttpContext.Request.QueryString.Value;
+            //return Redirect($"{domain}{queryString}"); //TODO: Change it to real domain
+            return Ok();
         }
 
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(ApiRoute.Identity.Reset, Name = nameof(ResetPassword))]
-        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequest request)
+        public async Task<IActionResult> ResetPassword([FromQuery] UserResetPasswordRequest request, [FromBody] UserNewPasswordRequest passwordRequest)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
+            passwordRequest = passwordRequest ?? throw new ArgumentNullException(nameof(passwordRequest));
 
-            var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, request.NewPassword, request.Code);
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(request.Code);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+
+            var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, passwordRequest.Password, codeDecoded);
 
             if (!authenticationResult.IsSuccessful)
             {
@@ -153,12 +192,12 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            // UNDONE: send mail with token here
+            await _emailService.SendMessageAsync(request.Email, "Password was changed", "Password was changed"); // TODO: literal
 
             return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
-                Message = IdentityResource.PasswordAccepted // UNDONE: RazorViewEngine + SendGrid
+                Message = IdentityResource.PasswordAccepted
             });
         }
 
@@ -180,8 +219,6 @@ namespace SocialMediaDashboard.Web.Controllers
                     Errors = authenticationResult.Errors
                 });
             }
-
-            // UNDONE: send mail with token here
 
             return Ok(new AuthSuccessfulResponse
             {

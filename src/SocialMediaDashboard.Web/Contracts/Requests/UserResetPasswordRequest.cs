@@ -11,11 +11,6 @@
         public string Email { get; set; }
 
         /// <summary>
-        /// Password.
-        /// </summary>
-        public string NewPassword { get; set; }
-
-        /// <summary>
         /// Verify code.
         /// </summary>
         public string Code { get; set; }
