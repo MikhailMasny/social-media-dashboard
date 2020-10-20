@@ -2,15 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Queries;
 using SocialMediaDashboard.Web.Contracts.Requests;
 using SocialMediaDashboard.Web.Contracts.Responses;
+using SocialMediaDashboard.Web.Extensions;
 using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -46,12 +45,11 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            // TODO: bug?!
-            var encodedToken = Uri.EscapeDataString(confirmationResult.Code);
+            var confirmToken = confirmationResult.Code.EncodeToken();
 
             var callbackUrl = Url.Action(
                 "ConfirmEmail", "Identity",
-                new { request.Email, token = encodedToken },
+                new { request.Email, token = confirmToken },
                 protocol: HttpContext.Request.Scheme);
 
             await _emailService.SendMessageAsync(request.Email, IdentityResource.EmailConfirm, callbackUrl); // TODO: Razor Service
@@ -104,7 +102,8 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            var authenticationResult = await _identityService.ConfirmEmailAsync(query.Email, query.Code);
+            var confirmToken = query.Code.DecodeToken();
+            var authenticationResult = await _identityService.ConfirmEmailAsync(query.Email, confirmToken);
 
             if (!authenticationResult.IsSuccessful)
             {
@@ -140,18 +139,14 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationResult.Code);
-            var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+            var passwordResetToken = confirmationResult.Code.EncodeToken();
 
-            // TODO: bug?!
             var callbackUrl = Url.Action(
                 "ResetPassword", "Identity",
-                new { email = request.Email, token = codeEncoded },
+                new { email = request.Email, token = passwordResetToken },
                 protocol: HttpContext.Request.Scheme);
 
-            var text = $"{callbackUrl}\n\n{confirmationResult.Code}";
-
-            await _emailService.SendMessageAsync(request.Email, IdentityResource.PasswordResetting, text); // TODO: Razor Service
+            await _emailService.SendMessageAsync(request.Email, IdentityResource.PasswordResetting, callbackUrl); // TODO: Razor Service
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -166,7 +161,8 @@ namespace SocialMediaDashboard.Web.Controllers
         public IActionResult ResetPassword()
         {
             var queryString = HttpContext.Request.QueryString.Value;
-            //return Redirect($"{domain}{queryString}"); //TODO: Change it to real domain
+            //TODO: Change it to real domain
+            //return Redirect($"{domain}{queryString}"); 
             return Ok();
         }
 
@@ -179,10 +175,8 @@ namespace SocialMediaDashboard.Web.Controllers
             request = request ?? throw new ArgumentNullException(nameof(request));
             passwordRequest = passwordRequest ?? throw new ArgumentNullException(nameof(passwordRequest));
 
-            var codeDecodedBytes = WebEncoders.Base64UrlDecode(request.Code);
-            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
-
-            var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, passwordRequest.Password, codeDecoded);
+            var passwordResetToken = request.Code.DecodeToken();
+            var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, passwordRequest.Password, passwordResetToken);
 
             if (!authenticationResult.IsSuccessful)
             {

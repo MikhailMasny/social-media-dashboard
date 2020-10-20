@@ -10,7 +10,7 @@ namespace SocialMediaDashboard.Web.Extensions
     /// <summary>
     /// Extensions for ServiceCollection.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtension
     {
         /// <summary>
         /// Extension method to overwrite configurations.
