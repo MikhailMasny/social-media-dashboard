@@ -1,35 +1,51 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SocialMediaDashboard.Common.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using SocialMediaDashboard.Domain.Enums;
+using System;
 
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
-    /// User profile entity.
+    /// Profile entity.
     /// </summary>
-    public class Profile : IHasDbIdentity, IHasUserIdentity
+    public class Profile
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Avatar.
+        /// User identifier.
         /// </summary>
-        public string Avatar { get; set; }
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// Navigation for User.
+        /// </summary>
+        public User User { get; set; }
 
         /// <summary>
         /// Name.
         /// </summary>
         public string Name { get; set; }
 
-        /// <inheritdoc/>
-        public string UserId { get; set; }
-
-        // UNDONE: maybe fix it?
         /// <summary>
-        /// User.
+        /// Gender.
         /// </summary>
-        [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
+        public GenderType Gender { get; set; }
+
+        /// <summary>
+        /// Date of birth.
+        /// </summary>
+        public DateTime BirthDate { get; set; }
+
+        /// <summary>
+        /// Country.
+        /// </summary>
+        public string Country { get; set; }
+
+        /// <summary>
+        /// Avatar.
+        /// </summary>
+        public byte[] Avatar { get; set; }
     }
 }

@@ -1,40 +1,45 @@
-﻿using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// Subscription entity.
     /// </summary>
-    public class Subscription : IHasDbIdentity
+    public class Subscription
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Type.
+        /// User identifier.
         /// </summary>
-        public SubscriptionType Type { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
-        /// Display for user.
+        /// Navigation for User.
         /// </summary>
-        public bool IsDisplayed { get; set; }
+        public User User { get; set; }
 
         /// <summary>
-        /// Social media account identifier.
+        /// Account name.
         /// </summary>
-        public int AccountId { get; set; }
+        public string AccountName { get; set; }
 
         /// <summary>
-        /// Navigation property for Social media account.
+        /// Subscription type identifier.
         /// </summary>
-        public Account Account { get; set; }
+        public int SubscriptionTypeId { get; set; }
 
         /// <summary>
-        /// Navigation to Statistic.
+        /// Navigation for SubscriptionType.
         /// </summary>
-        public ICollection<Statistic> Statistics { get; }
+        public SubscriptionType SubscriptionType { get; set; }
+
+        /// <summary>
+        /// Navigation on Statistics.
+        /// </summary>
+        public ICollection<Statistic> Statistics { get; set; }
     }
 }

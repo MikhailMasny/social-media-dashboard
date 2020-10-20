@@ -5,15 +5,89 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SocialMediaDashboard.Common\SocialMediaDashboard.Common.csproj" />
+    <Compile Update="Resources\CommonResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommonResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\IdentityResource.Designer.cs">
+      <DependentUpon>IdentityResource.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\ObservationResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ObservationResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\PlatformResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PlatformResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ProfileResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProfileResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\SubscriptionResource.Designer.cs">
+      <DependentUpon>SubscriptionResource.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\SubscriptionTypeResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SubscriptionTypeResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ValidatorResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ValidatorResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\CommonResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\IdentityResource.resx">
+      <LastGenOutput>IdentityResource.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ObservationResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ObservationResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PlatformResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PlatformResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ProfileResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProfileResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SubscriptionResource.resx">
+      <LastGenOutput>SubscriptionResource.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SubscriptionTypeResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SubscriptionTypeResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ValidatorResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ValidatorResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

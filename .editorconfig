@@ -28,5 +28,20 @@ dotnet_diagnostic.CA1034.severity = none
 # CA2000: Dispose objects before losing scope
 dotnet_diagnostic.CA2000.severity = none
 
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = none
+
 [*.xml]
 indent_style = space
+
+[YouTubeResult.cs]
+# CA2227: Collection properties should be read only
+dotnet_diagnostic.CA2227.severity = none
+
+[src/SocialMediaDashboard.Domain/Entities/**]
+# CA2227: Collection properties should be read only
+dotnet_diagnostic.CA2227.severity = none
+
+[src/SocialMediaDashboard.Application/Migrations/**]
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none

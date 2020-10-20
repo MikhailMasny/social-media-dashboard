@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.Common.Interfaces;
-using SocialMediaDashboard.Common.Models;
-using SocialMediaDashboard.Common.Resources;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Constants;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Helpers;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,32 +16,34 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IIdentityService"/>
     public class IdentityService : IIdentityService
     {
         private readonly IOptionsSnapshot<JwtSettings> _jwtSettings;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
+        private readonly IProfileService _profileService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
         public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
-                               UserManager<IdentityUser> userManager,
+                               UserManager<User> userManager,
                                RoleManager<IdentityRole> roleManager,
                                IRepository<RefreshToken> refreshTokenRepository,
-                               TokenValidationParameters tokenValidationParameters)
+                               TokenValidationParameters tokenValidationParameters,
+                               IProfileService profileService)
         {
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _refreshTokenRepository = refreshTokenRepository ?? throw new ArgumentNullException(nameof(refreshTokenRepository));
             _tokenValidationParameters = tokenValidationParameters ?? throw new ArgumentNullException(nameof(tokenValidationParameters));
+            _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
         }
 
-        /// <inheritdoc/>
-        public async Task<ConfirmationResult> RegistrationAsync(string email, string userName, string password)
+        public async Task<ConfirmationResult> SignUpAsync(string email, string password, string name)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
@@ -48,11 +51,15 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.EmailAlreadyExist }
+                    Errors = new[] { IdentityResource.EmailAlreadyExist }
                 };
             }
 
-            var user = new IdentityUser
+            var userName = Guid.NewGuid()
+                .ToString()
+                .Replace("-", "", StringComparison.InvariantCulture);
+
+            var user = new User
             {
                 Email = email,
                 UserName = userName
@@ -68,7 +75,8 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            await _userManager.AddToRoleAsync(user, Identity.UserRole);
+            await _profileService.CreateAsync(user.Id, name);
+            await _userManager.AddToRoleAsync(user, AppRole.User);
 
             return new ConfirmationResult
             {
@@ -78,30 +86,29 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        /// <inheritdoc/>
-        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        public async Task<AuthenticationResult> SignInAsync(string email, string password)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (user is null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.UserNotExist }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
-            var userHasValidPassword = await _userManager.CheckPasswordAsync(identityUser, password);
+            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
             if (!userHasValidPassword)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.IncorrectData }
+                    Errors = new[] { IdentityResource.IncorrectData }
                 };
             }
 
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
 
             if (!emailConfirmationResult.IsSuccessful)
             {
@@ -111,122 +118,97 @@ namespace SocialMediaDashboard.Logic.Services
                 };
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
-        /// <inheritdoc/>
-        public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
-        {
-            var validatedToken = GetPrincipalFromToken(token);
-
-            if (validatedToken == null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.TokenInvalid }
-                };
-            }
-
-            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value, CultureInfo.InvariantCulture);
-            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                .AddSeconds(expiryDateUnix);
-
-            if (expiryDateTimeUtc > DateTime.UtcNow)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.TokenNotExpired }
-                };
-            }
-
-            var jti = validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
-            var storedRefreshToken = await _refreshTokenRepository.GetEntityAsync(x => x.Token == refreshToken);
-
-            if (storedRefreshToken == null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.RefreshTokenNotExist }
-                };
-            }
-
-            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.RefreshTokenExpired }
-                };
-            }
-
-            if (storedRefreshToken.IsInvalid)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.RefreshTokenInvalid }
-                };
-            }
-
-            if (storedRefreshToken.IsUsed)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.RefreshTokenUsed }
-                };
-            }
-
-            if (storedRefreshToken.JwtId != jti)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { Identity.RefreshTokenNotMatch }
-                };
-            }
-
-            storedRefreshToken.IsUsed = true;
-            _refreshTokenRepository.Update(storedRefreshToken);
-            await _refreshTokenRepository.SaveChangesAsync();
-
-            var identityUser = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == Identity.Id).Value);
-            return await GenerateAuthenticationResultAsync(identityUser);
-        }
-
-        /// <inheritdoc />
         public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (user is null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.UserNotExist }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
-            var identityResult = await _userManager.ConfirmEmailAsync(identityUser, code);
+            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
 
             if (!identityResult.Succeeded)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { Identity.TokenException }
+                    Errors = new[] { IdentityResource.TokenException }
                 };
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
-        /// <inheritdoc />
+        public async Task<UserResult> GetUserByEmailAsync(string email)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
+
+            if (identityUser is null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
+            };
+        }
+
+        public async Task<UserResult> GetUserByIdAsync(string id)
+        {
+            var identityUser = await _userManager.FindByIdAsync(id);
+
+            if (identityUser is null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
+            };
+        }
+
+        public async Task<UserResult> GetUserByNameAsync(string username)
+        {
+            var identityUser = await _userManager.FindByNameAsync(username);
+
+            if (identityUser is null)
+            {
+                return null;
+            }
+
+            return new UserResult
+            {
+                Id = identityUser.Id,
+                Email = identityUser.Email,
+                UserName = identityUser.UserName,
+                PhoneNumber = identityUser.PhoneNumber
+            };
+        }
+
         public async Task<ConfirmationResult> RestorePasswordAsync(string email)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (identityUser is null)
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.UserNotExist }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
@@ -248,98 +230,116 @@ namespace SocialMediaDashboard.Logic.Services
             };
         }
 
-        /// <inheritdoc />
         public async Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser == null)
+            if (user is null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist." }
+                    Errors = new[] { IdentityResource.UserNotExist }
                 };
             }
 
-            var identityResult = await _userManager.ResetPasswordAsync(identityUser, code, newPassword);
+            var identityResult = await _userManager.ResetPasswordAsync(user, code, newPassword);
 
             if (!identityResult.Succeeded)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "An unexpected error occurred while resetting the password.." }
+                    Errors = new[] { IdentityResource.PasswordException }
                 };
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
-        /// <inheritdoc/>
-        public async Task<UserResult> GetUserByEmailAsync(string email)
+        public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var validatedToken = GetPrincipalFromToken(token);
 
-            if (identityUser == null)
+            if (validatedToken is null)
             {
-                return null;
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.TokenInvalid }
+                };
             }
 
-            return new UserResult
-            {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
-        }
+            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value, CultureInfo.InvariantCulture);
+            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                .AddSeconds(expiryDateUnix);
 
-        /// <inheritdoc/>
-        public async Task<UserResult> GetUserByIdAsync(string id)
-        {
-            var identityUser = await _userManager.FindByIdAsync(id);
-
-            if (identityUser == null)
+            if (expiryDateTimeUtc > DateTime.UtcNow)
             {
-                return null;
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.TokenNotExpired }
+                };
             }
 
-            return new UserResult
-            {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
-        }
+            var jti = validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-        /// <inheritdoc/>
-        public async Task<UserResult> GetUserByNameAsync(string username)
-        {
-            var identityUser = await _userManager.FindByNameAsync(username);
+            var storedRefreshToken = await _refreshTokenRepository.GetEntityAsync(x => x.Token == refreshToken);
 
-            if (identityUser == null)
+            if (storedRefreshToken is null)
             {
-                return null;
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.RefreshTokenNotExist }
+                };
             }
 
-            return new UserResult
+            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
             {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.RefreshTokenExpired }
+                };
+            }
+
+            if (storedRefreshToken.IsInvalid)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.RefreshTokenInvalid }
+                };
+            }
+
+            if (storedRefreshToken.IsUsed)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.RefreshTokenUsed }
+                };
+            }
+
+            if (storedRefreshToken.JwtId != jti)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { IdentityResource.RefreshTokenNotMatch }
+                };
+            }
+
+            storedRefreshToken.IsUsed = true;
+            _refreshTokenRepository.Update(storedRefreshToken);
+            await _refreshTokenRepository.SaveChangesAsync();
+
+            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == CommonResource.Id).Value);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
-        private async Task<ConfirmationResult> EmailConfirmHandlerAsync(IdentityUser identityUser)
+        private async Task<ConfirmationResult> EmailConfirmHandlerAsync(User user)
         {
-            var isConfirmed = await _userManager.IsEmailConfirmedAsync(identityUser);
+            var isConfirmed = await _userManager.IsEmailConfirmedAsync(user);
 
             if (!isConfirmed)
             {
                 return new ConfirmationResult
                 {
-                    Errors = new[] { Identity.EmailNotVerified }
+                    Errors = new[] { IdentityResource.EmailNotVerified }
                 };
             }
 
@@ -375,26 +375,26 @@ namespace SocialMediaDashboard.Logic.Services
                 && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser identityUser)
+        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Secret);
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
-                new Claim("id", identityUser.Id)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(CommonResource.Id, user.Id)
             };
 
-            var userRoles = await _userManager.GetRolesAsync(identityUser);
+            var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
 
                 var role = await _roleManager.FindByNameAsync(userRole);
-                if (role == null)
+                if (role is null)
                 {
                     continue;
                 }
@@ -423,12 +423,12 @@ namespace SocialMediaDashboard.Logic.Services
             {
                 Token = Guid.NewGuid().ToString(),
                 JwtId = token.Id,
-                UserId = identityUser.Id,
+                UserId = user.Id,
                 CreationDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
-            await _refreshTokenRepository.AddAsync(refreshToken);
+            await _refreshTokenRepository.CreateAsync(refreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
             return new AuthenticationResult

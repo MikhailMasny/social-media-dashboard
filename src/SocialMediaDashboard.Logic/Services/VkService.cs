@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
-using SocialMediaDashboard.Common.Helpers;
-using SocialMediaDashboard.Common.Interfaces;
+using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Domain.Helpers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Model;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
     /// <inheritdoc cref="IVkService"/>
     public class VkService : IVkService
@@ -22,7 +22,7 @@ namespace SocialMediaDashboard.Logic.Services
             _api = api ?? throw new ArgumentNullException(nameof(api));
         }
 
-        public async Task<int?> GetFollowersByUserNameAsync(string userName)
+        public async Task<int> GetFollowersByUserNameAsync(string userName)
         {
             await _api.AuthorizeAsync(new ApiAuthParams
             {
@@ -32,8 +32,7 @@ namespace SocialMediaDashboard.Logic.Services
             var response = await _api.Users.GetAsync(new string[] { userName }, VkNet.Enums.Filters.ProfileFields.Counters);
             var user = response.FirstOrDefault();
 
-            // TODO: fix it without null
-            return user.Counters.Followers;
+            return user.Counters.Followers ?? default;
         }
     }
 }

@@ -1,14 +1,15 @@
-﻿using SocialMediaDashboard.Common.Interfaces;
-using System;
+﻿using System;
 
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// Statistic entity.
     /// </summary>
-    public class Statistic : IHasDbIdentity
+    public class Statistic
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace SocialMediaDashboard.Domain.Entities
         public int SubscriptionId { get; set; }
 
         /// <summary>
-        /// Navigation property for Subscription.
+        /// Navigation for Subscription.
         /// </summary>
         public Subscription Subscription { get; set; }
     }

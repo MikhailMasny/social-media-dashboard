@@ -1,17 +1,26 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SocialMediaDashboard.Common.Interfaces;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 
 namespace SocialMediaDashboard.Domain.Entities
 {
     /// <summary>
     /// Refresh Token entity.
     /// </summary>
-    public class RefreshToken : IHasDbIdentity, IHasUserIdentity
+    public class RefreshToken
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Identifier.
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// User identifier.
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// Navigation for User.
+        /// </summary>
+        public User User { get; set; }
 
         /// <summary>
         /// JWT Token.
@@ -42,15 +51,5 @@ namespace SocialMediaDashboard.Domain.Entities
         /// Invalid indicator.
         /// </summary>
         public bool IsInvalid { get; set; }
-
-        /// <inheritdoc/>
-        public string UserId { get; set; }
-
-        // UNDONE: maybe fix it?
-        /// <summary>
-        /// User.
-        /// </summary>
-        [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
     }
 }

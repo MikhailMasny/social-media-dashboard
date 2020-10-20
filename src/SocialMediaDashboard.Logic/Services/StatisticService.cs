@@ -1,150 +1,99 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Logging;
-using SocialMediaDashboard.Common.Enums;
-using SocialMediaDashboard.Common.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SocialMediaDashboard.Logic.Services
+namespace SocialMediaDashboard.Infrastructure.Services
 {
-    /// <inheritdoc cref="IAccountService"/>
+    /// <inheritdoc cref="IStatisticService"/>
     public class StatisticService : IStatisticService
     {
-        // TODO: refactor this service 
+        private delegate Task<int> GetCounts(string name);
 
+        private readonly ILogger<StatisticService> _logger;
         private readonly IRepository<Statistic> _statisticRepository;
-        private readonly IAccountService _accountService;
+        private readonly ISubscriptionTypeService _subscriptionTypeService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IVkService _vkService;
         private readonly IInstagramService _instagramService;
         private readonly IYouTubeService _youTubeService;
-        private readonly ILogger<StatisticService> _logger;
 
-        public StatisticService(IRepository<Statistic> statisticRepository,
-                                IAccountService accountService,
+        public StatisticService(ILogger<StatisticService> logger,
+                                IRepository<Statistic> statisticRepository,
+                                ISubscriptionTypeService subscriptionTypeService,
                                 ISubscriptionService subscriptionService,
                                 IVkService vkService,
                                 IInstagramService instagramService,
-                                IYouTubeService youTubeService,
-                                ILogger<StatisticService> logger)
+                                IYouTubeService youTubeService)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
-            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+            _subscriptionTypeService = subscriptionTypeService ?? throw new ArgumentNullException(nameof(subscriptionTypeService));
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
             _vkService = vkService ?? throw new ArgumentNullException(nameof(vkService));
             _instagramService = instagramService ?? throw new ArgumentNullException(nameof(instagramService));
             _youTubeService = youTubeService ?? throw new ArgumentNullException(nameof(youTubeService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddFollowersFromVkAsync()
+        public async Task GetFollowersFromVkAsync()
         {
-            var statistics = new List<Statistic>();
-            var subscriptions = await _subscriptionService.GetAllSubscriptionsByTypeAsync(AccountType.Vk, SubscriptionType.Follower);
-
-            if (subscriptions.Any())
-            {
-                foreach (var subscription in subscriptions)
-                {
-                    var account = await _accountService.GetAccountAsync(subscription.AccountId);
-                    int? count;
-
-                    try
-                    {
-                        count = await _vkService.GetFollowersByUserNameAsync(account.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        throw;
-                    }
-
-                    var statistic = new Statistic
-                    {
-                        Count = count.Value,
-                        Date = DateTime.Now,
-                        SubscriptionId = subscription.Id
-                    };
-                    statistics.Add(statistic);
-                }
-
-                await _statisticRepository.AddRangeAsync(statistics);
-                await _statisticRepository.SaveChangesAsync();
-            }
+            var getCounts = new GetCounts(_vkService.GetFollowersByUserNameAsync);
+            await SaveStatisticsAsync(PlatformType.Vk, ObservationType.Follower, getCounts);
         }
 
-        public async Task AddFollowersFromInstagramAsync()
+        public async Task GetFollowersFromInstagramAsync()
         {
-            var statistics = new List<Statistic>();
-            var subscriptions = await _subscriptionService.GetAllSubscriptionsByTypeAsync(AccountType.Instagram, SubscriptionType.Follower);
-
-            if (subscriptions.Any())
-            {
-                foreach (var subscription in subscriptions)
-                {
-                    var account = await _accountService.GetAccountAsync(subscription.AccountId);
-                    int? count;
-
-                    try
-                    {
-                        count = await _instagramService.GetFollowersByUserNameAsync(account.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        throw;
-                    }
-
-                    var statistic = new Statistic
-                    {
-                        Count = count.Value,
-                        Date = DateTime.Now,
-                        SubscriptionId = subscription.Id
-                    };
-                    statistics.Add(statistic);
-                }
-
-                await _statisticRepository.AddRangeAsync(statistics);
-                await _statisticRepository.SaveChangesAsync();
-            }
+            var getCounts = new GetCounts(_instagramService.GetFollowersByUserNameAsync);
+            await SaveStatisticsAsync(PlatformType.Instagram, ObservationType.Follower, getCounts);
         }
 
-        public async Task AddSubscribersFromYouTubeAsync()
+        public async Task GetSubscribersFromYouTubeAsync()
+        {
+            var getCounts = new GetCounts(_youTubeService.GetSubscribersByChannelAsync);
+            await SaveStatisticsAsync(PlatformType.YouTube, ObservationType.Subscriber, getCounts);
+        }
+
+        private async Task SaveStatisticsAsync(PlatformType platformType, ObservationType observationType, GetCounts getCounts)
         {
             var statistics = new List<Statistic>();
-            var subscriptions = await _subscriptionService.GetAllSubscriptionsByTypeAsync(AccountType.YouTube, SubscriptionType.Subscriber);
+            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(platformType, observationType);
 
-            if (subscriptions.Any())
+            if (!(subscriptionTypeId == default))
             {
-                foreach (var subscription in subscriptions)
+                var subscriptions = await _subscriptionService.GetAccountNamesBySubscriptionTypeIdAsync(subscriptionTypeId);
+
+                if (subscriptions.Any())
                 {
-                    var account = await _accountService.GetAccountAsync(subscription.AccountId);
-                    int? count;
+                    foreach (var subscription in subscriptions)
+                    {
+                        int count;
 
-                    try
-                    {
-                        count = await _youTubeService.GetSubscribersByChannelAsync(account.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
-                        throw;
+                        try
+                        {
+                            count = await getCounts(subscription.AccountName);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, ex.Message);
+                            throw;
+                        }
+
+                        var statistic = new Statistic
+                        {
+                            Count = count,
+                            Date = DateTime.Now,
+                            SubscriptionId = subscription.Id
+                        };
+                        statistics.Add(statistic);
                     }
 
-                    var statistic = new Statistic
-                    {
-                        Count = count.Value,
-                        Date = DateTime.Now,
-                        SubscriptionId = subscription.Id
-                    };
-                    statistics.Add(statistic);
+                    await _statisticRepository.CreateRangeAsync(statistics);
+                    await _statisticRepository.SaveChangesAsync();
                 }
-
-                await _statisticRepository.AddRangeAsync(statistics);
-                await _statisticRepository.SaveChangesAsync();
             }
         }
     }

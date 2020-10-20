@@ -1,9 +1,9 @@
 ﻿using Coravel;
 using Microsoft.AspNetCore.Builder;
-using SocialMediaDashboard.Logic.Tasks;
+using SocialMediaDashboard.Infrastructure.Tasks;
 using System;
 
-namespace SocialMediaDashboard.Logic.Extensions
+namespace SocialMediaDashboard.Infrastructure.Extensions
 {
     /// <summary>
     /// Coravel extension.
@@ -23,7 +23,7 @@ namespace SocialMediaDashboard.Logic.Extensions
             provider.UseScheduler(scheduler =>
             {
                 scheduler.Schedule<StatisticInvocable>()
-                    .EveryMinute();
+                    .EveryThirtyMinutes();
             });
 
             return app;
