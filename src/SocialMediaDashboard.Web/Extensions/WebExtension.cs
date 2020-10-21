@@ -141,6 +141,7 @@ namespace SocialMediaDashboard.Web.Extensions
         {
             services.AddCors();
             services.AddHealthChecks();
+            services.AddRazorPages();
             services.AddControllers(options =>
                 options.Filters.Add<ValidationFilter>())
                     .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -155,7 +156,7 @@ namespace SocialMediaDashboard.Web.Extensions
             services.ConfigureWritable<SentrySettings>(configuration.GetSection(nameof(SentrySettings)));
             services.ConfigureWritable<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
             services.ConfigureWritable<SocialNetworksSettings>(configuration.GetSection(nameof(SocialNetworksSettings)));
-            services.ConfigureWritable<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
+            services.ConfigureWritable<MailSettings>(configuration.GetSection(nameof(MailSettings)));
 
             return services;
         }

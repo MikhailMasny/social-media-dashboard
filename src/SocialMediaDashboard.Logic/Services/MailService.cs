@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Infrastructure.Services
 {
-    /// <inheritdoc cref="IEmailService"/>
-    public class EmailService : IEmailService
+    /// <inheritdoc cref="IMailService"/>
+    public class MailService : IMailService
     {
         private readonly ILogger _logger;
-        private readonly EmailSettings _emailSettings;
+        private readonly MailSettings _emailSettings;
 
-        public EmailService(ILogger<EmailService> logger,
-                            IWritableOptions<EmailSettings> emailSettings)
+        public MailService(ILogger<MailService> logger,
+                            IWritableOptions<MailSettings> emailSettings)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             if (emailSettings is null)
@@ -29,7 +29,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task SendMessageAsync(string recipient, string subject, string body)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Social Media Dashboard App", _emailSettings.Address));
+            message.From.Add(new MailboxAddress("Social Media Dashboard App", _emailSettings.Address)); // TODO: literal
             message.To.Add(new MailboxAddress("", recipient));
             message.Subject = subject;
             message.Body = new TextPart(MimeKit.Text.TextFormat.Html)

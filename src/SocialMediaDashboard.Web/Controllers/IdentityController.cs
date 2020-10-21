@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
+using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Queries;
 using SocialMediaDashboard.Web.Contracts.Requests;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using SocialMediaDashboard.Web.Extensions;
+using SocialMediaDashboard.Web.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -19,13 +21,13 @@ namespace SocialMediaDashboard.Web.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
-        private readonly IEmailService _emailService;
+        private readonly ISenderService _senderService;
 
         public IdentityController(IIdentityService identityService,
-                                  IEmailService emailService)
+                                  ISenderService senderService)
         {
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
-            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+            _senderService = senderService ?? throw new ArgumentNullException(nameof(senderService));
         }
 
         [AllowAnonymous]
@@ -48,11 +50,26 @@ namespace SocialMediaDashboard.Web.Controllers
             var confirmToken = confirmationResult.Code.EncodeToken();
 
             var callbackUrl = Url.Action(
-                "ConfirmEmail", "Identity",
-                new { request.Email, token = confirmToken },
+                "ConfirmEmail", 
+                "Identity",
+                new
+                {
+                    request.Email,
+                    Code = confirmToken
+                },
                 protocol: HttpContext.Request.Scheme);
 
-            await _emailService.SendMessageAsync(request.Email, IdentityResource.EmailConfirm, callbackUrl); // TODO: Razor Service
+            var emailViewModel = new EmailViewModel
+            {
+                Name = request.Name,
+                Link = callbackUrl
+            };
+
+            await _senderService.RenderAndSendAsync(
+                emailViewModel, 
+                "Views/Mail/Confirm.cshtml", 
+                request.Email, 
+                IdentityResource.EmailConfirm); // TODO: literal
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -142,11 +159,25 @@ namespace SocialMediaDashboard.Web.Controllers
             var passwordResetToken = confirmationResult.Code.EncodeToken();
 
             var callbackUrl = Url.Action(
-                "ResetPassword", "Identity",
-                new { email = request.Email, token = passwordResetToken },
+                "ResetPassword", 
+                "Identity",
+                new { 
+                    request.Email, 
+                    Code = passwordResetToken 
+                },
                 protocol: HttpContext.Request.Scheme);
 
-            await _emailService.SendMessageAsync(request.Email, IdentityResource.PasswordResetting, callbackUrl); // TODO: Razor Service
+            var emailViewModel = new EmailViewModel
+            {
+                Name = request.Email,
+                Link = callbackUrl
+            };
+
+            await _senderService.RenderAndSendAsync(
+                emailViewModel,
+                "Views/Mail/Restore.cshtml",
+                request.Email,
+                IdentityResource.PasswordResetting); // TODO: literal
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -186,7 +217,16 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            await _emailService.SendMessageAsync(request.Email, "Password was changed", "Password was changed"); // TODO: literal
+            var emailViewModel = new EmailViewModel
+            {
+                Name = request.Email,
+            };
+
+            await _senderService.RenderAndSendAsync(
+                emailViewModel,
+                "Views/Mail/Reset.cshtml",
+                request.Email,
+                "Password was changed"); // TODO: literal
 
             return Ok(new AuthSuccessfulResponse
             {

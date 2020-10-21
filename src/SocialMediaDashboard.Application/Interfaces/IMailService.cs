@@ -5,7 +5,7 @@ namespace SocialMediaDashboard.Application.Interfaces
     /// <summary>
     /// Interface for implement email service.
     /// </summary>
-    public interface IEmailService
+    public interface IMailService
     {
         /// <summary>
         /// Send email.

@@ -3,7 +3,7 @@
     /// <summary>
     /// Email settings (from appsettings.json).
     /// </summary>
-    public class EmailSettings
+    public class MailSettings
     {
         /// <summary>
         /// Server.
