@@ -69,7 +69,7 @@ namespace SocialMediaDashboard.Web.Controllers
                 emailViewModel, 
                 "Views/Mail/Confirm.cshtml", 
                 request.Email, 
-                IdentityResource.EmailConfirm); // TODO: literal
+                EmailResource.AccountCreated);
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -177,7 +177,7 @@ namespace SocialMediaDashboard.Web.Controllers
                 emailViewModel,
                 "Views/Mail/Restore.cshtml",
                 request.Email,
-                IdentityResource.PasswordResetting); // TODO: literal
+                EmailResource.PasswordReset);
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -226,7 +226,7 @@ namespace SocialMediaDashboard.Web.Controllers
                 emailViewModel,
                 "Views/Mail/Reset.cshtml",
                 request.Email,
-                "Password was changed"); // TODO: literal
+                EmailResource.PasswordChanged);
 
             return Ok(new AuthSuccessfulResponse
             {
