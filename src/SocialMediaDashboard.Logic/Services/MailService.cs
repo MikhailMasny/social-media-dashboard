@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Domain.Helpers;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly MailSettings _emailSettings;
 
         public MailService(ILogger<MailService> logger,
-                            IWritableOptions<MailSettings> emailSettings)
+                           IWritableOptions<MailSettings> emailSettings)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             if (emailSettings is null)
@@ -29,8 +30,8 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task SendMessageAsync(string recipient, string subject, string body)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Social Media Dashboard App", _emailSettings.Address)); // TODO: literal
-            message.To.Add(new MailboxAddress("", recipient));
+            message.From.Add(new MailboxAddress(EmailResource.SenderName, _emailSettings.Address));
+            message.To.Add(new MailboxAddress(string.Empty, recipient));
             message.Subject = subject;
             message.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {

@@ -80,6 +80,11 @@
             /// Social networks settings endpoint.
             /// </summary>
             public const string SocialNetworks = Root + "/" + Path + "/social-networks";
+
+            /// <summary>
+            /// Mail settings endpoint.
+            /// </summary>
+            public const string Mail = Root + "/" + Path + "/mail";
         }
 
         /// <summary>

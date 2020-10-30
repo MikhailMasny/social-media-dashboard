@@ -135,6 +135,21 @@
   <data name="JwtTokenLifetimeInvalid" xml:space="preserve">
     <value>Invalid token lifetime format, use: hh:mm:ss.</value>
   </data>
+  <data name="MailAddressInvalid" xml:space="preserve">
+    <value>Invalid address value.</value>
+  </data>
+  <data name="MailPasswordInvalid" xml:space="preserve">
+    <value>Invalid password value.</value>
+  </data>
+  <data name="MailPortInvalid" xml:space="preserve">
+    <value>Invalid port value, must be: 25, 465 or 587.</value>
+  </data>
+  <data name="MailServerInvalid" xml:space="preserve">
+    <value>Invalid mail server value.</value>
+  </data>
+  <data name="MailUseSslInvalid" xml:space="preserve">
+    <value>Invalid use SSL value, must be: true or false.</value>
+  </data>
   <data name="ProfileBirthDateInvalid" xml:space="preserve">
     <value>Invalid date birth value, there should be more or equal 1970-01-01.</value>
   </data>

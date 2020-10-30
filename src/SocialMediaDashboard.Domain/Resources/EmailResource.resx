@@ -126,4 +126,7 @@
   <data name="PasswordReset" xml:space="preserve">
     <value>Reset your password</value>
   </data>
+  <data name="SenderName" xml:space="preserve">
+    <value>SMD. App</value>
+  </data>
 </root>

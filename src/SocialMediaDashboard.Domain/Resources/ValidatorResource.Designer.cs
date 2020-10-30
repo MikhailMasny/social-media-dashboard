@@ -115,6 +115,51 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid address value..
+        /// </summary>
+        public static string MailAddressInvalid {
+            get {
+                return ResourceManager.GetString("MailAddressInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid password value..
+        /// </summary>
+        public static string MailPasswordInvalid {
+            get {
+                return ResourceManager.GetString("MailPasswordInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid port value, must be: 25, 465 or 587..
+        /// </summary>
+        public static string MailPortInvalid {
+            get {
+                return ResourceManager.GetString("MailPortInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid mail server value..
+        /// </summary>
+        public static string MailServerInvalid {
+            get {
+                return ResourceManager.GetString("MailServerInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid use SSL value, must be: true or false..
+        /// </summary>
+        public static string MailUseSslInvalid {
+            get {
+                return ResourceManager.GetString("MailUseSslInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid date birth value, there should be more or equal 1970-01-01..
         /// </summary>
         public static string ProfileBirthDateInvalid {

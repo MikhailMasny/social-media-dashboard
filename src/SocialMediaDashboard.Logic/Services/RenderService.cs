@@ -77,7 +77,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 Environment.NewLine,
                 new[]
                 {
-                    $"Unable to find view '{viewName}'. The following locations were searched:" // TODO: to resources
+                    $"Unable to find view '{viewName}'. The following locations were searched:"
                 }
                 .Concat(searchedLocations));
 

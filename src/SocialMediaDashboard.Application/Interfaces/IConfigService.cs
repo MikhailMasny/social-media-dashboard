@@ -35,5 +35,12 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="tokenValue">Token key value.</param>
         /// <param name="socialNetworkConfigType">Type of social network key value.</param>
         Task CheckAndUpdateSocialNetworks(string tokenValue, SocialNetworkConfigType socialNetworkConfigType);
+
+        /// <summary>
+        /// Check and update mail settings.
+        /// </summary>
+        /// <param name="mailValue">Mail key value.</param>
+        /// <param name="mailConfigType">Type of mail key value.</param>
+        Task CheckAndUpdateMail(object mailValue, MailConfigType mailConfigType);
     }
 }

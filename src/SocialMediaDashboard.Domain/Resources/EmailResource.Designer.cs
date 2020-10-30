@@ -86,5 +86,14 @@ namespace SocialMediaDashboard.Domain.Resources {
                 return ResourceManager.GetString("PasswordReset", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SMD. App.
+        /// </summary>
+        public static string SenderName {
+            get {
+                return ResourceManager.GetString("SenderName", resourceCulture);
+            }
+        }
     }
 }
