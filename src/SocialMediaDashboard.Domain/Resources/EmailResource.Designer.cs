@@ -61,7 +61,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Social Media Dashboard account.
+        ///   Looks up a localized string similar to Create account.
         /// </summary>
         public static string AccountCreated {
             get {

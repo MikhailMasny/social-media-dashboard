@@ -130,6 +130,13 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
+            //TODO: Change it to real domain
+            //var queryString = new
+            //{
+            //    confirmEmail = true
+            //};
+            //return Redirect($"{domain}{queryString}"); 
+
             return Ok(new AuthSuccessfulResponse
             {
                 Token = authenticationResult.Token,
@@ -169,7 +176,7 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var emailViewModel = new EmailViewModel
             {
-                Name = request.Email,
+                Name = confirmationResult.Data,
                 Link = callbackUrl
             };
 
@@ -191,8 +198,8 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Identity.Reset, Name = nameof(ResetPassword))]
         public IActionResult ResetPassword()
         {
-            var queryString = HttpContext.Request.QueryString.Value;
             //TODO: Change it to real domain
+            //var queryString = HttpContext.Request.QueryString.Value;
             //return Redirect($"{domain}{queryString}"); 
             return Ok();
         }
