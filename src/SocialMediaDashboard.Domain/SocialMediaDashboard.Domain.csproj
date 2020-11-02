@@ -18,6 +18,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CommonResource.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\EmailResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EmailResource.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\IdentityResource.Designer.cs">
       <DependentUpon>IdentityResource.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -59,6 +64,10 @@
     <EmbeddedResource Update="Resources\CommonResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommonResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EmailResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\IdentityResource.resx">
       <LastGenOutput>IdentityResource.Designer.cs</LastGenOutput>

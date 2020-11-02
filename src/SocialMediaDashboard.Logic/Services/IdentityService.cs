@@ -46,7 +46,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task<ConfirmationResult> SignUpAsync(string email, string password, string name)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
-
             if (identityUser != null)
             {
                 return new ConfirmationResult
@@ -66,7 +65,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
             };
 
             var createdUser = await _userManager.CreateAsync(user, password);
-
             if (!createdUser.Succeeded)
             {
                 return new ConfirmationResult
@@ -81,7 +79,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             return new ConfirmationResult
             {
                 IsSuccessful = true,
-                Email = user.Email,
+                Data = name,
                 Code = await _userManager.GenerateEmailConfirmationTokenAsync(user)
             };
         }
@@ -89,7 +87,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task<AuthenticationResult> SignInAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-
             if (user is null)
             {
                 return new AuthenticationResult
@@ -99,7 +96,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
             }
 
             var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
-
             if (!userHasValidPassword)
             {
                 return new AuthenticationResult
@@ -109,7 +105,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
             }
 
             var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
-
             if (!emailConfirmationResult.IsSuccessful)
             {
                 return new AuthenticationResult
@@ -202,9 +197,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task<ConfirmationResult> RestorePasswordAsync(string email)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (identityUser is null)
+            if (user is null)
             {
                 return new ConfirmationResult
                 {
@@ -212,8 +207,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(identityUser);
-
+            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
             if (!emailConfirmationResult.IsSuccessful)
             {
                 return new ConfirmationResult
@@ -222,11 +216,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 };
             }
 
+            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var (profileDto, _) = await _profileService.GetByUserIdAsync(user.Id);
+
             return new ConfirmationResult
             {
                 IsSuccessful = true,
-                Email = identityUser.Email,
-                Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser)
+                Data = profileDto.Name,
+                Code = passwordResetToken
             };
         }
 

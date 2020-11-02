@@ -83,5 +83,22 @@ namespace SocialMediaDashboard.Web.Controllers
 
             return NoContent();
         }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [HttpPut(ApiRoute.Config.Mail, Name = nameof(UpdateMail))]
+        public async Task<IActionResult> UpdateMail([FromBody] MailSettingsRequest request)
+        {
+            request = request ?? throw new ArgumentNullException(nameof(request));
+
+            await _configService.CheckAndUpdateMail(request.Server, MailConfigType.Server);
+            await _configService.CheckAndUpdateMail(request.Port, MailConfigType.Port);
+            await _configService.CheckAndUpdateMail(request.UseSsl, MailConfigType.UseSsl);
+            await _configService.CheckAndUpdateMail(request.Address, MailConfigType.Address);
+            await _configService.CheckAndUpdateMail(request.Password, MailConfigType.Password);
+
+            return NoContent();
+        }
     }
 }

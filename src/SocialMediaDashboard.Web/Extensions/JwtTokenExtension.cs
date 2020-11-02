@@ -8,7 +8,7 @@ namespace SocialMediaDashboard.Web.Extensions
     /// <summary>
     /// Extensions for JWT Token.
     /// </summary>
-    public static class JwtTokenExtensions
+    public static class JwtTokenExtension
     {
         /// <summary>
         /// Get user identifier.

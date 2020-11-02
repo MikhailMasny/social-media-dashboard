@@ -1,10 +1,13 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Domain.Constants;
+using SocialMediaDashboard.Domain.Entities;
 using SocialMediaDashboard.Domain.Helpers;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Filters;
@@ -29,10 +32,22 @@ namespace SocialMediaDashboard.Web.Extensions
             configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
             services.AddJwt(configuration);
+            services.AddAppIdentity();
             services.AddSwagger();
-            services.AddMail();
             services.AddCoreBase();
             services.AddWritableOptions(configuration);
+
+            return services;
+        }
+
+        private static IServiceCollection AddAppIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<SocialMediaDashboardContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(IdentityConstant.TokenLifetime));
 
             return services;
         }
@@ -122,35 +137,11 @@ namespace SocialMediaDashboard.Web.Extensions
             return services;
         }
 
-        private static IServiceCollection AddMail(this IServiceCollection services)
-        {
-            // TODO: create mail settings
-            //var mailSettingsSection = configuration.GetSection(nameof(MailSettings));
-            //services.Configure<MailSettings>(mailSettingsSection);
-
-            //var mailSettings = jwtSettingsSection.Get<MailSettings>();
-
-            //services.AddMailKit(optionBuilder =>
-            //{
-            //    optionBuilder.UseMailKit(new MailKitOptions()
-            //    {
-            //        Server = configuration["Server"],
-            //        Port = Convert.ToInt32(configuration["Port"], CultureInfo.InvariantCulture),
-            //        Security = true,
-            //        SenderName = configuration["SenderName"],
-            //        SenderEmail = configuration["SenderEmail"],
-            //        Account = configuration["Account"],
-            //        Password = configuration["Password"],
-            //    });
-            //});
-
-            return services;
-        }
-
         private static IServiceCollection AddCoreBase(this IServiceCollection services)
         {
             services.AddCors();
             services.AddHealthChecks();
+            services.AddRazorPages();
             services.AddControllers(options =>
                 options.Filters.Add<ValidationFilter>())
                     .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -165,6 +156,7 @@ namespace SocialMediaDashboard.Web.Extensions
             services.ConfigureWritable<SentrySettings>(configuration.GetSection(nameof(SentrySettings)));
             services.ConfigureWritable<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
             services.ConfigureWritable<SocialNetworksSettings>(configuration.GetSection(nameof(SocialNetworksSettings)));
+            services.ConfigureWritable<MailSettings>(configuration.GetSection(nameof(MailSettings)));
 
             return services;
         }

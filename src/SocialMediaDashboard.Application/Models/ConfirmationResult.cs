@@ -6,9 +6,9 @@
     public class ConfirmationResult : ResultBase
     {
         /// <summary>
-        /// Email.
+        /// Email or Name.
         /// </summary>
-        public string Email { get; set; }
+        public string Data { get; set; }
 
         /// <summary>
         /// Verify code.
