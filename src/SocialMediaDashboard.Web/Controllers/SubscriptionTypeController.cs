@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -28,20 +31,14 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.SubscriptionType.Get, Name = nameof(GetSubscriptionType))]
         public async Task<IActionResult> GetSubscriptionType(int id)
         {
-            var (subscriptionTypeDto, operationResult) = await _subscriptionTypeService.GetByIdAsync(id);
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<SubscriptionTypeDto>
             {
-                return NotFound(new FailedResponse
+                Message = CommonResource.Successful,
+                Items = new List<SubscriptionTypeDto>
                 {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var subscriptionTypeSuccessfulResponse = new SuccessfulResponse<SubscriptionTypeDto>();
-            subscriptionTypeSuccessfulResponse.Items.Add(subscriptionTypeDto);
-            subscriptionTypeSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(subscriptionTypeSuccessfulResponse);
+                    await _subscriptionTypeService.GetByIdAsync(id),
+                },
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -50,20 +47,11 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.SubscriptionType.GetAll, Name = nameof(GetAllSubscriptionTypes))]
         public async Task<IActionResult> GetAllSubscriptionTypes()
         {
-            var (subscriptionTypeDtos, operationResult) = await _subscriptionTypeService.GetAllAsync();
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<SubscriptionTypeDto>
             {
-                return NotFound(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var subscriptionTypeSuccessfulResponse = new SuccessfulResponse<SubscriptionTypeDto>();
-            subscriptionTypeSuccessfulResponse.Items.AddRange(subscriptionTypeDtos);
-            subscriptionTypeSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(subscriptionTypeSuccessfulResponse);
+                Message = CommonResource.Successful,
+                Items = (await _subscriptionTypeService.GetAllAsync()).ToList(),
+            });
         }
     }
 }

@@ -16,11 +16,12 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IWritableOptions<SocialNetworksSettings> _socialNetworksSettings;
         private readonly IWritableOptions<MailSettings> _mailSettings;
 
-        public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings,
-                             IWritableOptions<JwtSettings> jwtSettings,
-                             IWritableOptions<SentrySettings> sentrySettings,
-                             IWritableOptions<SocialNetworksSettings> vkSettings,
-                             IWritableOptions<MailSettings> mailSettings)
+        public ConfigService(
+            IWritableOptions<ConnectionSettings> connectionSettings,
+            IWritableOptions<JwtSettings> jwtSettings,
+            IWritableOptions<SentrySettings> sentrySettings,
+            IWritableOptions<SocialNetworksSettings> vkSettings,
+            IWritableOptions<MailSettings> mailSettings)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));

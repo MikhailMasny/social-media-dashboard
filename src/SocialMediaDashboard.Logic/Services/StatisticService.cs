@@ -12,8 +12,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
     /// <inheritdoc cref="IStatisticService"/>
     public class StatisticService : IStatisticService
     {
-        private delegate Task<int> GetCounts(string name);
-
         private readonly ILogger<StatisticService> _logger;
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly ISubscriptionTypeService _subscriptionTypeService;
@@ -22,13 +20,14 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IInstagramService _instagramService;
         private readonly IYouTubeService _youTubeService;
 
-        public StatisticService(ILogger<StatisticService> logger,
-                                IRepository<Statistic> statisticRepository,
-                                ISubscriptionTypeService subscriptionTypeService,
-                                ISubscriptionService subscriptionService,
-                                IVkService vkService,
-                                IInstagramService instagramService,
-                                IYouTubeService youTubeService)
+        public StatisticService(
+            ILogger<StatisticService> logger,
+            IRepository<Statistic> statisticRepository,
+            ISubscriptionTypeService subscriptionTypeService,
+            ISubscriptionService subscriptionService,
+            IVkService vkService,
+            IInstagramService instagramService,
+            IYouTubeService youTubeService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
@@ -41,26 +40,35 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         public async Task GetFollowersFromVkAsync()
         {
-            var getCounts = new GetCounts(_vkService.GetFollowersByUserNameAsync);
-            await SaveStatisticsAsync(PlatformType.Vk, ObservationType.Follower, getCounts);
+            await SaveStatisticsAsync(
+                PlatformType.Vk,
+                ObservationType.Follower,
+                _vkService.GetFollowersByUserNameAsync);
         }
 
         public async Task GetFollowersFromInstagramAsync()
         {
-            var getCounts = new GetCounts(_instagramService.GetFollowersByUserNameAsync);
-            await SaveStatisticsAsync(PlatformType.Instagram, ObservationType.Follower, getCounts);
+            await SaveStatisticsAsync(
+                PlatformType.Instagram,
+                ObservationType.Follower,
+                _instagramService.GetFollowersByUserNameAsync);
         }
 
         public async Task GetSubscribersFromYouTubeAsync()
         {
-            var getCounts = new GetCounts(_youTubeService.GetSubscribersByChannelAsync);
-            await SaveStatisticsAsync(PlatformType.YouTube, ObservationType.Subscriber, getCounts);
+            await SaveStatisticsAsync(
+                PlatformType.YouTube,
+                ObservationType.Subscriber,
+                _youTubeService.GetSubscribersByChannelAsync);
         }
 
-        private async Task SaveStatisticsAsync(PlatformType platformType, ObservationType observationType, GetCounts getCounts)
+        private async Task SaveStatisticsAsync(PlatformType platformType, ObservationType observationType, Func<string, Task<int>> getCounts)
         {
             var statistics = new List<Statistic>();
-            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(platformType, observationType);
+            var subscriptionTypeId =
+                await _subscriptionTypeService.GetByParametersAsync(
+                    platformType,
+                    observationType);
 
             if (!(subscriptionTypeId == default))
             {
@@ -88,6 +96,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                             Date = DateTime.Now,
                             SubscriptionId = subscription.Id
                         };
+
                         statistics.Add(statistic);
                     }
 

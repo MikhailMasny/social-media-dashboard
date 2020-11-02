@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SocialMediaDashboard.Application.Exceptions;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Constants;
@@ -28,12 +29,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IProfileService _profileService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
-        public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
-                               UserManager<User> userManager,
-                               RoleManager<IdentityRole> roleManager,
-                               IRepository<RefreshToken> refreshTokenRepository,
-                               TokenValidationParameters tokenValidationParameters,
-                               IProfileService profileService)
+        public IdentityService(
+            IOptionsSnapshot<JwtSettings> jwtSettings,
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IRepository<RefreshToken> refreshTokenRepository,
+            TokenValidationParameters tokenValidationParameters,
+            IProfileService profileService)
         {
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -43,114 +45,79 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
         }
 
-        public async Task<ConfirmationResult> SignUpAsync(string email, string password, string name)
+        public async Task<string> SignUpAsync(string email, string password, string name)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
             if (identityUser != null)
             {
-                return new ConfirmationResult
-                {
-                    Errors = new[] { IdentityResource.EmailAlreadyExist }
-                };
+                throw new ConflictException(IdentityResource.EmailAlreadyExist);
             }
-
-            var userName = Guid.NewGuid()
-                .ToString()
-                .Replace("-", "", StringComparison.InvariantCulture);
 
             var user = new User
             {
                 Email = email,
-                UserName = userName
+                UserName = Guid.NewGuid()
+                    .ToString()
+                    .Replace("-", "", StringComparison.InvariantCulture),
             };
 
             var createdUser = await _userManager.CreateAsync(user, password);
             if (!createdUser.Succeeded)
             {
-                return new ConfirmationResult
-                {
-                    Errors = createdUser.Errors.Select(x => x.Description)
-                };
+                throw new ConflictException(string.Join(" ", createdUser.Errors.Select(x => x.Description)));
             }
 
             await _profileService.CreateAsync(user.Id, name);
             await _userManager.AddToRoleAsync(user, AppRole.User);
 
-            return new ConfirmationResult
-            {
-                IsSuccessful = true,
-                Data = name,
-                Code = await _userManager.GenerateEmailConfirmationTokenAsync(user)
-            };
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
-        public async Task<AuthenticationResult> SignInAsync(string email, string password)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user is null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
-            }
-
-            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
-            if (!userHasValidPassword)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.IncorrectData }
-                };
-            }
-
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
-            if (!emailConfirmationResult.IsSuccessful)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = emailConfirmationResult.Errors
-                };
-            }
-
-            return await GenerateAuthenticationResultAsync(user);
-        }
-
-        public async Task<AuthenticationResult> ConfirmEmailAsync(string email, string code)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
-            }
-
-            var identityResult = await _userManager.ConfirmEmailAsync(user, code);
-
-            if (!identityResult.Succeeded)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.TokenException }
-                };
-            }
-
-            return await GenerateAuthenticationResultAsync(user);
-        }
-
-        public async Task<UserResult> GetUserByEmailAsync(string email)
+        public async Task<AuthenticationDto> SignInAsync(string email, string password)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
-
             if (identityUser is null)
             {
-                return null;
+                throw new NotFoundException(IdentityResource.UserNotExist);
             }
 
-            return new UserResult
+            var isValidPassword = await _userManager.CheckPasswordAsync(identityUser, password);
+            if (!isValidPassword)
+            {
+                throw new AppException(IdentityResource.IncorrectData);
+            }
+
+            await EmailConfirmHandlerAsync(identityUser);
+
+            return await GenerateAuthenticationResultAsync(identityUser);
+        }
+
+        public async Task<AuthenticationDto> ConfirmEmailAsync(string email, string code)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
+            if (identityUser is null)
+            {
+                throw new NotFoundException(IdentityResource.UserNotExist);
+            }
+
+            var identityResult = await _userManager.ConfirmEmailAsync(identityUser, code);
+            if (!identityResult.Succeeded)
+            {
+                throw new AppException(IdentityResource.TokenException);
+            }
+
+            return await GenerateAuthenticationResultAsync(identityUser);
+        }
+
+        public async Task<UserDto> GetUserByEmailAsync(string email)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
+            if (identityUser is null)
+            {
+                throw new NotFoundException(IdentityResource.UserNotExist);
+            }
+
+            return new UserDto
             {
                 Id = identityUser.Id,
                 Email = identityUser.Email,
@@ -159,166 +126,113 @@ namespace SocialMediaDashboard.Infrastructure.Services
             };
         }
 
-        public async Task<UserResult> GetUserByIdAsync(string id)
+        public async Task<UserDto> GetUserByIdAsync(string id)
         {
             var identityUser = await _userManager.FindByIdAsync(id);
-
-            if (identityUser is null)
-            {
-                return null;
-            }
-
-            return new UserResult
-            {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
-            };
+            return identityUser is null
+                ? throw new NotFoundException(IdentityResource.UserNotExist)
+                : new UserDto
+                {
+                    Id = identityUser.Id,
+                    Email = identityUser.Email,
+                    UserName = identityUser.UserName,
+                    PhoneNumber = identityUser.PhoneNumber
+                };
         }
 
-        public async Task<UserResult> GetUserByNameAsync(string username)
+        public async Task<UserDto> GetUserByNameAsync(string username)
         {
             var identityUser = await _userManager.FindByNameAsync(username);
+            return identityUser is null
+                ? throw new NotFoundException(IdentityResource.UserNotExist)
+                : new UserDto
+                {
+                    Id = identityUser.Id,
+                    Email = identityUser.Email,
+                    UserName = identityUser.UserName,
+                    PhoneNumber = identityUser.PhoneNumber,
+                };
+        }
 
+        public async Task<ConfirmationDto> RestorePasswordAsync(string email)
+        {
+            var identityUser = await _userManager.FindByEmailAsync(email);
             if (identityUser is null)
             {
-                return null;
+                throw new NotFoundException(IdentityResource.UserNotExist);
             }
 
-            return new UserResult
+            await EmailConfirmHandlerAsync(identityUser);
+
+            return new ConfirmationDto
             {
-                Id = identityUser.Id,
-                Email = identityUser.Email,
-                UserName = identityUser.UserName,
-                PhoneNumber = identityUser.PhoneNumber
+                Data = (await _profileService.GetByUserIdAsync(identityUser.Id)).Name,
+                Code = await _userManager.GeneratePasswordResetTokenAsync(identityUser),
             };
         }
 
-        public async Task<ConfirmationResult> RestorePasswordAsync(string email)
+        public async Task<AuthenticationDto> ResetPasswordAsync(string email, string newPassword, string code)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
+            var identityUser = await _userManager.FindByEmailAsync(email);
+            if (identityUser is null)
             {
-                return new ConfirmationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
+                throw new NotFoundException(IdentityResource.UserNotExist);
             }
 
-            var emailConfirmationResult = await EmailConfirmHandlerAsync(user);
-            if (!emailConfirmationResult.IsSuccessful)
-            {
-                return new ConfirmationResult
-                {
-                    Errors = emailConfirmationResult.Errors
-                };
-            }
-
-            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var (profileDto, _) = await _profileService.GetByUserIdAsync(user.Id);
-
-            return new ConfirmationResult
-            {
-                IsSuccessful = true,
-                Data = profileDto.Name,
-                Code = passwordResetToken
-            };
-        }
-
-        public async Task<AuthenticationResult> ResetPasswordAsync(string email, string newPassword, string code)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.UserNotExist }
-                };
-            }
-
-            var identityResult = await _userManager.ResetPasswordAsync(user, code, newPassword);
+            var identityResult =
+                await _userManager.ResetPasswordAsync(
+                    identityUser,
+                    code,
+                    newPassword);
 
             if (!identityResult.Succeeded)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.PasswordException }
-                };
+                throw new AppException(IdentityResource.PasswordException);
             }
 
-            return await GenerateAuthenticationResultAsync(user);
+            return await GenerateAuthenticationResultAsync(identityUser);
         }
 
-        public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
+        public async Task<AuthenticationDto> RefreshTokenAsync(string token, string refreshToken)
         {
             var validatedToken = GetPrincipalFromToken(token);
-
-            if (validatedToken is null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.TokenInvalid }
-                };
-            }
-
             var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value, CultureInfo.InvariantCulture);
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                .AddSeconds(expiryDateUnix);
+                .AddSeconds(long.Parse(
+                    validatedToken.Claims.SingleOrDefault(x =>
+                        x.Type == JwtRegisteredClaimNames.Exp).Value,
+                        CultureInfo.InvariantCulture));
 
             if (expiryDateTimeUtc > DateTime.UtcNow)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.TokenNotExpired }
-                };
+                throw new AppException(IdentityResource.TokenNotExpired);
             }
 
             var jti = validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
             var storedRefreshToken = await _refreshTokenRepository.GetEntityAsync(x => x.Token == refreshToken);
-
             if (storedRefreshToken is null)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.RefreshTokenNotExist }
-                };
+                throw new NotFoundException(IdentityResource.RefreshTokenNotExist);
             }
 
             if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.RefreshTokenExpired }
-                };
+                throw new AppException(IdentityResource.RefreshTokenExpired);
             }
 
             if (storedRefreshToken.IsInvalid)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.RefreshTokenInvalid }
-                };
+                throw new AppException(IdentityResource.RefreshTokenInvalid);
             }
 
             if (storedRefreshToken.IsUsed)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.RefreshTokenUsed }
-                };
+                throw new AppException(IdentityResource.RefreshTokenUsed);
             }
 
             if (storedRefreshToken.JwtId != jti)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { IdentityResource.RefreshTokenNotMatch }
-                };
+                throw new AppException(IdentityResource.RefreshTokenNotMatch);
             }
 
             storedRefreshToken.IsUsed = true;
@@ -329,22 +243,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
             return await GenerateAuthenticationResultAsync(user);
         }
 
-        private async Task<ConfirmationResult> EmailConfirmHandlerAsync(User user)
+        private async Task EmailConfirmHandlerAsync(User user)
         {
-            var isConfirmed = await _userManager.IsEmailConfirmedAsync(user);
-
-            if (!isConfirmed)
+            var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
+            if (!isEmailConfirmed)
             {
-                return new ConfirmationResult
-                {
-                    Errors = new[] { IdentityResource.EmailNotVerified }
-                };
+                throw new AppException(IdentityResource.EmailNotVerified);
             }
-
-            return new ConfirmationResult
-            {
-                IsSuccessful = true
-            };
         }
 
         private ClaimsPrincipal GetPrincipalFromToken(string token)
@@ -356,14 +261,14 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 var principal = tokenHandler.ValidateToken(token, _tokenValidationParameters, out var validatedToken);
                 if (!IsJwtWithValidaSecurityAlgorithm(validatedToken))
                 {
-                    return null;
+                    throw new AppException(IdentityResource.TokenInvalid);
                 }
 
                 return principal;
             }
             catch (Exception)
             {
-                return null;
+                throw new AppException(IdentityResource.TokenInvalid);
             }
         }
 
@@ -373,8 +278,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(User user)
+        private async Task<AuthenticationDto> GenerateAuthenticationResultAsync(User user)
         {
+            // TODO: refactor it
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Secret);
 
@@ -409,13 +315,17 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 }
             }
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(_jwtSettings.Value.TokenLifetime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = 
+                tokenHandler.CreateToken(
+                    new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(claims),
+                        Expires = DateTime.UtcNow.Add(_jwtSettings.Value.TokenLifetime),
+                        SigningCredentials = 
+                            new SigningCredentials(
+                                new SymmetricSecurityKey(key), 
+                                SecurityAlgorithms.HmacSha256Signature),
+                    });
 
             var refreshToken = new RefreshToken
             {
@@ -429,9 +339,8 @@ namespace SocialMediaDashboard.Infrastructure.Services
             await _refreshTokenRepository.CreateAsync(refreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            return new AuthenticationResult
+            return new AuthenticationDto
             {
-                IsSuccessful = true,
                 Token = tokenHandler.WriteToken(token),
                 RefreshToken = refreshToken.Token
             };

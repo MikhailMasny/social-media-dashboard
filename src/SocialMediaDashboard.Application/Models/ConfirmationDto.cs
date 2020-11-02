@@ -3,7 +3,7 @@
     /// <summary>
     /// Registration data transfet object.
     /// </summary>
-    public class ConfirmationResult : ResultBase
+    public class ConfirmationDto
     {
         /// <summary>
         /// Email or Name.

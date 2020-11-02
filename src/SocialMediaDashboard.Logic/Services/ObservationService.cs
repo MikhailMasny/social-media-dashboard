@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using SocialMediaDashboard.Application.Exceptions;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
@@ -17,68 +18,39 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IRepository<Observation> _observationRepository;
         private readonly IMapper _mapper;
 
-        public ObservationService(IRepository<Observation> observationRepository,
-                                  IMapper mapper)
+        public ObservationService(
+            IRepository<Observation> observationRepository,
+            IMapper mapper)
         {
             _observationRepository = observationRepository ?? throw new ArgumentNullException(nameof(observationRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<(IEnumerable<ObservationDto> observationDtos, OperationResult operationResult)> GetAllAsync()
+        public async Task<IEnumerable<ObservationDto>> GetAllAsync()
         {
-            OperationResult operationResult;
-
             var observations = await _observationRepository
                 .GetAllWithoutTracking()
                 .ToListAsync();
 
             if (!observations.Any())
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = ObservationResource.NotFound,
-                };
-
-                return (new List<ObservationDto>(), operationResult);
+                throw new NotFoundException(ObservationResource.NotFound);
             }
 
-            var observationsDtos = _mapper.Map<List<ObservationDto>>(observations);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = CommonResource.Successful,
-            };
-
-            return (observationsDtos, operationResult);
+            return _mapper.Map<List<ObservationDto>>(observations);
         }
 
-        public async Task<(ObservationDto observationDto, OperationResult operationResult)> GetByIdAsync(int id)
+        public async Task<ObservationDto> GetByIdAsync(int id)
         {
-            OperationResult operationResult;
-
             var observation = await _observationRepository
                 .GetEntityWithoutTrackingAsync(observation => observation.Id == id);
 
             if (observation is null)
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = ObservationResource.NotFoundSpecified,
-                };
-
-                return (new ObservationDto(), operationResult);
+                throw new NotFoundException(ObservationResource.NotFoundSpecified);
             }
 
-            var observationDto = _mapper.Map<ObservationDto>(observation);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = CommonResource.Successful,
-            };
-
-            return (observationDto, operationResult);
+            return _mapper.Map<ObservationDto>(observation);
         }
     }
 }

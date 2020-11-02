@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
-using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Queries;
@@ -23,8 +22,9 @@ namespace SocialMediaDashboard.Web.Controllers
         private readonly IIdentityService _identityService;
         private readonly ISenderService _senderService;
 
-        public IdentityController(IIdentityService identityService,
-                                  ISenderService senderService)
+        public IdentityController(
+            IIdentityService identityService,
+            ISenderService senderService)
         {
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
             _senderService = senderService ?? throw new ArgumentNullException(nameof(senderService));
@@ -38,37 +38,28 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var confirmationResult = await _identityService.SignUpAsync(request.Email, request.Password, request.Name);
-            if (!confirmationResult.IsSuccessful)
-            {
-                return Conflict(new AuthFailedResponse
-                {
-                    Errors = confirmationResult.Errors
-                });
-            }
-
-            var confirmToken = confirmationResult.Code.EncodeToken();
-
-            var callbackUrl = Url.Action(
-                "ConfirmEmail", 
-                "Identity",
-                new
-                {
+            var code =
+                await _identityService.SignUpAsync(
                     request.Email,
-                    Code = confirmToken
-                },
-                protocol: HttpContext.Request.Scheme);
-
-            var emailViewModel = new EmailViewModel
-            {
-                Name = request.Name,
-                Link = callbackUrl
-            };
+                    request.Password,
+                    request.Name);
 
             await _senderService.RenderAndSendAsync(
-                emailViewModel, 
-                "Views/Mail/Confirm.cshtml", 
-                request.Email, 
+                new EmailViewModel
+                {
+                    Name = request.Name,
+                    Link = Url.Action(
+                    "ConfirmEmail",
+                    "Identity",
+                    new
+                    {
+                        request.Email,
+                        Code = code.EncodeToken(),
+                    },
+                    protocol: HttpContext.Request.Scheme),
+                },
+                "Views/Mail/Confirm.cshtml",
+                request.Email,
                 EmailResource.AccountCreated);
 
             return Ok(new AuthSuccessfulResponse
@@ -85,15 +76,10 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var authenticationResult = await _identityService.SignInAsync(request.Email, request.Password);
-
-            if (!authenticationResult.IsSuccessful)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authenticationResult.Errors
-                });
-            }
+            var authenticationResult =
+                await _identityService.SignInAsync(
+                    request.Email,
+                    request.Password);
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -111,24 +97,10 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             query = query ?? throw new ArgumentNullException(nameof(query));
 
-            if (query.Email is null || query.Code is null)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = new[] { IdentityResource.IncorrectData }
-                });
-            }
-
-            var confirmToken = query.Code.DecodeToken();
-            var authenticationResult = await _identityService.ConfirmEmailAsync(query.Email, confirmToken);
-
-            if (!authenticationResult.IsSuccessful)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authenticationResult.Errors
-                });
-            }
+            var authenticationResult =
+                await _identityService.ConfirmEmailAsync(
+                    query.Email,
+                    query.Code.DecodeToken());
 
             //TODO: Change it to real domain
             //var queryString = new
@@ -148,6 +120,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPost(ApiRoute.Identity.Restore, Name = nameof(RestorePassword))]
         public async Task<IActionResult> RestorePassword([FromBody] UserRestorePasswordRequest request)
         {
@@ -166,11 +139,12 @@ namespace SocialMediaDashboard.Web.Controllers
             var passwordResetToken = confirmationResult.Code.EncodeToken();
 
             var callbackUrl = Url.Action(
-                "ResetPassword", 
+                "ResetPassword",
                 "Identity",
-                new { 
-                    request.Email, 
-                    Code = passwordResetToken 
+                new
+                {
+                    request.Email,
+                    Code = passwordResetToken
                 },
                 protocol: HttpContext.Request.Scheme);
 
@@ -213,24 +187,17 @@ namespace SocialMediaDashboard.Web.Controllers
             request = request ?? throw new ArgumentNullException(nameof(request));
             passwordRequest = passwordRequest ?? throw new ArgumentNullException(nameof(passwordRequest));
 
-            var passwordResetToken = request.Code.DecodeToken();
-            var authenticationResult = await _identityService.ResetPasswordAsync(request.Email, passwordRequest.Password, passwordResetToken);
-
-            if (!authenticationResult.IsSuccessful)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authenticationResult.Errors
-                });
-            }
-
-            var emailViewModel = new EmailViewModel
-            {
-                Name = request.Email,
-            };
+            var authenticationResult =
+                await _identityService.ResetPasswordAsync(
+                    request.Email,
+                    passwordRequest.Password,
+                    request.Code.DecodeToken());
 
             await _senderService.RenderAndSendAsync(
-                emailViewModel,
+                new EmailViewModel
+                {
+                    Name = request.Email,
+                },
                 "Views/Mail/Reset.cshtml",
                 request.Email,
                 EmailResource.PasswordChanged);
@@ -245,21 +212,17 @@ namespace SocialMediaDashboard.Web.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost(ApiRoute.Identity.Refresh, Name = nameof(RefreshToken))]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var authenticationResult = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
-
-            if (!authenticationResult.IsSuccessful)
-            {
-                return Conflict(new AuthFailedResponse
-                {
-                    Errors = authenticationResult.Errors
-                });
-            }
+            var authenticationResult =
+                await _identityService.RefreshTokenAsync(
+                    request.Token,
+                    request.RefreshToken);
 
             return Ok(new AuthSuccessfulResponse
             {

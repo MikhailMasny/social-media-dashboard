@@ -19,14 +19,14 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// Get profile by user identifier.
         /// </summary>
         /// <param name="userId">User identifier.</param>
-        /// <returns>Profile data transfer object with operation result.</returns>
-        Task<(ProfileDto profileDto, OperationResult operationResult)> GetByUserIdAsync(string userId);
+        /// <returns>Profile data transfer object.</returns>
+        Task<ProfileDto> GetByUserIdAsync(string userId);
 
         /// <summary>
         /// Update profile by user identifier.
         /// </summary>
         /// <param name="profileDto">Profile data transfer object.</param>
-        /// <returns>Profile data transfer object with operation result.</returns>
-        Task<(ProfileDto profileDto, OperationResult operationResult)> UpdateAsync(ProfileDto profileDto);
+        /// <returns>Profile data transfer object.</returns>
+        Task<ProfileDto> UpdateAsync(ProfileDto profileDto);
     }
 }

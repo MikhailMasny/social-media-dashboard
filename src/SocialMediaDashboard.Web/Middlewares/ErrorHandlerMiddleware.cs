@@ -42,6 +42,7 @@ namespace SocialMediaDashboard.Web.Middlewares
                 {
                     AppException _ => StatusCodes.Status400BadRequest,
                     NotFoundException _ => StatusCodes.Status404NotFound,
+                    ConflictException _ => StatusCodes.Status409Conflict,
                     _ => StatusCodes.Status500InternalServerError,
                 };
 

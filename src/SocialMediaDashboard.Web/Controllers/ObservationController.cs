@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -28,20 +31,14 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Observation.Get, Name = nameof(GetAllObservation))]
         public async Task<IActionResult> GetAllObservation(int id)
         {
-            var (observationDto, operationResult) = await _observationService.GetByIdAsync(id);
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<ObservationDto>
             {
-                return NotFound(new FailedResponse
+                Message = CommonResource.Successful,
+                Items = new List<ObservationDto>
                 {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var observationSuccessfulResponse = new SuccessfulResponse<ObservationDto>();
-            observationSuccessfulResponse.Items.Add(observationDto);
-            observationSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(observationSuccessfulResponse);
+                    await _observationService.GetByIdAsync(id),
+                },
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -50,20 +47,11 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Observation.GetAll, Name = nameof(GetAllObservations))]
         public async Task<IActionResult> GetAllObservations()
         {
-            var (observationDtos, operationResult) = await _observationService.GetAllAsync();
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<ObservationDto>
             {
-                return NotFound(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var observationSuccessfulResponse = new SuccessfulResponse<ObservationDto>();
-            observationSuccessfulResponse.Items.AddRange(observationDtos);
-            observationSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(observationSuccessfulResponse);
+                Message = CommonResource.Successful,
+                Items = (await _observationService.GetAllAsync()).ToList(),
+            });
         }
     }
 }

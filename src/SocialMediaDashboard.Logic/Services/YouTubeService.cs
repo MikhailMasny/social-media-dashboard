@@ -23,7 +23,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
             return !data.Any()
                 ? default
-                : int.Parse(data.FirstOrDefault().Statistics.SubscriberCount, CultureInfo.InvariantCulture);
+                : int.Parse(
+                    data.FirstOrDefault().Statistics.SubscriberCount,
+                    CultureInfo.InvariantCulture);
         }
     }
 }

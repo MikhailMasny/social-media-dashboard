@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -28,20 +31,14 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Platform.Get, Name = nameof(GetPlatform))]
         public async Task<IActionResult> GetPlatform(int id)
         {
-            var (platformDto, operationResult) = await _platformService.GetByIdAsync(id);
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<PlatformDto>
             {
-                return NotFound(new FailedResponse
+                Message = CommonResource.Successful,
+                Items = new List<PlatformDto>
                 {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var platformSuccessfulResponse = new SuccessfulResponse<PlatformDto>();
-            platformSuccessfulResponse.Items.Add(platformDto);
-            platformSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(platformSuccessfulResponse);
+                    await _platformService.GetByIdAsync(id),
+                },
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -50,20 +47,11 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Platform.GetAll, Name = nameof(GetAllPlatforms))]
         public async Task<IActionResult> GetAllPlatforms()
         {
-            var (platformDtos, operationResult) = await _platformService.GetAllAsync();
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<PlatformDto>
             {
-                return NotFound(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var platformSuccessfulResponse = new SuccessfulResponse<PlatformDto>();
-            platformSuccessfulResponse.Items.AddRange(platformDtos);
-            platformSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(platformSuccessfulResponse);
+                Message = CommonResource.Successful,
+                Items = (await _platformService.GetAllAsync()).ToList(),
+            });
         }
     }
 }

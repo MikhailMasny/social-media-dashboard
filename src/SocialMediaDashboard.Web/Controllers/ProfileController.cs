@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
+using SocialMediaDashboard.Domain.Resources;
 using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Contracts.Requests;
 using SocialMediaDashboard.Web.Contracts.Responses;
@@ -31,21 +32,11 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Profile.Get, Name = nameof(GetProfile))]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = HttpContext.GetUserId();
-            var (profileDto, operationResult) = await _profileService.GetByUserIdAsync(userId);
-            if (!operationResult.Result)
+            return Ok(new ProfileResponse
             {
-                return NotFound(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var profileSuccessfulResponse = new SuccessfulResponse<ProfileDto>();
-            profileSuccessfulResponse.Items.Add(profileDto);
-            profileSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(profileSuccessfulResponse);
+                Message = CommonResource.Successful,
+                Data = await _profileService.GetByUserIdAsync(HttpContext.GetUserId()),
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -79,20 +70,11 @@ namespace SocialMediaDashboard.Web.Controllers
                 Avatar = ConvertAvatar(request.Avatar),
             };
 
-            var (updatedProfileDto, operationResult) = await _profileService.UpdateAsync(profileDto);
-            if (!operationResult.Result)
+            return Ok(new ProfileResponse
             {
-                return Conflict(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var profileSuccessfulResponse = new SuccessfulResponse<ProfileDto>();
-            profileSuccessfulResponse.Items.Add(updatedProfileDto);
-            profileSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(profileSuccessfulResponse);
+                Message = SubscriptionResource.Updated,
+                Data = await _profileService.UpdateAsync(profileDto),
+            });
         }
     }
 }

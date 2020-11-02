@@ -29,10 +29,18 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 AccessToken = _socialNetworksSettings.Value.VkAccessToken
             });
 
-            var response = await _api.Users.GetAsync(new string[] { userName }, VkNet.Enums.Filters.ProfileFields.Counters);
-            var user = response.FirstOrDefault();
+            var response =
+                (await _api.Users.GetAsync(
+                    new string[]
+                    {
+                        userName
+                    },
+                    VkNet.Enums.Filters.ProfileFields.Counters))
+                .FirstOrDefault()
+                .Counters
+                .Followers;
 
-            return user.Counters.Followers ?? default;
+            return response ?? default;
         }
     }
 }

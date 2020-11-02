@@ -23,12 +23,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task<YouTubeResult> GetDataFromYouTubeApiByChannelAsync(string channel)
         {
             return await ApiPlatform.YouTube.Domain
-                .AppendPathSegments(ApiPlatform.YouTube.MainPath, ApiPlatform.YouTube.Version, ApiPlatform.YouTube.ChannelType)
+                .AppendPathSegments(
+                    ApiPlatform.YouTube.MainPath,
+                    ApiPlatform.YouTube.Version,
+                    ApiPlatform.YouTube.ChannelType)
                 .SetQueryParams(new
                 {
                     part = ApiPlatform.YouTube.StatisticPart,
                     id = channel,
-                    key = _socialNetworksSettings.Value.YouTubeAccessToken
+                    key = _socialNetworksSettings.Value.YouTubeAccessToken,
                 })
                 .GetJsonAsync<YouTubeResult>();
         }
@@ -36,12 +39,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task<YouTubeResult> GetDataFromYouTubeApiByUsernameAsync(string username)
         {
             return await ApiPlatform.YouTube.Domain
-                .AppendPathSegments(ApiPlatform.YouTube.MainPath, ApiPlatform.YouTube.Version, ApiPlatform.YouTube.ChannelType)
+                .AppendPathSegments(
+                    ApiPlatform.YouTube.MainPath,
+                    ApiPlatform.YouTube.Version,
+                    ApiPlatform.YouTube.ChannelType)
                 .SetQueryParams(new
                 {
                     part = ApiPlatform.YouTube.StatisticPart,
                     forUsername = username,
-                    key = _socialNetworksSettings.Value.YouTubeAccessToken
+                    key = _socialNetworksSettings.Value.YouTubeAccessToken,
                 })
                 .GetJsonAsync<YouTubeResult>();
         }
@@ -49,12 +55,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task<YouTubeResult> GetDataFromYouTubeApiByVideoAsync(string video)
         {
             return await ApiPlatform.YouTube.Domain
-                .AppendPathSegments(ApiPlatform.YouTube.MainPath, ApiPlatform.YouTube.Version, ApiPlatform.YouTube.VideoType)
+                .AppendPathSegments(
+                    ApiPlatform.YouTube.MainPath,
+                    ApiPlatform.YouTube.Version,
+                    ApiPlatform.YouTube.VideoType)
                 .SetQueryParams(new
                 {
                     part = ApiPlatform.YouTube.StatisticPart,
                     id = video,
-                    key = _socialNetworksSettings.Value.YouTubeAccessToken
+                    key = _socialNetworksSettings.Value.YouTubeAccessToken,
                 })
                 .GetJsonAsync<YouTubeResult>();
         }

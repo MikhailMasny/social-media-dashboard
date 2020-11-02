@@ -3,7 +3,7 @@
     /// <summary>
     /// User data transfet object.
     /// </summary>
-    public class UserResult
+    public class UserDto
     {
         /// <summary>
         /// Identifier (GUID).

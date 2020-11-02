@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using SocialMediaDashboard.Application.Exceptions;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
@@ -18,29 +19,21 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly IMapper _mapper;
 
-        public SubscriptionService(IRepository<Subscription> subscriptionRepository,
-                                   IRepository<Statistic> statisticRepository,
-                                   IMapper mapper)
+        public SubscriptionService(
+            IRepository<Subscription> subscriptionRepository,
+            IRepository<Statistic> statisticRepository,
+            IMapper mapper)
         {
             _subscriptionRepository = subscriptionRepository ?? throw new ArgumentNullException(nameof(subscriptionRepository));
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<(SubscriptionDto subscriptionDto, OperationResult operationResult)> CreateAsync(string userId, string accountName, int subscriptionTypeId)
+        public async Task<SubscriptionDto> CreateAsync(string userId, string accountName, int subscriptionTypeId)
         {
-            OperationResult operationResult;
-
-            var canUserCreateSubscription = await CanUserCreateSubscriptionAsync(userId, accountName, subscriptionTypeId);
-            if (!canUserCreateSubscription)
+            if (!await CanUserCreateSubscriptionAsync(userId, accountName, subscriptionTypeId))
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = SubscriptionResource.AlreadyExist,
-                };
-
-                return (new SubscriptionDto(), operationResult);
+                throw new ConflictException(SubscriptionResource.AlreadyExist);
             }
 
             var subscription = new Subscription
@@ -53,48 +46,25 @@ namespace SocialMediaDashboard.Infrastructure.Services
             await _subscriptionRepository.CreateAsync(subscription);
             await _subscriptionRepository.SaveChangesAsync();
 
-            var subscriptionDto = _mapper.Map<SubscriptionDto>(subscription);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = SubscriptionResource.Added,
-            };
-
-            return (subscriptionDto, operationResult);
+            return _mapper.Map<SubscriptionDto>(subscription);
         }
 
-        public async Task<(SubscriptionDto subscriptionDto, OperationResult operationResult)> GetByIdAsync(int id, string userId)
+        public async Task<SubscriptionDto> GetByIdAsync(int id, string userId)
         {
-            OperationResult operationResult;
-
             var subscription = await _subscriptionRepository
-                .GetEntityAsync(subscription => subscription.Id == id && subscription.UserId == userId);
+                .GetEntityAsync(subscription =>
+                    subscription.Id == id && subscription.UserId == userId);
 
             if (subscription is null)
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = SubscriptionResource.NotFoundSpecified,
-                };
-
-                return (new SubscriptionDto(), operationResult);
+                throw new NotFoundException(SubscriptionResource.NotFoundSpecified);
             }
 
-            var subscriptionDto = _mapper.Map<SubscriptionDto>(subscription);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = CommonResource.Successful,
-            };
-
-            return (subscriptionDto, operationResult);
+            return _mapper.Map<SubscriptionDto>(subscription);
         }
 
-        public async Task<(IEnumerable<SubscriptionDto> subscriptionDto, OperationResult operationResult)> GetAllAsync(string userId)
+        public async Task<IEnumerable<SubscriptionDto>> GetAllAsync(string userId)
         {
-            OperationResult operationResult;
-
             var subscriptions = await _subscriptionRepository
                 .GetAllWithoutTracking()
                 .Where(subscription => subscription.UserId == userId)
@@ -102,71 +72,45 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
             if (!subscriptions.Any())
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = SubscriptionResource.NotFound,
-                };
-
-                return (new List<SubscriptionDto>(), operationResult);
+                throw new NotFoundException(SubscriptionResource.NotFound);
             }
 
-            var subscriptionDtos = _mapper.Map<List<SubscriptionDto>>(subscriptions);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = CommonResource.Successful,
-            };
-
-            return (subscriptionDtos, operationResult);
+            return _mapper.Map<List<SubscriptionDto>>(subscriptions);
         }
 
-        public async Task<(SubscriptionDto subscriptionDto, OperationResult operationResult)> UpdateAsync(int id, string userId, string accountName, int subscriptionTypeId)
+        public async Task<SubscriptionDto> UpdateAsync(int id, string userId, string accountName, int subscriptionTypeId)
         {
-            OperationResult operationResult;
-
             var subscription = await _subscriptionRepository
-                .GetEntityAsync(subscription => subscription.Id == id && subscription.UserId == userId);
+                .GetEntityAsync(subscription =>
+                    subscription.Id == id && subscription.UserId == userId);
 
             if (subscription is null)
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = SubscriptionResource.NotFoundSpecified,
-                };
-
-                return (new SubscriptionDto(), operationResult);
+                throw new NotFoundException(SubscriptionResource.NotFoundSpecified);
             }
 
             static bool CompareAndUpdate(Subscription subscription, string accountName, int subscriptionTypeId)
             {
-                bool update = false;
+                bool toUpdate = false;
 
                 if (subscription.AccountName != accountName)
                 {
                     subscription.AccountName = accountName;
-                    update = true;
+                    toUpdate = true;
                 }
 
                 if (subscription.SubscriptionTypeId != subscriptionTypeId)
                 {
                     subscription.SubscriptionTypeId = subscriptionTypeId;
-                    update = true;
+                    toUpdate = true;
                 }
 
-                return update;
+                return toUpdate;
             }
 
             if (!CompareAndUpdate(subscription, accountName, subscriptionTypeId))
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = SubscriptionResource.SameData,
-                };
-
-                return (new SubscriptionDto(), operationResult);
+                throw new ConflictException(SubscriptionResource.SameData);
             }
 
             _subscriptionRepository.Update(subscription);
@@ -179,38 +123,22 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _statisticRepository.DeleteRange(statistics);
             await _subscriptionRepository.SaveChangesAsync();
 
-            var subscriptionDto = _mapper.Map<SubscriptionDto>(subscription);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = SubscriptionResource.Updated,
-            };
-
-            return (subscriptionDto, operationResult);
+            return _mapper.Map<SubscriptionDto>(subscription);
         }
 
-        public async Task<OperationResult> DeleteByIdAsync(int id, string userId)
+        public async Task DeleteByIdAsync(int id, string userId)
         {
             var subscription = await _subscriptionRepository
-                .GetEntityAsync(subscription => subscription.Id == id && subscription.UserId == userId);
+                .GetEntityAsync(subscription =>
+                    subscription.Id == id && subscription.UserId == userId);
 
             if (subscription is null)
             {
-                return new OperationResult
-                {
-                    Result = false,
-                    Message = SubscriptionResource.NotFoundSpecified,
-                };
+                throw new NotFoundException(SubscriptionResource.NotFoundSpecified);
             }
 
             _subscriptionRepository.Delete(subscription);
             await _subscriptionRepository.SaveChangesAsync();
-
-            return new OperationResult
-            {
-                Result = true,
-                Message = SubscriptionResource.Deleted,
-            };
         }
 
         public async Task<IEnumerable<SubscriptionDto>> GetAccountNamesBySubscriptionTypeIdAsync(int subscriptionTypeId)
@@ -226,7 +154,8 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private async Task<bool> CanUserCreateSubscriptionAsync(string userId, string accountName, int subscriptionTypeId)
         {
             var selectedSubscription = await _subscriptionRepository
-                .GetEntityWithoutTrackingAsync(subscriptionType => subscriptionType.UserId == userId
+                .GetEntityWithoutTrackingAsync(subscriptionType =>
+                    subscriptionType.UserId == userId
                     && subscriptionType.AccountName == accountName
                     && subscriptionType.SubscriptionTypeId == subscriptionTypeId);
 

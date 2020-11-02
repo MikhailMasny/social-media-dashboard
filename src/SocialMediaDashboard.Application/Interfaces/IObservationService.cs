@@ -12,14 +12,14 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <summary>
         /// Get all observation data transfer objects.
         /// </summary>
-        /// <returns>List of observation data transfer objects with operation result.</returns>
-        Task<(IEnumerable<ObservationDto> observationDtos, OperationResult operationResult)> GetAllAsync();
+        /// <returns>List of observation data transfer objects.</returns>
+        Task<IEnumerable<ObservationDto>> GetAllAsync();
 
         /// <summary>
         /// Get observation data transfer object by identifier.
         /// </summary>
         /// <param name="id">Identifier.</param>
-        /// <returns>Observation data transfer object with operation result.</returns>
-        Task<(ObservationDto observationDto, OperationResult operationResult)> GetByIdAsync(int id);
+        /// <returns>Observation data transfer object.</returns>
+        Task<ObservationDto> GetByIdAsync(int id);
     }
 }

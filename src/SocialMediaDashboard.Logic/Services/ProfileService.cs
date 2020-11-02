@@ -1,4 +1,5 @@
-﻿using SocialMediaDashboard.Application.Interfaces;
+﻿using SocialMediaDashboard.Application.Exceptions;
+using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Models;
 using SocialMediaDashboard.Domain.Entities;
 using SocialMediaDashboard.Domain.Resources;
@@ -13,7 +14,8 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IRepository<Profile> _profileRepository;
         private readonly AutoMapper.IMapper _mapper;
 
-        public ProfileService(IRepository<Profile> profileRepository,
+        public ProfileService(
+            IRepository<Profile> profileRepository,
             AutoMapper.IMapper mapper)
         {
             _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
@@ -32,113 +34,77 @@ namespace SocialMediaDashboard.Infrastructure.Services
             await _profileRepository.SaveChangesAsync();
         }
 
-        public async Task<(ProfileDto profileDto, OperationResult operationResult)> GetByUserIdAsync(string userId)
+        public async Task<ProfileDto> GetByUserIdAsync(string userId)
         {
-            OperationResult operationResult;
-
             var profile = await _profileRepository
                 .GetEntityWithoutTrackingAsync(profile => profile.UserId == userId);
 
             if (profile is null)
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = ProfileResource.NotFoundSpecified,
-                };
-
-                return (new ProfileDto(), operationResult);
+                throw new NotFoundException(ProfileResource.NotFoundSpecified);
             }
 
-            var profileDto = _mapper.Map<ProfileDto>(profile);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = CommonResource.Successful,
-            };
-
-            return (profileDto, operationResult);
+            return _mapper.Map<ProfileDto>(profile);
         }
 
-        public async Task<(ProfileDto profileDto, OperationResult operationResult)> UpdateAsync(ProfileDto profileDto)
+        public async Task<ProfileDto> UpdateAsync(ProfileDto profileDto)
         {
             profileDto = profileDto ?? throw new ArgumentNullException(nameof(profileDto));
-
-            OperationResult operationResult;
 
             var profile = await _profileRepository
                 .GetEntityAsync(profile => profile.UserId == profileDto.UserId);
 
             if (profile is null)
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = ProfileResource.NotFoundSpecified,
-                };
-
-                return (new ProfileDto(), operationResult);
+                throw new NotFoundException(ProfileResource.NotFoundSpecified);
             }
 
             static bool CompareAndUpdate(Profile profile, ProfileDto profileDto)
             {
-                bool update = false;
+                bool toUpdate = false;
 
                 if (profile.Name != profileDto.Name)
                 {
                     profile.Name = profileDto.Name;
-                    update = true;
+                    toUpdate = true;
                 }
 
                 if (profile.Gender != profileDto.Gender)
                 {
                     profile.Gender = profileDto.Gender;
-                    update = true;
+                    toUpdate = true;
                 }
 
                 if (profile.BirthDate != profileDto.BirthDate)
                 {
                     profile.BirthDate = profileDto.BirthDate;
-                    update = true;
+                    toUpdate = true;
                 }
 
                 if (profile.Country != profileDto.Country)
                 {
                     profile.Country = profileDto.Country;
-                    update = true;
+                    toUpdate = true;
                 }
 
                 if (profile.Avatar != profileDto.Avatar)
                 {
                     profile.Avatar = profileDto.Avatar;
-                    update = true;
+                    toUpdate = true;
                 }
 
-                return update;
+                return toUpdate;
             }
 
             if (!CompareAndUpdate(profile, profileDto))
             {
-                operationResult = new OperationResult
-                {
-                    Result = false,
-                    Message = ProfileResource.SameData,
-                };
-
-                return (new ProfileDto(), operationResult);
+                throw new ConflictException(ProfileResource.SameData);
             }
 
             _profileRepository.Update(profile);
             await _profileRepository.SaveChangesAsync();
 
-            var updatedProfileDto = _mapper.Map<ProfileDto>(profile);
-            operationResult = new OperationResult
-            {
-                Result = true,
-                Message = SubscriptionResource.Updated,
-            };
-
-            return (updatedProfileDto, operationResult);
+            return _mapper.Map<ProfileDto>(profile);
         }
     }
 }

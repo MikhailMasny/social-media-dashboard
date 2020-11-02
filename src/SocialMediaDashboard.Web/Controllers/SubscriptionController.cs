@@ -10,6 +10,8 @@ using SocialMediaDashboard.Web.Contracts.Requests;
 using SocialMediaDashboard.Web.Contracts.Responses;
 using SocialMediaDashboard.Web.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialMediaDashboard.Web.Controllers
@@ -21,8 +23,9 @@ namespace SocialMediaDashboard.Web.Controllers
         private readonly ISubscriptionService _subscriptionService;
         private readonly ISubscriptionTypeService _subscriptionTypeService;
 
-        public SubscriptionController(ISubscriptionService subscriptionService,
-                                      ISubscriptionTypeService subscriptionTypeService)
+        public SubscriptionController(
+            ISubscriptionService subscriptionService,
+            ISubscriptionTypeService subscriptionTypeService)
         {
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
             _subscriptionTypeService = subscriptionTypeService ?? throw new ArgumentNullException(nameof(subscriptionTypeService));
@@ -46,22 +49,21 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            var userId = HttpContext.GetUserId();
-            var (subscriptionDto, operationResult) = await _subscriptionService.CreateAsync(userId, request.AccountName, request.SubscriptionTypeId);
-            if (!operationResult.Result)
-            {
-                return Conflict(new FailedResponse
+            var subscriptionDto = await _subscriptionService.CreateAsync(
+                HttpContext.GetUserId(),
+                request.AccountName,
+                request.SubscriptionTypeId);
+
+            return Created(
+                new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoute.Subscription.Create}/{subscriptionDto.Id}"),
+                new SuccessfulResponse<SubscriptionDto>
                 {
-                    Error = operationResult.Message,
+                    Message = SubscriptionResource.Added,
+                    Items = new List<SubscriptionDto>
+                    {
+                        subscriptionDto,
+                    },
                 });
-            }
-
-            var uri = new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoute.Subscription.Create}/{subscriptionDto.Id}");
-            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
-            subscriptionSuccessfulResponse.Items.Add(subscriptionDto);
-            subscriptionSuccessfulResponse.Message = operationResult.Message;
-
-            return Created(uri, subscriptionSuccessfulResponse);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -70,21 +72,16 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Subscription.Get, Name = nameof(GetSubscription))]
         public async Task<IActionResult> GetSubscription(int id)
         {
-            var userId = HttpContext.GetUserId();
-            var (subscriptionDto, operationResult) = await _subscriptionService.GetByIdAsync(id, userId);
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<SubscriptionDto>
             {
-                return NotFound(new FailedResponse
+                Message = CommonResource.Successful,
+                Items = new List<SubscriptionDto>
                 {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
-            subscriptionSuccessfulResponse.Items.Add(subscriptionDto);
-            subscriptionSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(subscriptionSuccessfulResponse);
+                    await _subscriptionService.GetByIdAsync(
+                        id,
+                        HttpContext.GetUserId()),
+                },
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -93,21 +90,11 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpGet(ApiRoute.Subscription.GetAll, Name = nameof(GetAllSubscriptions))]
         public async Task<IActionResult> GetAllSubscriptions()
         {
-            var userId = HttpContext.GetUserId();
-            var (subscriptionDtos, operationResult) = await _subscriptionService.GetAllAsync(userId);
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<SubscriptionDto>
             {
-                return NotFound(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
-            subscriptionSuccessfulResponse.Items.AddRange(subscriptionDtos);
-            subscriptionSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(subscriptionSuccessfulResponse);
+                Message = CommonResource.Successful,
+                Items = (await _subscriptionService.GetAllAsync(HttpContext.GetUserId())).ToList(),
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -128,21 +115,18 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            var userId = HttpContext.GetUserId();
-            var (subscriptionDto, operationResult) = await _subscriptionService.UpdateAsync(id, userId, request.AccountName, request.SubscriptionTypeId);
-            if (!operationResult.Result)
+            return Ok(new SuccessfulResponse<SubscriptionDto>
             {
-                return Conflict(new FailedResponse
+                Message = SubscriptionResource.Updated,
+                Items = new List<SubscriptionDto>
                 {
-                    Error = operationResult.Message,
-                });
-            }
-
-            var subscriptionSuccessfulResponse = new SuccessfulResponse<SubscriptionDto>();
-            subscriptionSuccessfulResponse.Items.Add(subscriptionDto);
-            subscriptionSuccessfulResponse.Message = operationResult.Message;
-
-            return Ok(subscriptionSuccessfulResponse);
+                    await _subscriptionService.UpdateAsync(
+                        id,
+                        HttpContext.GetUserId(),
+                        request.AccountName,
+                        request.SubscriptionTypeId)
+                },
+            });
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -151,16 +135,9 @@ namespace SocialMediaDashboard.Web.Controllers
         [HttpDelete(ApiRoute.Subscription.Delete, Name = nameof(DeleteSubscription))]
         public async Task<IActionResult> DeleteSubscription(int id)
         {
-            var userId = HttpContext.GetUserId();
-
-            var operationResult = await _subscriptionService.DeleteByIdAsync(id, userId);
-            if (!operationResult.Result)
-            {
-                return NotFound(new FailedResponse
-                {
-                    Error = operationResult.Message,
-                });
-            }
+            await _subscriptionService.DeleteByIdAsync(
+                id,
+                HttpContext.GetUserId());
 
             return NoContent();
         }

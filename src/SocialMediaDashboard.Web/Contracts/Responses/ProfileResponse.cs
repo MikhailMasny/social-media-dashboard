@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using SocialMediaDashboard.Application.Models;
 
 namespace SocialMediaDashboard.Web.Contracts.Responses
 {
     /// <summary>
-    /// Successful response.
+    /// Profile response.
     /// </summary>
-    public class SuccessfulResponse<T>
+    public class ProfileResponse
     {
         /// <summary>
         /// Message.
@@ -13,8 +13,8 @@ namespace SocialMediaDashboard.Web.Contracts.Responses
         public string Message { get; set; }
 
         /// <summary>
-        /// Data transfer objects.
+        /// Profile data.
         /// </summary>
-        public List<T> Items { get; set; }
+        public ProfileDto Data { get; set; }
     }
 }
