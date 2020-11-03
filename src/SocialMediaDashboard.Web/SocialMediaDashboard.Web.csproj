@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SocialMediaDashboard.Logic\SocialMediaDashboard.Infrastructure.csproj" />
+    <ProjectReference Include="..\SocialMediaDashboard.Infrastructure\SocialMediaDashboard.Infrastructure.csproj" />
   </ItemGroup>
 
 
