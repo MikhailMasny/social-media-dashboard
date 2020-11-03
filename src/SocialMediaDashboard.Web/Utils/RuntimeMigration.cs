@@ -28,9 +28,9 @@ namespace SocialMediaDashboard.Web.Utils
                 {
                     var appContextService = serviceProvider.GetRequiredService<SocialMediaDashboardContext>();
                     appContextService.Database.Migrate();
-                }
 
-                Log.Information(CommonResource.DatabaseMigrateSuccessful);
+                    Log.Information(CommonResource.DatabaseMigrateSuccessful);
+                }
             }
             catch (Exception ex)
             {

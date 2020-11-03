@@ -14,14 +14,12 @@ namespace SocialMediaDashboard.Application.Context
         /// <summary>
         /// Seed roles.
         /// </summary>
-        /// <param name="context">SocialMediaDashboard context.</param>
         /// <param name="roleManager">Role manager.</param>
-        public static async Task SeedRolesAsync(SocialMediaDashboardContext context, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            context = context ?? throw new ArgumentNullException(nameof(context));
             roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 
-            if (context.Roles.Any())
+            if (roleManager.Roles.Any())
             {
                 return;
             }
