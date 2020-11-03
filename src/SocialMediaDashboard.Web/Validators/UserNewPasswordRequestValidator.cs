@@ -20,6 +20,7 @@ namespace SocialMediaDashboard.Web.Validators
                 .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserPasswordRequired);
 
             RuleFor(userNewPasswordRequest => userNewPasswordRequest.ConfirmPassword)
+                .Equal(userNewPasswordRequest => userNewPasswordRequest.Password).WithMessage(ValidatorResource.UserConfirmPasswordNotMatch)
                 .NotNull().WithMessage(ValidatorResource.UserConfirmPasswordRequired)
                 .NotEmpty().WithMessage(ValidatorResource.UserConfirmPasswordRequired)
                 .NotEqual(CommonResource.String).WithMessage(ValidatorResource.UserConfirmPasswordRequired);

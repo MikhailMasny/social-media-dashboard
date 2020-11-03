@@ -67,8 +67,8 @@ namespace SocialMediaDashboard.Application.Interfaces
         /// <param name="email">Email.</param>
         /// <param name="newPassword">New password.</param>
         /// <param name="code">Verify code.</param>
-        /// <returns>Authentication data transfer object.</returns>
-        Task<AuthenticationDto> ResetPasswordAsync(string email, string newPassword, string code);
+        /// <returns>Profile name and authentication data transfer object.</returns>
+        Task<(string name, AuthenticationDto authenticationDto)> ResetPasswordAsync(string email, string newPassword, string code);
 
         /// <summary>
         /// Refresh user token.

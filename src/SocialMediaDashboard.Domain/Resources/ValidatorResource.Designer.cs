@@ -268,6 +268,15 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passwords do not match..
+        /// </summary>
+        public static string UserConfirmPasswordNotMatch {
+            get {
+                return ResourceManager.GetString("UserConfirmPasswordNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm password is required..
         /// </summary>
         public static string UserConfirmPasswordRequired {

@@ -4,50 +4,101 @@
     Layout = "_EmailLayout";
 }
 
-<body style="margin: 0; padding: 0; background-color: #f7f9fd">
-    <center>
-        <table width="640" cellpadding="0" cellspacing="0" border="0" class="wrapper" bgcolor="#FFFFFF">
-            <tr>
-                <td height="10" style="font-size:10px; line-height:10px;">&nbsp;</td>
-            </tr>
-            <tr>
-                <td height="100" valign="center" style="padding: 0 20px;">
-                    <p class="font font__size_logo">Social Media Dashboard</p>
-                </td>
-            </tr>
-            <tr>
-                <td height="50" valign="center" style="padding: 0 20px;">
-                    <p class="font font__size_big">Hello, @Model.Name!</p>
-                </td>
-            </tr>
-            <tr>
-                <td height="50" valign="center" style="padding: 0 20px;">
-                    <p class="font font__size-medium">
-                        We are almost done creating your account. Click the link below to verify
-                        this email address.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td height="100" style="padding-left: 20px;">
-                    <a href="@Model.Link" target="_blank" class="font font__size-medium button" style="color: #fff">Verify your account</a>
-                </td>
-            </tr>
-            <tr style="background-color: #f0f0f0">
-                <td align="center" valign="center" style="padding: 20px;">
-                    <p class="font font__size-small">
-                        If you did not register, someone may have registered with your information by mistake. Contact Us for further assistance.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" valign="center" style="padding: 20px;">
-                    <span class="font font__size-small">© 2020 Social Media Dashboard - All rights reserved</span>
-                </td>
-            </tr>
-            <tr>
-                <td height="10" style="font-size:10px; line-height:10px;">&nbsp;</td>
-            </tr>
-        </table>
-    </center>
-</body>
+<table width="640"
+       cellpadding="0"
+       cellspacing="0"
+       border="0"
+       bgcolor="#ffffff">
+    <tr>
+        <td height="80" style="padding: 0 20px">
+            <p style="
+                font-family: 'Open Sans', sans-serif;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 32px;
+                color: #4f5a68;
+              ">
+                Social Media Dashboard
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td height="40" style="font-size: 40px; line-height: 40px">&nbsp;</td>
+    </tr>
+    <tr>
+        <td height="120" style="padding: 0 20px">
+            <span style="
+                font-family: 'Open Sans', sans-serif;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 40px;
+                line-height: 44px;
+                color: #4f5a68;
+              ">
+                Hello, @Model.Name!
+            </span>
+            <p style="
+                font-family: 'Open Sans', sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 24px;
+                color: #4f5a68;
+              ">
+                We are almost done creating your account.
+                Please click the link below to validate your email address in
+                order to get started 👍🎊🎉
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td height="100" style="padding-left: 20px">
+            <a href="@Model.Link"
+               target="_blank"
+               style="
+                font-family: 'Open Sans', sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 20px;
+                color: #4f5a68;
+                cursor: pointer;
+                padding: 16px 80px;
+                background: #2e2e2e;
+                border-radius: 3px;
+                text-align: center;
+                text-decoration: none;
+                border: none;
+                color: #ffffff;
+              ">Confirm your email</a>
+        </td>
+    </tr>
+    <tr style="background-color: #f0f0f0">
+        <td align="center" style="padding: 20px">
+            <p style="
+                font-family: 'Open Sans', sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 16px;
+                color: #4f5a68;
+              ">
+                If you did not register, someone may have registered with your
+                information by mistake. Contact Us for further assistance.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding: 20px">
+            <span style="
+                font-family: 'Open Sans', sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 20px;
+                color: #4f5a68;
+              ">© 2020 Social Media Dashboard - All rights reserved</span>
+        </td>
+    </tr>
+</table>

@@ -59,7 +59,7 @@ namespace SocialMediaDashboard.Web.Controllers
                 },
                 "Views/Mail/Confirm.cshtml",
                 request.Email,
-                EmailResource.AccountCreated);
+                EmailResource.ConfirmEmail);
 
             return Ok(new AuthSuccessfulResponse
             {
@@ -172,7 +172,7 @@ namespace SocialMediaDashboard.Web.Controllers
             request = request ?? throw new ArgumentNullException(nameof(request));
             passwordRequest = passwordRequest ?? throw new ArgumentNullException(nameof(passwordRequest));
 
-            var authenticationResult =
+            var (name, authenticationResult) =
                 await _identityService.ResetPasswordAsync(
                     request.Email,
                     passwordRequest.Password,
@@ -181,7 +181,7 @@ namespace SocialMediaDashboard.Web.Controllers
             await _senderService.RenderAndSendAsync(
                 new EmailViewModel
                 {
-                    Name = request.Email,
+                    Name = name,
                 },
                 "Views/Mail/Reset.cshtml",
                 request.Email,

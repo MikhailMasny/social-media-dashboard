@@ -61,11 +61,11 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create account.
+        ///   Looks up a localized string similar to Confirm your email.
         /// </summary>
-        public static string AccountCreated {
+        public static string ConfirmEmail {
             get {
-                return ResourceManager.GetString("AccountCreated", resourceCulture);
+                return ResourceManager.GetString("ConfirmEmail", resourceCulture);
             }
         }
         
@@ -88,7 +88,7 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SMD. App.
+        ///   Looks up a localized string similar to Social Media Dashboard.
         /// </summary>
         public static string SenderName {
             get {

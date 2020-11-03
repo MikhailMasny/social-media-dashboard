@@ -170,7 +170,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             };
         }
 
-        public async Task<AuthenticationDto> ResetPasswordAsync(string email, string newPassword, string code)
+        public async Task<(string name, AuthenticationDto authenticationDto)> ResetPasswordAsync(string email, string newPassword, string code)
         {
             var identityUser = await _userManager.FindByEmailAsync(email);
             if (identityUser is null)
@@ -179,13 +179,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
             }
 
             var identityResult = await _userManager.ResetPasswordAsync(identityUser, code, newPassword);
-
             if (!identityResult.Succeeded)
             {
                 throw new AppException(IdentityResource.PasswordException);
             }
 
-            return await GenerateAuthenticationResultAsync(identityUser);
+            return ((await _profileService.GetByUserIdAsync(identityUser.Id)).Name,
+                await GenerateAuthenticationResultAsync(identityUser));
         }
 
         public async Task<AuthenticationDto> RefreshTokenAsync(string token, string refreshToken)
