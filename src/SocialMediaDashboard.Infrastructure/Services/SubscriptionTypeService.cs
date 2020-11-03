@@ -16,10 +16,10 @@ namespace SocialMediaDashboard.Infrastructure.Services
     /// <inheritdoc cref="ISubscriptionTypeService"/>
     public class SubscriptionTypeService : ISubscriptionTypeService
     {
-        private readonly IRepository<SubscriptionType> _subscriptionTypeRepository;
+        private readonly IGenericRepository<SubscriptionType> _subscriptionTypeRepository;
         private readonly IMapper _mapper;
 
-        public SubscriptionTypeService(IRepository<SubscriptionType> subscriptionTypeRepository,
+        public SubscriptionTypeService(IGenericRepository<SubscriptionType> subscriptionTypeRepository,
                                        IMapper mapper)
         {
             _subscriptionTypeRepository = subscriptionTypeRepository ?? throw new ArgumentNullException(nameof(subscriptionTypeRepository));

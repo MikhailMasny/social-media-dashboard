@@ -28,7 +28,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Observation.Get, Name = nameof(GetAllObservation))]
+        [HttpGet(ApiRoute.ObservationRoute.Get, Name = nameof(GetAllObservation))]
         public async Task<IActionResult> GetAllObservation(int id)
         {
             return Ok(new SuccessfulResponse<ObservationDto>
@@ -44,7 +44,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Observation.GetAll, Name = nameof(GetAllObservations))]
+        [HttpGet(ApiRoute.ObservationRoute.GetAll, Name = nameof(GetAllObservations))]
         public async Task<IActionResult> GetAllObservations()
         {
             return Ok(new SuccessfulResponse<ObservationDto>

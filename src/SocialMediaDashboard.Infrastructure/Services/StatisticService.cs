@@ -13,7 +13,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
     public class StatisticService : IStatisticService
     {
         private readonly ILogger<StatisticService> _logger;
-        private readonly IRepository<Statistic> _statisticRepository;
+        private readonly IGenericRepository<Statistic> _statisticRepository;
         private readonly ISubscriptionTypeService _subscriptionTypeService;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IVkService _vkService;
@@ -21,7 +21,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IYouTubeService _youTubeService;
 
         public StatisticService(ILogger<StatisticService> logger,
-                                IRepository<Statistic> statisticRepository,
+                                IGenericRepository<Statistic> statisticRepository,
                                 ISubscriptionTypeService subscriptionTypeService,
                                 ISubscriptionService subscriptionService,
                                 IVkService vkService,

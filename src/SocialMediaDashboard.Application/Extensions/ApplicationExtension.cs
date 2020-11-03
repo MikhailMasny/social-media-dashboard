@@ -44,7 +44,7 @@ namespace SocialMediaDashboard.Application.Extensions
             //});
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;
         }

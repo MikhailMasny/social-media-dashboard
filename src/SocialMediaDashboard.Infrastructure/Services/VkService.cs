@@ -13,24 +13,22 @@ namespace SocialMediaDashboard.Infrastructure.Services
     public class VkService : IVkService
     {
         private readonly IOptionsSnapshot<SocialNetworksSettings> _socialNetworksSettings;
-        private readonly VkApi _api;
 
-        public VkService(IOptionsSnapshot<SocialNetworksSettings> socialNetworksSettings,
-                         VkApi api)
+        public VkService(IOptionsSnapshot<SocialNetworksSettings> socialNetworksSettings)
         {
             _socialNetworksSettings = socialNetworksSettings ?? throw new ArgumentNullException(nameof(socialNetworksSettings));
-            _api = api ?? throw new ArgumentNullException(nameof(api));
         }
 
         public async Task<int> GetFollowersByUserNameAsync(string userName)
         {
-            await _api.AuthorizeAsync(new ApiAuthParams
+            using var vkApi = new VkApi();
+            await vkApi.AuthorizeAsync(new ApiAuthParams
             {
                 AccessToken = _socialNetworksSettings.Value.VkAccessToken
             });
 
             var response =
-                (await _api.Users.GetAsync(
+                (await vkApi.Users.GetAsync(
                     new string[]
                     {
                         userName

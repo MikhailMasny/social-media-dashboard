@@ -29,7 +29,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Profile.Get, Name = nameof(GetProfile))]
+        [HttpGet(ApiRoute.ProfileRoute.Get, Name = nameof(GetProfile))]
         public async Task<IActionResult> GetProfile()
         {
             return Ok(new ProfileResponse
@@ -43,7 +43,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPut(ApiRoute.Profile.Update, Name = nameof(UpdateProfile))]
+        [HttpPut(ApiRoute.ProfileRoute.Update, Name = nameof(UpdateProfile))]
         public async Task<IActionResult> UpdateProfile([FromForm] ProfileUpdateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));

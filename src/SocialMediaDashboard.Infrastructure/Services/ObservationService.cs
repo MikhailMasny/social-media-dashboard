@@ -15,10 +15,10 @@ namespace SocialMediaDashboard.Infrastructure.Services
     /// <inheritdoc cref="IObservationService"/>
     public class ObservationService : IObservationService
     {
-        private readonly IRepository<Observation> _observationRepository;
+        private readonly IGenericRepository<Observation> _observationRepository;
         private readonly IMapper _mapper;
 
-        public ObservationService(IRepository<Observation> observationRepository, IMapper mapper)
+        public ObservationService(IGenericRepository<Observation> observationRepository, IMapper mapper)
         {
             _observationRepository = observationRepository ?? throw new ArgumentNullException(nameof(observationRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

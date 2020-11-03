@@ -26,7 +26,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpPut(ApiRoute.Config.Connection, Name = nameof(UpdateConnections))]
+        [HttpPut(ApiRoute.ConfigRoute.Connection, Name = nameof(UpdateConnections))]
         public async Task<IActionResult> UpdateConnections([FromBody] ConnectionSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
@@ -41,7 +41,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpPut(ApiRoute.Config.Token, Name = nameof(UpdateToken))]
+        [HttpPut(ApiRoute.ConfigRoute.Token, Name = nameof(UpdateToken))]
         public async Task<IActionResult> UpdateToken([FromBody] JwtSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
@@ -56,7 +56,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpPut(ApiRoute.Config.Sentry, Name = nameof(UpdateSentry))]
+        [HttpPut(ApiRoute.ConfigRoute.Sentry, Name = nameof(UpdateSentry))]
         public async Task<IActionResult> UpdateSentry([FromBody] SentrySettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
@@ -71,7 +71,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpPut(ApiRoute.Config.SocialNetworks, Name = nameof(UpdateSocialNetworks))]
+        [HttpPut(ApiRoute.ConfigRoute.SocialNetworks, Name = nameof(UpdateSocialNetworks))]
         public async Task<IActionResult> UpdateSocialNetworks([FromBody] SocialNetworksSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
@@ -87,7 +87,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [HttpPut(ApiRoute.Config.Mail, Name = nameof(UpdateMail))]
+        [HttpPut(ApiRoute.ConfigRoute.Mail, Name = nameof(UpdateMail))]
         public async Task<IActionResult> UpdateMail([FromBody] MailSettingsRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));

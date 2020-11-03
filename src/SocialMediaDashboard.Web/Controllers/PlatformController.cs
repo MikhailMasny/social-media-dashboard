@@ -28,7 +28,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Platform.Get, Name = nameof(GetPlatform))]
+        [HttpGet(ApiRoute.PlatformRoute.Get, Name = nameof(GetPlatform))]
         public async Task<IActionResult> GetPlatform(int id)
         {
             return Ok(new SuccessfulResponse<PlatformDto>
@@ -44,7 +44,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Platform.GetAll, Name = nameof(GetAllPlatforms))]
+        [HttpGet(ApiRoute.PlatformRoute.GetAll, Name = nameof(GetAllPlatforms))]
         public async Task<IActionResult> GetAllPlatforms()
         {
             return Ok(new SuccessfulResponse<PlatformDto>

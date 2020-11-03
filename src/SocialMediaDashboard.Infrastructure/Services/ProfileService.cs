@@ -11,10 +11,10 @@ namespace SocialMediaDashboard.Infrastructure.Services
     /// <inheritdoc cref="IProfileService"/>
     public class ProfileService : IProfileService
     {
-        private readonly IRepository<Profile> _profileRepository;
+        private readonly IGenericRepository<Profile> _profileRepository;
         private readonly AutoMapper.IMapper _mapper;
 
-        public ProfileService(IRepository<Profile> profileRepository, AutoMapper.IMapper mapper)
+        public ProfileService(IGenericRepository<Profile> profileRepository, AutoMapper.IMapper mapper)
         {
             _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

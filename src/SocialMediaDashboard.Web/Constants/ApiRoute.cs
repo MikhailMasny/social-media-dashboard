@@ -13,7 +13,7 @@
         /// <summary>
         /// Identity path.
         /// </summary>
-        public static class Identity
+        public static class IdentityRoute
         {
             /// <summary>
             /// Identity path.
@@ -54,7 +54,7 @@
         /// <summary>
         /// Config path.
         /// </summary>
-        public static class Config
+        public static class ConfigRoute
         {
             /// <summary>
             /// Config path.
@@ -90,7 +90,7 @@
         /// <summary>
         /// Profile path.
         /// </summary>
-        public static class Profile
+        public static class ProfileRoute
         {
             /// <summary>
             /// Profile path.
@@ -111,7 +111,7 @@
         /// <summary>
         /// Subscription path.
         /// </summary>
-        public static class Subscription
+        public static class SubscriptionRoute
         {
             /// <summary>
             /// Subscription path.
@@ -147,7 +147,7 @@
         /// <summary>
         /// Observation path.
         /// </summary>
-        public static class Observation
+        public static class ObservationRoute
         {
             /// <summary>
             /// Observation path.
@@ -168,7 +168,7 @@
         /// <summary>
         /// Platform path.
         /// </summary>
-        public static class Platform
+        public static class PlatformRoute
         {
             /// <summary>
             /// Observation path.
@@ -189,7 +189,7 @@
         /// <summary>
         /// Subscription type path.
         /// </summary>
-        public static class SubscriptionType
+        public static class SubscriptionTypeRoute
         {
             /// <summary>
             /// Observation path.

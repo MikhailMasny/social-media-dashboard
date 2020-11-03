@@ -28,7 +28,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.SubscriptionType.Get, Name = nameof(GetSubscriptionType))]
+        [HttpGet(ApiRoute.SubscriptionTypeRoute.Get, Name = nameof(GetSubscriptionType))]
         public async Task<IActionResult> GetSubscriptionType(int id)
         {
             return Ok(new SuccessfulResponse<SubscriptionTypeDto>
@@ -44,7 +44,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.SubscriptionType.GetAll, Name = nameof(GetAllSubscriptionTypes))]
+        [HttpGet(ApiRoute.SubscriptionTypeRoute.GetAll, Name = nameof(GetAllSubscriptionTypes))]
         public async Task<IActionResult> GetAllSubscriptionTypes()
         {
             return Ok(new SuccessfulResponse<SubscriptionTypeDto>

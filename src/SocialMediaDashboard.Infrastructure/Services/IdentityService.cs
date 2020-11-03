@@ -27,12 +27,12 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IProfileService _profileService;
-        private readonly IRepository<RefreshToken> _refreshTokenRepository;
+        private readonly IGenericRepository<RefreshToken> _refreshTokenRepository;
 
         public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
                                UserManager<User> userManager,
                                RoleManager<IdentityRole> roleManager,
-                               IRepository<RefreshToken> refreshTokenRepository,
+                               IGenericRepository<RefreshToken> refreshTokenRepository,
                                TokenValidationParameters tokenValidationParameters,
                                IProfileService profileService)
         {
@@ -272,7 +272,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
             }
         }
 
-        private bool IsJwtWithValidaSecurityAlgorithm(SecurityToken validatedToken)
+        private static bool IsJwtWithValidaSecurityAlgorithm(SecurityToken validatedToken)
         {
             return (validatedToken is JwtSecurityToken jwtSecurityToken)
                 && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);

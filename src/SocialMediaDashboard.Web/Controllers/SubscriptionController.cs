@@ -34,7 +34,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost(ApiRoute.Subscription.Create, Name = nameof(CreateSubscription))]
+        [HttpPost(ApiRoute.SubscriptionRoute.Create, Name = nameof(CreateSubscription))]
         public async Task<IActionResult> CreateSubscription([FromBody] SubscriptionCreateOrUpdateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
@@ -57,7 +57,7 @@ namespace SocialMediaDashboard.Web.Controllers
                     request.SubscriptionTypeId);
 
             return Created(
-                new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoute.Subscription.Create}/{subscriptionDto.Id}"),
+                new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoute.SubscriptionRoute.Create}/{subscriptionDto.Id}"),
                 new SuccessfulResponse<SubscriptionDto>
                 {
                     Message = SubscriptionResource.Added,
@@ -71,7 +71,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Subscription.Get, Name = nameof(GetSubscription))]
+        [HttpGet(ApiRoute.SubscriptionRoute.Get, Name = nameof(GetSubscription))]
         public async Task<IActionResult> GetSubscription(int id)
         {
             return Ok(new SuccessfulResponse<SubscriptionDto>
@@ -89,7 +89,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet(ApiRoute.Subscription.GetAll, Name = nameof(GetAllSubscriptions))]
+        [HttpGet(ApiRoute.SubscriptionRoute.GetAll, Name = nameof(GetAllSubscriptions))]
         public async Task<IActionResult> GetAllSubscriptions()
         {
             return Ok(new SuccessfulResponse<SubscriptionDto>
@@ -103,7 +103,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPut(ApiRoute.Subscription.Update, Name = nameof(UpdateSubscription))]
+        [HttpPut(ApiRoute.SubscriptionRoute.Update, Name = nameof(UpdateSubscription))]
         public async Task<IActionResult> UpdateSubscription(int id, [FromBody] SubscriptionCreateOrUpdateRequest request)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
@@ -136,7 +136,7 @@ namespace SocialMediaDashboard.Web.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete(ApiRoute.Subscription.Delete, Name = nameof(DeleteSubscription))]
+        [HttpDelete(ApiRoute.SubscriptionRoute.Delete, Name = nameof(DeleteSubscription))]
         public async Task<IActionResult> DeleteSubscription(int id)
         {
             await _subscriptionService.DeleteByIdAsync(

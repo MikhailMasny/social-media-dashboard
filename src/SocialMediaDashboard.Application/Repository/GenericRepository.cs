@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 namespace SocialMediaDashboard.Application.Repository
 {
     /// <inheritdoc cref="IRepository<T>"</>
-    public class Repository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly DbSet<T> _dbSet;
         private readonly DbContext _context;
 
-        public Repository(SocialMediaDashboardContext context)
+        public GenericRepository(SocialMediaDashboardContext context)
         {
             context = context ?? throw new ArgumentNullException(nameof(context));
 

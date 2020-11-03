@@ -10,7 +10,7 @@ namespace SocialMediaDashboard.Application.Interfaces
     /// Generic repository provide all base needed methods (CRUD)
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IRepository<T> where T : class
+    public interface IGenericRepository<T> where T : class
     {
         /// <summary>
         /// Get all queries without tracking.

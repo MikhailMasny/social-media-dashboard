@@ -21,7 +21,6 @@ namespace SocialMediaDashboard.Infrastructure.Extensions
         {
             services.AddScheduler();
             services.AddTransient<StatisticInvocable>();
-            services.AddSingleton(new VkApi());
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IRenderService, RenderService>();

@@ -3,7 +3,7 @@
     /// <summary>
     /// Identity constants.
     /// </summary>
-    public class IdentityConstant
+    public static class IdentityConstant
     {
         /// <summary>
         /// Token lifetime.
