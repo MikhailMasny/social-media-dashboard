@@ -21,9 +21,11 @@ namespace SocialMediaDashboard.Web.Utils
             try
             {
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                SocialMediaDashboardContextSeed.SeedRolesAsync(roleManager).GetAwaiter().GetResult();
-
-                Log.Information(CommonResource.ContextSeedSuccessful);
+                var isSeeded = SocialMediaDashboardContextSeed.SeedRolesAsync(roleManager).GetAwaiter().GetResult();
+                if (isSeeded)
+                {
+                    Log.Information(CommonResource.ContextSeedSuccessful);
+                }
             }
             catch (Exception ex)
             {

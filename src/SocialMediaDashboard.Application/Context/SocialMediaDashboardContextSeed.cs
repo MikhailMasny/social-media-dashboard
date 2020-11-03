@@ -15,13 +15,13 @@ namespace SocialMediaDashboard.Application.Context
         /// Seed roles.
         /// </summary>
         /// <param name="roleManager">Role manager.</param>
-        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        public static async Task<bool> SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 
             if (roleManager.Roles.Any())
             {
-                return;
+                return false;
             }
 
             if (!await roleManager.RoleExistsAsync(AppRole.Admin))
@@ -35,6 +35,8 @@ namespace SocialMediaDashboard.Application.Context
                 var userRole = new IdentityRole(AppRole.User);
                 await roleManager.CreateAsync(userRole);
             }
+
+            return true;
         }
     }
 }
