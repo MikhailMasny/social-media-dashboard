@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using SocialMediaDashboard.Domain.Resources;
+using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Utils;
 using System;
 using System.IO;
@@ -24,17 +26,17 @@ namespace SocialMediaDashboard.Web
 
             try
             {
-                Log.Information("Starting web host");
+                Log.Information(CommonResource.HostStart);
 
                 IHost host = CreateHostBuilder(args).Build();
-                InitialServices.Build(host);
+                InitialInitialization.Run(host);
                 host.Run();
 
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                Log.Fatal(ex, CommonResource.HostFatalError);
                 return 1;
             }
             finally
@@ -48,7 +50,7 @@ namespace SocialMediaDashboard.Web
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile(SettingConstant.AppSettingsFile, optional: false, reloadOnChange: true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

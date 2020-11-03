@@ -19,6 +19,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                            IWritableOptions<MailSettings> emailSettings)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
             if (emailSettings is null)
             {
                 throw new ArgumentNullException(nameof(emailSettings));

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using SocialMediaDashboard.Application.Extensions;
 using SocialMediaDashboard.Infrastructure.Extensions;
+using SocialMediaDashboard.Web.Constants;
 using SocialMediaDashboard.Web.Extensions;
 using System;
 
@@ -26,7 +27,7 @@ namespace SocialMediaDashboard.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddData(Configuration);
+            services.AddData(Configuration, Environment);
             services.AddLogic();
             services.AddWeb(Configuration);
         }
@@ -47,7 +48,7 @@ namespace SocialMediaDashboard.Web
             app.UseRouting();
 
             app.UseSwagger();
-            app.UseSwaggerUI(config => config.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Media Dashboard API"));
+            app.UseSwaggerUI(config => config.SwaggerEndpoint("/swagger/v1/swagger.json", SwaggerParameter.Description));
 
             app.UseCors(config => config.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

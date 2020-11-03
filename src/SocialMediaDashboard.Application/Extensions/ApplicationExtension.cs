@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Application.Repository;
@@ -22,9 +23,18 @@ namespace SocialMediaDashboard.Application.Extensions
         /// <param name="configuration">Configuration.</param>
         /// <param name="environment">Host environment.</param>
         /// <returns>Service collection.</returns>
-        public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
-            services.AddDbContext<SocialMediaDashboardContext>(options => options.UseSqlServer(configuration.GetConnectionString(ConnectionString.MsSqlServer)));
+            if (environment.IsProduction())
+            {
+                services.AddDbContext<SocialMediaDashboardContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString(ConnectionString.MsSqlServer)));
+            }
+            else
+            {
+                services.AddDbContext<SocialMediaDashboardContext>(options =>
+                    options.UseInMemoryDatabase(ConnectionString.InMemory));
+            }
 
             // TODO: for production
             //services.AddDbContext<SocialMediaDashboardContext>(options =>

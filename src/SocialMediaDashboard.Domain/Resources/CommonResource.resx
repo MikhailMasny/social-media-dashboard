@@ -117,6 +117,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppSettingsFile" xml:space="preserve">
+    <value>appsettings.json</value>
+  </data>
+  <data name="ContextSeedError" xml:space="preserve">
+    <value>An error occurred seeding the DB.</value>
+  </data>
+  <data name="ContextSeedSuccessful" xml:space="preserve">
+    <value>The database is successfully seeded.</value>
+  </data>
+  <data name="DatabaseMigrateError" xml:space="preserve">
+    <value>An error occurred migrating the DB.</value>
+  </data>
+  <data name="DatabaseMigrateSuccessful" xml:space="preserve">
+    <value>The database is successfully migrated.</value>
+  </data>
+  <data name="HostFatalError" xml:space="preserve">
+    <value>Host terminated unexpectedly!</value>
+  </data>
+  <data name="HostStart" xml:space="preserve">
+    <value>Starting web host..</value>
+  </data>
   <data name="Id" xml:space="preserve">
     <value>id</value>
   </data>

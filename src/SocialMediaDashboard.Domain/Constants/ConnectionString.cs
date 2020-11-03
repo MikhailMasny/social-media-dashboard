@@ -19,5 +19,10 @@
         /// PostgreSQL name.
         /// </summary>
         public const string PostgreSql = "PostgreSqlConnection";
+
+        /// <summary>
+        /// In memory database.
+        /// </summary>
+        public const string InMemory = "SocialMediaDashboardAppInMemoryDatabase";
     }
 }

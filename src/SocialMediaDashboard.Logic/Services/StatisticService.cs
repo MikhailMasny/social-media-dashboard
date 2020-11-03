@@ -20,14 +20,13 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IInstagramService _instagramService;
         private readonly IYouTubeService _youTubeService;
 
-        public StatisticService(
-            ILogger<StatisticService> logger,
-            IRepository<Statistic> statisticRepository,
-            ISubscriptionTypeService subscriptionTypeService,
-            ISubscriptionService subscriptionService,
-            IVkService vkService,
-            IInstagramService instagramService,
-            IYouTubeService youTubeService)
+        public StatisticService(ILogger<StatisticService> logger,
+                                IRepository<Statistic> statisticRepository,
+                                ISubscriptionTypeService subscriptionTypeService,
+                                ISubscriptionService subscriptionService,
+                                IVkService vkService,
+                                IInstagramService instagramService,
+                                IYouTubeService youTubeService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));
@@ -65,10 +64,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private async Task SaveStatisticsAsync(PlatformType platformType, ObservationType observationType, Func<string, Task<int>> getCounts)
         {
             var statistics = new List<Statistic>();
-            var subscriptionTypeId =
-                await _subscriptionTypeService.GetByParametersAsync(
-                    platformType,
-                    observationType);
+            var subscriptionTypeId = await _subscriptionTypeService.GetByParametersAsync(platformType, observationType);
 
             if (!(subscriptionTypeId == default))
             {

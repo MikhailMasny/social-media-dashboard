@@ -3,7 +3,7 @@
     /// <summary>
     /// Swagger parameters.
     /// </summary>
-    public static class SwaggerParameters
+    public static class SwaggerParameter
     {
         /// <summary>
         /// Version.

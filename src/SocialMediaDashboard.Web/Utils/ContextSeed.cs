@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SocialMediaDashboard.Application.Context;
 using SocialMediaDashboard.Domain.Entities;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 
 namespace SocialMediaDashboard.Web.Utils
@@ -13,9 +14,6 @@ namespace SocialMediaDashboard.Web.Utils
     /// </summary>
     public static class ContextSeed
     {
-        private const string logErrorMessage = "An error occurred seeding the DB.";
-        private const string logInformationMessage = "The database is successfully seeded.";
-
         /// <summary>
         /// Context seed.
         /// </summary>
@@ -32,11 +30,11 @@ namespace SocialMediaDashboard.Web.Utils
 
                 SocialMediaDashboardContextSeed.SeedRolesAsync(applicationContext, roleManager).GetAwaiter().GetResult();
 
-                Log.Information(logInformationMessage);
+                Log.Information(CommonResource.ContextSeedSuccessful);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, logErrorMessage);
+                Log.Error(ex, CommonResource.ContextSeedError);
             }
         }
     }

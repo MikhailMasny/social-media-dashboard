@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SocialMediaDashboard.Application.Interfaces;
 using SocialMediaDashboard.Infrastructure.Options;
+using SocialMediaDashboard.Web.Constants;
 
 namespace SocialMediaDashboard.Web.Extensions
 {
@@ -19,7 +20,9 @@ namespace SocialMediaDashboard.Web.Extensions
         /// <param name="services">Service collection.</param>
         /// <param name="section">Configuration section.</param>
         /// <param name="file">Application settings file.</param>
-        public static void ConfigureWritable<T>(this IServiceCollection services, IConfigurationSection section, string file = "appsettings.json") where T : class, new()
+        public static void ConfigureWritable<T>(this IServiceCollection services,
+                                                IConfigurationSection section,
+                                                string file = SettingConstant.AppSettingsFile) where T : class, new()
         {
             services.Configure<T>(section);
             services.AddTransient<IWritableOptions<T>>(provider =>

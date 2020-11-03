@@ -5,15 +5,15 @@ using System;
 namespace SocialMediaDashboard.Web.Utils
 {
     /// <summary>
-    /// Create initial service factory in a specific scope.
+    /// Run initial services in a specific scope.
     /// </summary>
-    public class InitialServices
+    public class InitialInitialization
     {
         /// <summary>
         /// Build a factory for initital tasks.
         /// </summary>
         /// <param name="host">Application host.</param>
-        public static void Build(IHost host)
+        public static void Run(IHost host)
         {
             host = host ?? throw new ArgumentNullException(nameof(host));
 

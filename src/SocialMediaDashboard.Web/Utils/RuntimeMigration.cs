@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using SocialMediaDashboard.Application.Context;
+using SocialMediaDashboard.Domain.Resources;
 using System;
 
 namespace SocialMediaDashboard.Web.Utils
@@ -11,9 +13,6 @@ namespace SocialMediaDashboard.Web.Utils
     /// </summary>
     public static class RuntimeMigration
     {
-        private const string logErrorMessage = "An error occurred migrating the DB.";
-        private const string logInformationMessage = "The database is successfully migrated.";
-
         /// <summary>
         /// Apply migration.
         /// </summary>
@@ -24,14 +23,18 @@ namespace SocialMediaDashboard.Web.Utils
 
             try
             {
-                var appContextService = serviceProvider.GetRequiredService<SocialMediaDashboardContext>();
-                appContextService.Database.Migrate();
+                var hostEnironmentService = serviceProvider.GetRequiredService<IHostEnvironment>();
+                if (hostEnironmentService.IsProduction())
+                {
+                    var appContextService = serviceProvider.GetRequiredService<SocialMediaDashboardContext>();
+                    appContextService.Database.Migrate();
+                }
 
-                Log.Information(logInformationMessage);
+                Log.Information(CommonResource.DatabaseMigrateSuccessful);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, logErrorMessage);
+                Log.Error(ex, CommonResource.DatabaseMigrateError);
             }
         }
     }

@@ -19,10 +19,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IRepository<Statistic> _statisticRepository;
         private readonly IMapper _mapper;
 
-        public SubscriptionService(
-            IRepository<Subscription> subscriptionRepository,
-            IRepository<Statistic> statisticRepository,
-            IMapper mapper)
+        public SubscriptionService(IRepository<Subscription> subscriptionRepository,
+                                   IRepository<Statistic> statisticRepository,
+                                   IMapper mapper)
         {
             _subscriptionRepository = subscriptionRepository ?? throw new ArgumentNullException(nameof(subscriptionRepository));
             _statisticRepository = statisticRepository ?? throw new ArgumentNullException(nameof(statisticRepository));

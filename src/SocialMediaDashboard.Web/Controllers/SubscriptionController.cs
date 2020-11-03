@@ -23,9 +23,8 @@ namespace SocialMediaDashboard.Web.Controllers
         private readonly ISubscriptionService _subscriptionService;
         private readonly ISubscriptionTypeService _subscriptionTypeService;
 
-        public SubscriptionController(
-            ISubscriptionService subscriptionService,
-            ISubscriptionTypeService subscriptionTypeService)
+        public SubscriptionController(ISubscriptionService subscriptionService,
+                                      ISubscriptionTypeService subscriptionTypeService)
         {
             _subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
             _subscriptionTypeService = subscriptionTypeService ?? throw new ArgumentNullException(nameof(subscriptionTypeService));
@@ -40,7 +39,9 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
+            var subscriptionTypeExist =
+                await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
+
             if (!subscriptionTypeExist)
             {
                 return BadRequest(new FailedResponse
@@ -49,10 +50,11 @@ namespace SocialMediaDashboard.Web.Controllers
                 });
             }
 
-            var subscriptionDto = await _subscriptionService.CreateAsync(
-                HttpContext.GetUserId(),
-                request.AccountName,
-                request.SubscriptionTypeId);
+            var subscriptionDto =
+                await _subscriptionService.CreateAsync(
+                    HttpContext.GetUserId(),
+                    request.AccountName,
+                    request.SubscriptionTypeId);
 
             return Created(
                 new Uri($"{Request.Scheme}://{Request.Host}/{ApiRoute.Subscription.Create}/{subscriptionDto.Id}"),
@@ -106,7 +108,9 @@ namespace SocialMediaDashboard.Web.Controllers
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var subscriptionTypeExist = await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
+            var subscriptionTypeExist =
+                await _subscriptionTypeService.IsExistAsync(request.SubscriptionTypeId);
+
             if (!subscriptionTypeExist)
             {
                 return BadRequest(new FailedResponse

@@ -18,9 +18,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IRepository<Observation> _observationRepository;
         private readonly IMapper _mapper;
 
-        public ObservationService(
-            IRepository<Observation> observationRepository,
-            IMapper mapper)
+        public ObservationService(IRepository<Observation> observationRepository, IMapper mapper)
         {
             _observationRepository = observationRepository ?? throw new ArgumentNullException(nameof(observationRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

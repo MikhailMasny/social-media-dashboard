@@ -18,9 +18,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IRepository<Platform> _platformRepository;
         private readonly IMapper _mapper;
 
-        public PlatformService(
-            IRepository<Platform> platformRepository,
-            IMapper mapper)
+        public PlatformService(IRepository<Platform> platformRepository, IMapper mapper)
         {
             _platformRepository = platformRepository ?? throw new ArgumentNullException(nameof(platformRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

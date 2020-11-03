@@ -29,13 +29,12 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IProfileService _profileService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
-        public IdentityService(
-            IOptionsSnapshot<JwtSettings> jwtSettings,
-            UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IRepository<RefreshToken> refreshTokenRepository,
-            TokenValidationParameters tokenValidationParameters,
-            IProfileService profileService)
+        public IdentityService(IOptionsSnapshot<JwtSettings> jwtSettings,
+                               UserManager<User> userManager,
+                               RoleManager<IdentityRole> roleManager,
+                               IRepository<RefreshToken> refreshTokenRepository,
+                               TokenValidationParameters tokenValidationParameters,
+                               IProfileService profileService)
         {
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -179,11 +178,7 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 throw new NotFoundException(IdentityResource.UserNotExist);
             }
 
-            var identityResult =
-                await _userManager.ResetPasswordAsync(
-                    identityUser,
-                    code,
-                    newPassword);
+            var identityResult = await _userManager.ResetPasswordAsync(identityUser, code, newPassword);
 
             if (!identityResult.Succeeded)
             {
@@ -196,12 +191,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
         public async Task<AuthenticationDto> RefreshTokenAsync(string token, string refreshToken)
         {
             var validatedToken = GetPrincipalFromToken(token);
-            var expiryDateUnix = long.Parse(validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value, CultureInfo.InvariantCulture);
+
+            var expiryDateUnix = long.Parse(
+                validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value,
+                CultureInfo.InvariantCulture);
+
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(long.Parse(
-                    validatedToken.Claims.SingleOrDefault(x =>
-                        x.Type == JwtRegisteredClaimNames.Exp).Value,
-                        CultureInfo.InvariantCulture));
+                    validatedToken.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value,
+                    CultureInfo.InvariantCulture));
 
             if (expiryDateTimeUtc > DateTime.UtcNow)
             {
@@ -239,7 +237,9 @@ namespace SocialMediaDashboard.Infrastructure.Services
             _refreshTokenRepository.Update(storedRefreshToken);
             await _refreshTokenRepository.SaveChangesAsync();
 
-            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == CommonResource.Id).Value);
+            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x =>
+                x.Type == CommonResource.Id).Value);
+
             return await GenerateAuthenticationResultAsync(user);
         }
 
@@ -280,7 +280,6 @@ namespace SocialMediaDashboard.Infrastructure.Services
 
         private async Task<AuthenticationDto> GenerateAuthenticationResultAsync(User user)
         {
-            // TODO: refactor it
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Secret);
 
@@ -315,15 +314,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
                 }
             }
 
-            var token = 
+            var token =
                 tokenHandler.CreateToken(
                     new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(claims),
                         Expires = DateTime.UtcNow.Add(_jwtSettings.Value.TokenLifetime),
-                        SigningCredentials = 
+                        SigningCredentials =
                             new SigningCredentials(
-                                new SymmetricSecurityKey(key), 
+                                new SymmetricSecurityKey(key),
                                 SecurityAlgorithms.HmacSha256Signature),
                     });
 

@@ -96,37 +96,37 @@ namespace SocialMediaDashboard.Web.Extensions
         {
             services.AddSwaggerGen(config =>
             {
-                config.SwaggerDoc(SwaggerParameters.Version, new OpenApiInfo
+                config.SwaggerDoc(SwaggerParameter.Version, new OpenApiInfo
                 {
-                    Version = SwaggerParameters.Version,
-                    Title = SwaggerParameters.Title,
-                    Description = SwaggerParameters.Description,
+                    Version = SwaggerParameter.Version,
+                    Title = SwaggerParameter.Title,
+                    Description = SwaggerParameter.Description,
                     Contact = new OpenApiContact()
                     {
-                        Name = SwaggerParameters.Contact.Name,
+                        Name = SwaggerParameter.Contact.Name,
                         //Url = new Uri("https://social-media-dashboard-api.herokuapp.com/") // UNDONE: add it after deploy
                     }
                 });
 
                 var securitySchema = new OpenApiSecurityScheme
                 {
-                    Description = SwaggerParameters.Security.Description,
-                    Name = SwaggerParameters.Security.Name,
+                    Description = SwaggerParameter.Security.Description,
+                    Name = SwaggerParameter.Security.Name,
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Scheme = SwaggerParameters.Security.HttpAuth,
+                    Scheme = SwaggerParameter.Security.HttpAuth,
                     Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
-                        Id = SwaggerParameters.Security.Schema
+                        Id = SwaggerParameter.Security.Schema
                     }
                 };
-                config.AddSecurityDefinition(SwaggerParameters.Security.Schema, securitySchema);
+                config.AddSecurityDefinition(SwaggerParameter.Security.Schema, securitySchema);
 
                 var securityRequirement = new OpenApiSecurityRequirement
                 {
                     {
-                        securitySchema, new[] { SwaggerParameters.Security.Schema }
+                        securitySchema, new[] { SwaggerParameter.Security.Schema }
                     }
                 };
                 config.AddSecurityRequirement(securityRequirement);

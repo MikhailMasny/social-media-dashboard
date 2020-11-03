@@ -22,9 +22,8 @@ namespace SocialMediaDashboard.Web.Controllers
         private readonly IIdentityService _identityService;
         private readonly ISenderService _senderService;
 
-        public IdentityController(
-            IIdentityService identityService,
-            ISenderService senderService)
+        public IdentityController(IIdentityService identityService,
+                                  ISenderService senderService)
         {
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
             _senderService = senderService ?? throw new ArgumentNullException(nameof(senderService));
@@ -128,34 +127,20 @@ namespace SocialMediaDashboard.Web.Controllers
 
             var confirmationResult = await _identityService.RestorePasswordAsync(request.Email);
 
-            if (!confirmationResult.IsSuccessful)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = confirmationResult.Errors
-                });
-            }
-
-            var passwordResetToken = confirmationResult.Code.EncodeToken();
-
-            var callbackUrl = Url.Action(
-                "ResetPassword",
-                "Identity",
-                new
-                {
-                    request.Email,
-                    Code = passwordResetToken
-                },
-                protocol: HttpContext.Request.Scheme);
-
-            var emailViewModel = new EmailViewModel
-            {
-                Name = confirmationResult.Data,
-                Link = callbackUrl
-            };
-
             await _senderService.RenderAndSendAsync(
-                emailViewModel,
+                new EmailViewModel
+                {
+                    Name = confirmationResult.Data,
+                    Link = Url.Action(
+                        "ResetPassword",
+                        "Identity",
+                        new
+                        {
+                            request.Email,
+                            Code = confirmationResult.Code.EncodeToken(),
+                        },
+                        protocol: HttpContext.Request.Scheme),
+                },
                 "Views/Mail/Restore.cshtml",
                 request.Email,
                 EmailResource.PasswordReset);

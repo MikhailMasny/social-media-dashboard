@@ -16,12 +16,11 @@ namespace SocialMediaDashboard.Infrastructure.Services
         private readonly IWritableOptions<SocialNetworksSettings> _socialNetworksSettings;
         private readonly IWritableOptions<MailSettings> _mailSettings;
 
-        public ConfigService(
-            IWritableOptions<ConnectionSettings> connectionSettings,
-            IWritableOptions<JwtSettings> jwtSettings,
-            IWritableOptions<SentrySettings> sentrySettings,
-            IWritableOptions<SocialNetworksSettings> vkSettings,
-            IWritableOptions<MailSettings> mailSettings)
+        public ConfigService(IWritableOptions<ConnectionSettings> connectionSettings,
+                             IWritableOptions<JwtSettings> jwtSettings,
+                             IWritableOptions<SentrySettings> sentrySettings,
+                             IWritableOptions<SocialNetworksSettings> vkSettings,
+                             IWritableOptions<MailSettings> mailSettings)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _jwtSettings = jwtSettings ?? throw new ArgumentNullException(nameof(jwtSettings));
@@ -36,13 +35,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case DataProviderType.MsSqlServer:
                     {
-                        _connectionSettings.Update(connectionSettings => connectionSettings.MsSqlServerConnection = dataProvider);
+                        _connectionSettings.Update(connectionSettings =>
+                            connectionSettings.MsSqlServerConnection = dataProvider);
                     }
                     break;
 
                 case DataProviderType.PostgreSql:
                     {
-                        _connectionSettings.Update(connectionSettings => connectionSettings.PostgreSqlConnection = dataProvider);
+                        _connectionSettings.Update(connectionSettings =>
+                            connectionSettings.PostgreSqlConnection = dataProvider);
                     }
                     break;
             }
@@ -56,13 +57,15 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case JwtConfigType.Secret:
                     {
-                        _jwtSettings.Update(jwtSettings => jwtSettings.Secret = jwtValue);
+                        _jwtSettings.Update(jwtSettings =>
+                            jwtSettings.Secret = jwtValue);
                     }
                     break;
 
                 case JwtConfigType.TokenLifetime:
                     {
-                        _jwtSettings.Update(jwtSettings => jwtSettings.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
+                        _jwtSettings.Update(jwtSettings =>
+                            jwtSettings.TokenLifetime = TimeSpan.Parse(jwtValue, CultureInfo.InvariantCulture));
                     }
                     break;
             }
@@ -76,19 +79,22 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case SentryConfigType.Dns:
                     {
-                        _sentrySettings.Update(sentrySettings => sentrySettings.Dsn = sentryValue);
+                        _sentrySettings.Update(sentrySettings =>
+                            sentrySettings.Dsn = sentryValue);
                     }
                     break;
 
                 case SentryConfigType.MinimumBreadcrumbLevel:
                     {
-                        _sentrySettings.Update(sentrySettings => sentrySettings.MinimumBreadcrumbLevel = sentryValue);
+                        _sentrySettings.Update(sentrySettings =>
+                            sentrySettings.MinimumBreadcrumbLevel = sentryValue);
                     }
                     break;
 
                 case SentryConfigType.MinimumEventLevel:
                     {
-                        _sentrySettings.Update(sentrySettings => sentrySettings.MinimumEventLevel = sentryValue);
+                        _sentrySettings.Update(sentrySettings =>
+                            sentrySettings.MinimumEventLevel = sentryValue);
                     }
                     break;
             }
@@ -102,25 +108,29 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case SocialNetworkConfigType.VkAccessToken:
                     {
-                        _socialNetworksSettings.Update(socialNetworksSettings => socialNetworksSettings.VkAccessToken = tokenValue);
+                        _socialNetworksSettings.Update(socialNetworksSettings =>
+                            socialNetworksSettings.VkAccessToken = tokenValue);
                     }
                     break;
 
                 case SocialNetworkConfigType.InstagramUsername:
                     {
-                        _socialNetworksSettings.Update(socialNetworksSettings => socialNetworksSettings.InstagramAccount.Username = tokenValue);
+                        _socialNetworksSettings.Update(socialNetworksSettings =>
+                            socialNetworksSettings.InstagramAccount.Username = tokenValue);
                     }
                     break;
 
                 case SocialNetworkConfigType.InstagramPassword:
                     {
-                        _socialNetworksSettings.Update(socialNetworksSettings => socialNetworksSettings.InstagramAccount.Password = tokenValue);
+                        _socialNetworksSettings.Update(socialNetworksSettings =>
+                            socialNetworksSettings.InstagramAccount.Password = tokenValue);
                     }
                     break;
 
                 case SocialNetworkConfigType.YouTubeAccessToken:
                     {
-                        _socialNetworksSettings.Update(socialNetworksSettings => socialNetworksSettings.YouTubeAccessToken = tokenValue);
+                        _socialNetworksSettings.Update(socialNetworksSettings =>
+                            socialNetworksSettings.YouTubeAccessToken = tokenValue);
                     }
                     break;
             }
@@ -134,31 +144,36 @@ namespace SocialMediaDashboard.Infrastructure.Services
             {
                 case MailConfigType.Server:
                     {
-                        _mailSettings.Update(mailSettings => mailSettings.Server = (string)mailValue);
+                        _mailSettings.Update(mailSettings =>
+                            mailSettings.Server = (string)mailValue);
                     }
                     break;
 
                 case MailConfigType.Port:
                     {
-                        _mailSettings.Update(mailSettings => mailSettings.Port = (int)mailValue);
+                        _mailSettings.Update(mailSettings =>
+                            mailSettings.Port = (int)mailValue);
                     }
                     break;
 
                 case MailConfigType.UseSsl:
                     {
-                        _mailSettings.Update(mailSettings => mailSettings.UseSsl = (bool)mailValue);
+                        _mailSettings.Update(mailSettings =>
+                            mailSettings.UseSsl = (bool)mailValue);
                     }
                     break;
 
                 case MailConfigType.Address:
                     {
-                        _mailSettings.Update(mailSettings => mailSettings.Address = (string)mailValue);
+                        _mailSettings.Update(mailSettings =>
+                            mailSettings.Address = (string)mailValue);
                     }
                     break;
 
                 case MailConfigType.Password:
                     {
-                        _mailSettings.Update(mailSettings => mailSettings.Password = (string)mailValue);
+                        _mailSettings.Update(mailSettings =>
+                            mailSettings.Password = (string)mailValue);
                     }
                     break;
             }

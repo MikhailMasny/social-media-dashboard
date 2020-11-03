@@ -61,6 +61,69 @@ namespace SocialMediaDashboard.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to appsettings.json.
+        /// </summary>
+        public static string AppSettingsFile {
+            get {
+                return ResourceManager.GetString("AppSettingsFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred seeding the DB..
+        /// </summary>
+        public static string ContextSeedError {
+            get {
+                return ResourceManager.GetString("ContextSeedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The database is successfully seeded..
+        /// </summary>
+        public static string ContextSeedSuccessful {
+            get {
+                return ResourceManager.GetString("ContextSeedSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred migrating the DB..
+        /// </summary>
+        public static string DatabaseMigrateError {
+            get {
+                return ResourceManager.GetString("DatabaseMigrateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The database is successfully migrated..
+        /// </summary>
+        public static string DatabaseMigrateSuccessful {
+            get {
+                return ResourceManager.GetString("DatabaseMigrateSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host terminated unexpectedly!.
+        /// </summary>
+        public static string HostFatalError {
+            get {
+                return ResourceManager.GetString("HostFatalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting web host...
+        /// </summary>
+        public static string HostStart {
+            get {
+                return ResourceManager.GetString("HostStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to id.
         /// </summary>
         public static string Id {
